@@ -99,10 +99,10 @@ Current scope:     <a href="../../index.html">all classes</a>
 <i class="no-highlight">24</i>&nbsp; */
 <i class="no-highlight">25</i>&nbsp;public class PlayerController extends Component {
 <i class="no-highlight">26</i>&nbsp;    private Player player;
-<i class="no-highlight">27</i>&nbsp;    private float current_speed;
-<i class="no-highlight">28</i>&nbsp;    private float base_speed; // when not powered up
-<i class="no-highlight">29</i>&nbsp;    private int powerupTimer;
-<b class="fc"><i class="no-highlight">30</i>&nbsp;    private final Vector2 modifier = new Vector2(-16,-24);</b>
+<i class="no-highlight">27</i>&nbsp;    private float current_speed; // added for assesment 2, current speed of the player
+<i class="no-highlight">28</i>&nbsp;    private float base_speed; // speed when not powered up (assesment 2)
+<i class="no-highlight">29</i>&nbsp;    private int powerupTimer; // ensures powerups stop acting within a time period (assesment 2)
+<b class="fc"><i class="no-highlight">30</i>&nbsp;    private final Vector2 modifier = new Vector2(-16,-24); // speed decrease during bad weather (assesment 2)</b>
 <i class="no-highlight">31</i>&nbsp;    public PlayerController() {
 <b class="fc"><i class="no-highlight">32</i>&nbsp;        super();</b>
 <b class="fc"><i class="no-highlight">33</i>&nbsp;        powerupTimer = 0;</b>
@@ -209,59 +209,61 @@ Current scope:     <a href="../../index.html">all classes</a>
 <i class="no-highlight">134</i>&nbsp;        }
 <b class="nc"><i class="no-highlight">135</i>&nbsp;        return dir;</b>
 <i class="no-highlight">136</i>&nbsp;    }
-<i class="no-highlight">137</i>&nbsp;    /**
-<i class="no-highlight">138</i>&nbsp;     * Multiplies speed by a given amount for a given amount of time, then undoes the speed gain
-<i class="no-highlight">139</i>&nbsp;     *
-<i class="no-highlight">140</i>&nbsp;     * @param multiplier the factor by which the speed increases
-<i class="no-highlight">141</i>&nbsp;     * @param duration the duration (in seconds) that this powerup is active for
-<i class="no-highlight">142</i>&nbsp;     * */
-<i class="no-highlight">143</i>&nbsp;    public void gainSpeed(float multiplier, int duration){
-<b class="fc"><i class="no-highlight">144</i>&nbsp;        player.setPoweredUp(true);</b>
-<b class="fc"><i class="no-highlight">145</i>&nbsp;        player.setSpedUp(true);</b>
-<b class="fc"><i class="no-highlight">146</i>&nbsp;        powerupTimer = (int) (duration / EntityManager.getDeltaTime());</b>
-<b class="fc"><i class="no-highlight">147</i>&nbsp;        current_speed = current_speed * multiplier;</b>
-<b class="fc"><i class="no-highlight">148</i>&nbsp;    }</b>
-<i class="no-highlight">149</i>&nbsp;
-<i class="no-highlight">150</i>&nbsp;    /**
-<i class="no-highlight">151</i>&nbsp;     * Multiplies speed by a given amount for a given amount of time, then undoes the speed gain
-<i class="no-highlight">152</i>&nbsp;     * @param duration the duration (in seconds) that this powerup is active for
-<i class="no-highlight">153</i>&nbsp;     * */
-<i class="no-highlight">154</i>&nbsp;    public void gainInvincibility(int duration){
-<b class="fc"><i class="no-highlight">155</i>&nbsp;        player.setPoweredUp(true);</b>
-<b class="fc"><i class="no-highlight">156</i>&nbsp;        player.setInvincible(true);</b>
-<b class="fc"><i class="no-highlight">157</i>&nbsp;        powerupTimer = (int) (duration / EntityManager.getDeltaTime());</b>
-<i class="no-highlight">158</i>&nbsp;        // invincibility stuff
-<b class="fc"><i class="no-highlight">159</i>&nbsp;    }</b>
-<i class="no-highlight">160</i>&nbsp;
-<i class="no-highlight">161</i>&nbsp;    /**
-<i class="no-highlight">162</i>&nbsp;     * Multiplies speed by a given amount for a given amount of time, then undoes the speed gain
-<i class="no-highlight">163</i>&nbsp;     * @param duration the duration (in seconds) that this powerup is active for
-<i class="no-highlight">164</i>&nbsp;     * */
-<i class="no-highlight">165</i>&nbsp;    public void gainWeatherRes(int duration){
-<b class="fc"><i class="no-highlight">166</i>&nbsp;        player.setPoweredUp(true);</b>
-<b class="fc"><i class="no-highlight">167</i>&nbsp;        player.setWeatherResistant(true);</b>
-<b class="fc"><i class="no-highlight">168</i>&nbsp;        powerupTimer = (int) (duration / EntityManager.getDeltaTime());</b>
-<b class="fc"><i class="no-highlight">169</i>&nbsp;    }</b>
-<i class="no-highlight">170</i>&nbsp;
-<i class="no-highlight">171</i>&nbsp;    /**
-<i class="no-highlight">172</i>&nbsp;     * Sets all powerup related flags to false and restores speed to current speed upgrade level.
-<i class="no-highlight">173</i>&nbsp;     * */
-<i class="no-highlight">174</i>&nbsp;    public void stopPowerups(){
-<b class="nc"><i class="no-highlight">175</i>&nbsp;        player.setPoweredUp(false);</b>
-<b class="nc"><i class="no-highlight">176</i>&nbsp;        player.setInvincible(false);</b>
-<b class="nc"><i class="no-highlight">177</i>&nbsp;        player.setWeatherResistant(false);</b>
-<b class="nc"><i class="no-highlight">178</i>&nbsp;        player.setSpedUp(false);</b>
-<b class="nc"><i class="no-highlight">179</i>&nbsp;        powerupTimer = 0;</b>
-<b class="nc"><i class="no-highlight">180</i>&nbsp;        current_speed = base_speed; //resets speed</b>
-<b class="nc"><i class="no-highlight">181</i>&nbsp;    }</b>
-<i class="no-highlight">182</i>&nbsp;
-<b class="nc"><i class="no-highlight">183</i>&nbsp;    public int getPowerupTimer(){return powerupTimer;}</b>
-<b class="nc"><i class="no-highlight">184</i>&nbsp;    public void setSpeed(float newSpeed){current_speed = newSpeed;}</b>
-<b class="nc"><i class="no-highlight">185</i>&nbsp;    public void setBase_speed(float newSpeed){base_speed = newSpeed;}</b>
-<b class="fc"><i class="no-highlight">186</i>&nbsp;    public float getBase_speed(){return base_speed;}</b>
-<b class="fc"><i class="no-highlight">187</i>&nbsp;    public float getSpeed(){return current_speed;}</b>
-<i class="no-highlight">188</i>&nbsp;
-<i class="no-highlight">189</i>&nbsp;}
+<i class="no-highlight">137</i>&nbsp;
+<i class="no-highlight">138</i>&nbsp;    //The following methods implement powerups as outlined in assesment 2:
+<i class="no-highlight">139</i>&nbsp;    /**
+<i class="no-highlight">140</i>&nbsp;     * Multiplies speed by a given amount for a given amount of time, then undoes the speed gain
+<i class="no-highlight">141</i>&nbsp;     *
+<i class="no-highlight">142</i>&nbsp;     * @param multiplier the factor by which the speed increases
+<i class="no-highlight">143</i>&nbsp;     * @param duration the duration (in seconds) that this powerup is active for
+<i class="no-highlight">144</i>&nbsp;     * */
+<i class="no-highlight">145</i>&nbsp;    public void gainSpeed(float multiplier, int duration){
+<b class="fc"><i class="no-highlight">146</i>&nbsp;        player.setPoweredUp(true);</b>
+<b class="fc"><i class="no-highlight">147</i>&nbsp;        player.setSpedUp(true);</b>
+<b class="fc"><i class="no-highlight">148</i>&nbsp;        powerupTimer = (int) (duration / EntityManager.getDeltaTime());</b>
+<b class="fc"><i class="no-highlight">149</i>&nbsp;        current_speed = current_speed * multiplier;</b>
+<b class="fc"><i class="no-highlight">150</i>&nbsp;    }</b>
+<i class="no-highlight">151</i>&nbsp;
+<i class="no-highlight">152</i>&nbsp;    /**
+<i class="no-highlight">153</i>&nbsp;     * Multiplies speed by a given amount for a given amount of time, then undoes the speed gain
+<i class="no-highlight">154</i>&nbsp;     * @param duration the duration (in seconds) that this powerup is active for
+<i class="no-highlight">155</i>&nbsp;     * */
+<i class="no-highlight">156</i>&nbsp;    public void gainInvincibility(int duration){
+<b class="fc"><i class="no-highlight">157</i>&nbsp;        player.setPoweredUp(true);</b>
+<b class="fc"><i class="no-highlight">158</i>&nbsp;        player.setInvincible(true);</b>
+<b class="fc"><i class="no-highlight">159</i>&nbsp;        powerupTimer = (int) (duration / EntityManager.getDeltaTime());</b>
+<i class="no-highlight">160</i>&nbsp;        // invincibility stuff
+<b class="fc"><i class="no-highlight">161</i>&nbsp;    }</b>
+<i class="no-highlight">162</i>&nbsp;
+<i class="no-highlight">163</i>&nbsp;    /**
+<i class="no-highlight">164</i>&nbsp;     * Multiplies speed by a given amount for a given amount of time, then undoes the speed gain
+<i class="no-highlight">165</i>&nbsp;     * @param duration the duration (in seconds) that this powerup is active for
+<i class="no-highlight">166</i>&nbsp;     * */
+<i class="no-highlight">167</i>&nbsp;    public void gainWeatherRes(int duration){
+<b class="fc"><i class="no-highlight">168</i>&nbsp;        player.setPoweredUp(true);</b>
+<b class="fc"><i class="no-highlight">169</i>&nbsp;        player.setWeatherResistant(true);</b>
+<b class="fc"><i class="no-highlight">170</i>&nbsp;        powerupTimer = (int) (duration / EntityManager.getDeltaTime());</b>
+<b class="fc"><i class="no-highlight">171</i>&nbsp;    }</b>
+<i class="no-highlight">172</i>&nbsp;
+<i class="no-highlight">173</i>&nbsp;    /**
+<i class="no-highlight">174</i>&nbsp;     * Sets all powerup related flags to false and restores speed to current speed upgrade level.
+<i class="no-highlight">175</i>&nbsp;     * */
+<i class="no-highlight">176</i>&nbsp;    public void stopPowerups(){
+<b class="nc"><i class="no-highlight">177</i>&nbsp;        player.setPoweredUp(false);</b>
+<b class="nc"><i class="no-highlight">178</i>&nbsp;        player.setInvincible(false);</b>
+<b class="nc"><i class="no-highlight">179</i>&nbsp;        player.setWeatherResistant(false);</b>
+<b class="nc"><i class="no-highlight">180</i>&nbsp;        player.setSpedUp(false);</b>
+<b class="nc"><i class="no-highlight">181</i>&nbsp;        powerupTimer = 0;</b>
+<b class="nc"><i class="no-highlight">182</i>&nbsp;        current_speed = base_speed; //resets speed</b>
+<b class="nc"><i class="no-highlight">183</i>&nbsp;    }</b>
+<i class="no-highlight">184</i>&nbsp;
+<b class="nc"><i class="no-highlight">185</i>&nbsp;    public int getPowerupTimer(){return powerupTimer;}</b>
+<b class="nc"><i class="no-highlight">186</i>&nbsp;    public void setSpeed(float newSpeed){current_speed = newSpeed;}</b>
+<b class="nc"><i class="no-highlight">187</i>&nbsp;    public void setBase_speed(float newSpeed){base_speed = newSpeed;}</b>
+<b class="fc"><i class="no-highlight">188</i>&nbsp;    public float getBase_speed(){return base_speed;}</b>
+<b class="fc"><i class="no-highlight">189</i>&nbsp;    public float getSpeed(){return current_speed;}</b>
+<i class="no-highlight">190</i>&nbsp;    //----------------------------------------------------------------------------------------------------
+<i class="no-highlight">191</i>&nbsp;}
 </div>
 </pre>
 </div>
@@ -288,7 +290,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2022-05-03 16:30</div>
+    <div style="float:right;">generated on 2022-05-03 20:24</div>
 </div>
 </body>
 </html>

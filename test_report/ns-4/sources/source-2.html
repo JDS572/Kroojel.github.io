@@ -97,7 +97,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 <i class="no-highlight">22</i>&nbsp;    private static float speed;
 <i class="no-highlight">23</i>&nbsp;    private boolean toggleLife;
 <i class="no-highlight">24</i>&nbsp;    private int life_remaining;
-<i class="no-highlight">25</i>&nbsp;    private Entity shooter;
+<i class="no-highlight">25</i>&nbsp;    private Entity shooter; // changed to Entity for assesment 2, allows duckMonsters to shoot
 <i class="no-highlight">26</i>&nbsp;
 <i class="no-highlight">27</i>&nbsp;    public CannonBall() {
 <b class="fc"><i class="no-highlight">28</i>&nbsp;        super(3);</b>
@@ -154,7 +154,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 <i class="no-highlight">79</i>&nbsp;     */
 <i class="no-highlight">80</i>&nbsp;    public void fire(Vector2 pos, Vector2 dir, Entity sender) {
 <b class="fc"><i class="no-highlight">81</i>&nbsp;        shooter = sender;</b>
-<b class="fc"><i class="no-highlight">82</i>&nbsp;        if (sender instanceof DuckMonster){</b>
+<b class="fc"><i class="no-highlight">82</i>&nbsp;        if (sender instanceof DuckMonster){ // for assesment 2, changes sprite for cannonballs shot by duck monster</b>
 <b class="fc"><i class="no-highlight">83</i>&nbsp;            getComponent(Renderable.class).setTexture(ResourceManager.getSprite(ResourceManager.getId(&quot;Eggball.txt&quot;), &quot;egg&quot;));</b>
 <i class="no-highlight">84</i>&nbsp;        }
 <i class="no-highlight">85</i>&nbsp;        else{
@@ -235,7 +235,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2022-05-03 16:30</div>
+    <div style="float:right;">generated on 2022-05-03 20:24</div>
 </div>
 </body>
 </html>

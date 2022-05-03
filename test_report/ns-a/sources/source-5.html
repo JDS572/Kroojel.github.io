@@ -61,7 +61,7 @@ Current scope:     <a href="../../index.html">all classes</a>
     100%
   </span>
   <span class="absValue">
-    (55/55)
+    (60/60)
   </span>
 </td>
 </tr>
@@ -74,104 +74,116 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <pre>
 <div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package com.mygdx.tests;
-<i class="no-highlight">2</i>&nbsp;import com.badlogic.gdx.math.Vector2;
-<i class="no-highlight">3</i>&nbsp;import com.badlogic.gdx.utils.ObjectMap;
-<i class="no-highlight">4</i>&nbsp;import com.mygdx.game.Components.RigidBody;
-<i class="no-highlight">5</i>&nbsp;import com.mygdx.game.Entitys.Player;
-<i class="no-highlight">6</i>&nbsp;import com.mygdx.game.Managers.PhysicsManager;
-<i class="no-highlight">7</i>&nbsp;import com.mygdx.game.Managers.ResourceManager;
-<i class="no-highlight">8</i>&nbsp;import org.junit.*;
-<i class="no-highlight">9</i>&nbsp;import static com.mygdx.utils.Constants.INIT_CONSTANTS;
-<i class="no-highlight">10</i>&nbsp;import static org.junit.Assert.assertTrue;
-<i class="no-highlight">11</i>&nbsp;
-<i class="no-highlight">12</i>&nbsp;import org.junit.jupiter.api.AfterEach;
-<i class="no-highlight">13</i>&nbsp;import org.junit.jupiter.api.BeforeEach;
-<i class="no-highlight">14</i>&nbsp;import org.junit.runner.RunWith;
-<i class="no-highlight">15</i>&nbsp;
-<i class="no-highlight">16</i>&nbsp;@RunWith(GdxTestRunner.class)
-<b class="fc"><i class="no-highlight">17</i>&nbsp;public class MovementTests {</b>
-<i class="no-highlight">18</i>&nbsp;    @Before
-<i class="no-highlight">19</i>&nbsp;    public void prepareEnv(){
-<b class="fc"><i class="no-highlight">20</i>&nbsp;        int id_ship = ResourceManager.addTexture(&quot;ship.png&quot;);</b>
-<b class="fc"><i class="no-highlight">21</i>&nbsp;        int id_map = ResourceManager.addTileMap(&quot;Map.tmx&quot;);</b>
-<b class="fc"><i class="no-highlight">22</i>&nbsp;        int atlas_id = ResourceManager.addTextureAtlas(&quot;Boats.txt&quot;);</b>
-<b class="fc"><i class="no-highlight">23</i>&nbsp;        int extras_id = ResourceManager.addTextureAtlas(&quot;UISkin/skin.atlas&quot;);</b>
-<b class="fc"><i class="no-highlight">24</i>&nbsp;        int buildings_id = ResourceManager.addTextureAtlas(&quot;Buildings.txt&quot;);</b>
-<b class="fc"><i class="no-highlight">25</i>&nbsp;        int powups_atlas_id = ResourceManager.addTextureAtlas(&quot;upgrades_powerups.txt&quot;);</b>
-<b class="fc"><i class="no-highlight">26</i>&nbsp;        ResourceManager.addTexture(&quot;menuBG.jpg&quot;);</b>
-<b class="fc"><i class="no-highlight">27</i>&nbsp;        ResourceManager.addTexture(&quot;Chest.png&quot;);</b>
-<b class="fc"><i class="no-highlight">28</i>&nbsp;        ResourceManager.addTexture(&quot;progress_bar_red.png&quot;);</b>
-<b class="fc"><i class="no-highlight">29</i>&nbsp;        ResourceManager.addTexture(&quot;progress_bar_green.png&quot;);</b>
-<b class="fc"><i class="no-highlight">30</i>&nbsp;        ResourceManager.addTexture(&quot;points_star.png&quot;);</b>
-<b class="fc"><i class="no-highlight">31</i>&nbsp;        ResourceManager.addTextureAtlas(&quot;upgrade_tier_bar.txt&quot;);</b>
-<b class="fc"><i class="no-highlight">32</i>&nbsp;        ResourceManager.addTextureAtlas(&quot;upgrade_pricetags.txt&quot;);</b>
-<b class="fc"><i class="no-highlight">33</i>&nbsp;        ResourceManager.addTextureAtlas(&quot;longboi_moveset.txt&quot;);</b>
-<b class="fc"><i class="no-highlight">34</i>&nbsp;        ResourceManager.addTextureAtlas(&quot;Eggball.txt&quot;);</b>
-<b class="fc"><i class="no-highlight">35</i>&nbsp;        ResourceManager.addTexture(&quot;poison.png&quot;);</b>
-<b class="fc"><i class="no-highlight">36</i>&nbsp;        ResourceManager.addTexture(&quot;arrow.png&quot;);</b>
-<b class="fc"><i class="no-highlight">37</i>&nbsp;        ResourceManager.loadAssets();</b>
-<b class="fc"><i class="no-highlight">38</i>&nbsp;        INIT_CONSTANTS();</b>
-<b class="fc"><i class="no-highlight">39</i>&nbsp;        PhysicsManager.Initialize(false);</b>
-<b class="fc"><i class="no-highlight">40</i>&nbsp;    }</b>
-<i class="no-highlight">41</i>&nbsp;    @After
-<i class="no-highlight">42</i>&nbsp;    public void cleanEnv(){
-<b class="fc"><i class="no-highlight">43</i>&nbsp;        ResourceManager.deepClean();</b>
-<b class="fc"><i class="no-highlight">44</i>&nbsp;    }</b>
-<i class="no-highlight">45</i>&nbsp;    @Test
-<b class="fc"><i class="no-highlight">46</i>&nbsp;    public void testMovesNorth(){ testMoveDirection(&quot;-up&quot;);}</b>
-<i class="no-highlight">47</i>&nbsp;    @Test
-<b class="fc"><i class="no-highlight">48</i>&nbsp;    public void testMovesSouth(){testMoveDirection(&quot;-down&quot;);}</b>
-<i class="no-highlight">49</i>&nbsp;    @Test
-<b class="fc"><i class="no-highlight">50</i>&nbsp;    public void testMovesEast(){testMoveDirection(&quot;-right&quot;);}</b>
-<i class="no-highlight">51</i>&nbsp;    @Test
-<b class="fc"><i class="no-highlight">52</i>&nbsp;    public void testMovesWest(){testMoveDirection(&quot;-left&quot;);}</b>
+<i class="no-highlight">2</i>&nbsp;import com.badlogic.gdx.Game;
+<i class="no-highlight">3</i>&nbsp;import com.badlogic.gdx.math.Vector2;
+<i class="no-highlight">4</i>&nbsp;import com.badlogic.gdx.utils.ObjectMap;
+<i class="no-highlight">5</i>&nbsp;import com.mygdx.game.Components.RigidBody;
+<i class="no-highlight">6</i>&nbsp;import com.mygdx.game.Entitys.Player;
+<i class="no-highlight">7</i>&nbsp;import com.mygdx.game.Managers.GameManager;
+<i class="no-highlight">8</i>&nbsp;import com.mygdx.game.Managers.PhysicsManager;
+<i class="no-highlight">9</i>&nbsp;import com.mygdx.game.Managers.ResourceManager;
+<i class="no-highlight">10</i>&nbsp;import org.junit.*;
+<i class="no-highlight">11</i>&nbsp;import static com.mygdx.utils.Constants.INIT_CONSTANTS;
+<i class="no-highlight">12</i>&nbsp;import static org.junit.Assert.assertTrue;
+<i class="no-highlight">13</i>&nbsp;
+<i class="no-highlight">14</i>&nbsp;import org.junit.jupiter.api.AfterEach;
+<i class="no-highlight">15</i>&nbsp;import org.junit.jupiter.api.BeforeEach;
+<i class="no-highlight">16</i>&nbsp;import org.junit.runner.RunWith;
+<i class="no-highlight">17</i>&nbsp;
+<i class="no-highlight">18</i>&nbsp;@RunWith(GdxTestRunner.class)
+<b class="fc"><i class="no-highlight">19</i>&nbsp;public class MovementTests {</b>
+<i class="no-highlight">20</i>&nbsp;    @Before
+<i class="no-highlight">21</i>&nbsp;    public void prepareEnv(){
+<b class="fc"><i class="no-highlight">22</i>&nbsp;        int id_ship = ResourceManager.addTexture(&quot;ship.png&quot;);</b>
+<b class="fc"><i class="no-highlight">23</i>&nbsp;        int id_map = ResourceManager.addTileMap(&quot;Map.tmx&quot;);</b>
+<b class="fc"><i class="no-highlight">24</i>&nbsp;        int atlas_id = ResourceManager.addTextureAtlas(&quot;Boats.txt&quot;);</b>
+<b class="fc"><i class="no-highlight">25</i>&nbsp;        int extras_id = ResourceManager.addTextureAtlas(&quot;UISkin/skin.atlas&quot;);</b>
+<b class="fc"><i class="no-highlight">26</i>&nbsp;        int buildings_id = ResourceManager.addTextureAtlas(&quot;Buildings.txt&quot;);</b>
+<b class="fc"><i class="no-highlight">27</i>&nbsp;        int powups_atlas_id = ResourceManager.addTextureAtlas(&quot;upgrades_powerups.txt&quot;);</b>
+<b class="fc"><i class="no-highlight">28</i>&nbsp;        ResourceManager.addTexture(&quot;menuBG.jpg&quot;);</b>
+<b class="fc"><i class="no-highlight">29</i>&nbsp;        ResourceManager.addTexture(&quot;Chest.png&quot;);</b>
+<b class="fc"><i class="no-highlight">30</i>&nbsp;        ResourceManager.addTexture(&quot;progress_bar_red.png&quot;);</b>
+<b class="fc"><i class="no-highlight">31</i>&nbsp;        ResourceManager.addTexture(&quot;progress_bar_green.png&quot;);</b>
+<b class="fc"><i class="no-highlight">32</i>&nbsp;        ResourceManager.addTexture(&quot;points_star.png&quot;);</b>
+<b class="fc"><i class="no-highlight">33</i>&nbsp;        ResourceManager.addTextureAtlas(&quot;upgrade_tier_bar.txt&quot;);</b>
+<b class="fc"><i class="no-highlight">34</i>&nbsp;        ResourceManager.addTextureAtlas(&quot;upgrade_pricetags.txt&quot;);</b>
+<b class="fc"><i class="no-highlight">35</i>&nbsp;        ResourceManager.addTextureAtlas(&quot;longboi_moveset.txt&quot;);</b>
+<b class="fc"><i class="no-highlight">36</i>&nbsp;        ResourceManager.addTextureAtlas(&quot;Eggball.txt&quot;);</b>
+<b class="fc"><i class="no-highlight">37</i>&nbsp;        ResourceManager.addTexture(&quot;poison.png&quot;);</b>
+<b class="fc"><i class="no-highlight">38</i>&nbsp;        ResourceManager.addTexture(&quot;arrow.png&quot;);</b>
+<b class="fc"><i class="no-highlight">39</i>&nbsp;        ResourceManager.loadAssets();</b>
+<b class="fc"><i class="no-highlight">40</i>&nbsp;        INIT_CONSTANTS();</b>
+<b class="fc"><i class="no-highlight">41</i>&nbsp;        PhysicsManager.Initialize(false);</b>
+<b class="fc"><i class="no-highlight">42</i>&nbsp;        GameManager.CreatePlayer(); // the player entity for tests</b>
+<b class="fc"><i class="no-highlight">43</i>&nbsp;        GameManager.CreateNPCShip(2); // the &quot;enemy&quot; entity for tests</b>
+<b class="fc"><i class="no-highlight">44</i>&nbsp;        GameManager.CreateNPCShip(1); // the &quot;ally&quot; entity for tests</b>
+<b class="fc"><i class="no-highlight">45</i>&nbsp;        GameManager.CreateCollege(2);</b>
+<b class="fc"><i class="no-highlight">46</i>&nbsp;    }</b>
+<i class="no-highlight">47</i>&nbsp;    @After
+<i class="no-highlight">48</i>&nbsp;    public void cleanEnv(){
+<b class="fc"><i class="no-highlight">49</i>&nbsp;        ResourceManager.deepClean();</b>
+<b class="fc"><i class="no-highlight">50</i>&nbsp;        GameManager.getShips().clear();</b>
+<b class="fc"><i class="no-highlight">51</i>&nbsp;        GameManager.getColleges().clear();</b>
+<b class="fc"><i class="no-highlight">52</i>&nbsp;    }</b>
 <i class="no-highlight">53</i>&nbsp;    @Test
-<b class="fc"><i class="no-highlight">54</i>&nbsp;    public void testMovesNorthEast(){testMoveDirection(&quot;-ur&quot;);}</b>
+<b class="fc"><i class="no-highlight">54</i>&nbsp;    public void testMovesNorth(){ testMoveDirection(&quot;-up&quot;);}</b>
 <i class="no-highlight">55</i>&nbsp;    @Test
-<b class="fc"><i class="no-highlight">56</i>&nbsp;    public void testMovesNorthWest(){testMoveDirection(&quot;-ul&quot;);}</b>
+<b class="fc"><i class="no-highlight">56</i>&nbsp;    public void testMovesSouth(){testMoveDirection(&quot;-down&quot;);}</b>
 <i class="no-highlight">57</i>&nbsp;    @Test
-<b class="fc"><i class="no-highlight">58</i>&nbsp;    public void testMovesSouthEast(){testMoveDirection(&quot;-dr&quot;);}</b>
+<b class="fc"><i class="no-highlight">58</i>&nbsp;    public void testMovesEast(){testMoveDirection(&quot;-right&quot;);}</b>
 <i class="no-highlight">59</i>&nbsp;    @Test
-<b class="fc"><i class="no-highlight">60</i>&nbsp;    public void testMovesSouthWest(){testMoveDirection(&quot;-dl&quot;);}</b>
-<i class="no-highlight">61</i>&nbsp;
-<i class="no-highlight">62</i>&nbsp;    public void testMoveDirection(String dir){
-<i class="no-highlight">63</i>&nbsp;        /**
-<i class="no-highlight">64</i>&nbsp;         * Tests one of the 8 possible directions a ship can move in.
-<i class="no-highlight">65</i>&nbsp;         * @param dir : the direction to be tested.
-<i class="no-highlight">66</i>&nbsp;         *
-<i class="no-highlight">67</i>&nbsp;         * */
-<b class="fc"><i class="no-highlight">68</i>&nbsp;        ObjectMap shipDirections = new ObjectMap&lt;&gt;();</b>
-<b class="fc"><i class="no-highlight">69</i>&nbsp;        shipDirections.put(&quot;-up&quot;, new Vector2(0f, 100f));</b>
-<b class="fc"><i class="no-highlight">70</i>&nbsp;        shipDirections.put(&quot;-down&quot;, new Vector2(0f, -100f));</b>
-<b class="fc"><i class="no-highlight">71</i>&nbsp;        shipDirections.put(&quot;-right&quot;, new Vector2(100f, 0f));</b>
-<b class="fc"><i class="no-highlight">72</i>&nbsp;        shipDirections.put(&quot;-left&quot;, new Vector2(-100f, 0f));</b>
-<b class="fc"><i class="no-highlight">73</i>&nbsp;        shipDirections.put(&quot;-ur&quot;, new Vector2(100f, 100f));</b>
-<b class="fc"><i class="no-highlight">74</i>&nbsp;        shipDirections.put(&quot;-ul&quot;, new Vector2(-100f, 100f));</b>
-<b class="fc"><i class="no-highlight">75</i>&nbsp;        shipDirections.put(&quot;-dr&quot;, new Vector2(100f, -100f));</b>
-<b class="fc"><i class="no-highlight">76</i>&nbsp;        shipDirections.put(&quot;-dl&quot;, new Vector2(-100f, -100f));</b>
-<i class="no-highlight">77</i>&nbsp;
-<b class="fc"><i class="no-highlight">78</i>&nbsp;        Vector2 moveDir = (Vector2) shipDirections.get(dir);</b>
-<b class="fc"><i class="no-highlight">79</i>&nbsp;        Player player = new Player();</b>
-<b class="fc"><i class="no-highlight">80</i>&nbsp;        RigidBody player_body = player.getComponent(RigidBody.class);</b>
-<b class="fc"><i class="no-highlight">81</i>&nbsp;        Vector2 start = player.getPosition().cpy();</b>
-<b class="fc"><i class="no-highlight">82</i>&nbsp;        player_body.setVelocity(moveDir);</b>
-<b class="fc"><i class="no-highlight">83</i>&nbsp;        player_body.update();</b>
-<b class="fc"><i class="no-highlight">84</i>&nbsp;        PhysicsManager.update();</b>
-<b class="fc"><i class="no-highlight">85</i>&nbsp;        player_body.setVelocity(moveDir);</b>
-<b class="fc"><i class="no-highlight">86</i>&nbsp;        player_body.update();</b>
-<b class="fc"><i class="no-highlight">87</i>&nbsp;        PhysicsManager.update();</b>
-<b class="fc"><i class="no-highlight">88</i>&nbsp;        Vector2 delta = player.getPosition().cpy().sub(start);</b>
-<b class="fc"><i class="no-highlight">89</i>&nbsp;        delta = new Vector2(delta.x * moveDir.x, delta.y * moveDir.y);</b>
-<i class="no-highlight">90</i>&nbsp;        //Check that ship has moved in the correct direction:
-<b class="fc"><i class="no-highlight">91</i>&nbsp;        assertTrue(</b>
-<i class="no-highlight">92</i>&nbsp;                &quot;Ship moved in incorrect direction!&quot; + delta,
-<i class="no-highlight">93</i>&nbsp;                (
-<i class="no-highlight">94</i>&nbsp;                        ((delta.x &gt;= 0.0) &amp;&amp; // ship moved in the correct direction in the x axis
-<i class="no-highlight">95</i>&nbsp;                        (delta.y &gt;= 0.0)) // ship moved in the correct direction in the y axis
-<i class="no-highlight">96</i>&nbsp;                ));
-<i class="no-highlight">97</i>&nbsp;
-<b class="fc"><i class="no-highlight">98</i>&nbsp;        }</b>
-<i class="no-highlight">99</i>&nbsp;}
+<b class="fc"><i class="no-highlight">60</i>&nbsp;    public void testMovesWest(){ testMoveDirection(&quot;-left&quot;);}</b>
+<i class="no-highlight">61</i>&nbsp;    @Test
+<b class="fc"><i class="no-highlight">62</i>&nbsp;    public void testMovesNorthEast(){testMoveDirection(&quot;-ur&quot;);}</b>
+<i class="no-highlight">63</i>&nbsp;    @Test
+<b class="fc"><i class="no-highlight">64</i>&nbsp;    public void testMovesNorthWest(){testMoveDirection(&quot;-ul&quot;);}</b>
+<i class="no-highlight">65</i>&nbsp;    @Test
+<i class="no-highlight">66</i>&nbsp;    public void testMovesSouthEast(){
+<b class="fc"><i class="no-highlight">67</i>&nbsp;        testMoveDirection(&quot;-dr&quot;);</b>
+<b class="fc"><i class="no-highlight">68</i>&nbsp;    }</b>
+<i class="no-highlight">69</i>&nbsp;    @Test
+<b class="fc"><i class="no-highlight">70</i>&nbsp;    public void testMovesSouthWest(){testMoveDirection(&quot;-dl&quot;);}</b>
+<i class="no-highlight">71</i>&nbsp;
+<i class="no-highlight">72</i>&nbsp;    public void testMoveDirection(String dir){
+<i class="no-highlight">73</i>&nbsp;        /**
+<i class="no-highlight">74</i>&nbsp;         * Tests one of the 8 possible directions a ship can move in.
+<i class="no-highlight">75</i>&nbsp;         * @param dir : the direction to be tested.
+<i class="no-highlight">76</i>&nbsp;         *
+<i class="no-highlight">77</i>&nbsp;         * */
+<b class="fc"><i class="no-highlight">78</i>&nbsp;        ObjectMap shipDirections = new ObjectMap&lt;&gt;();</b>
+<b class="fc"><i class="no-highlight">79</i>&nbsp;        shipDirections.put(&quot;-up&quot;, new Vector2(0f, 100f));</b>
+<b class="fc"><i class="no-highlight">80</i>&nbsp;        shipDirections.put(&quot;-down&quot;, new Vector2(0f, -100f));</b>
+<b class="fc"><i class="no-highlight">81</i>&nbsp;        shipDirections.put(&quot;-right&quot;, new Vector2(100f, 0f));</b>
+<b class="fc"><i class="no-highlight">82</i>&nbsp;        shipDirections.put(&quot;-left&quot;, new Vector2(-100f, 0f));</b>
+<b class="fc"><i class="no-highlight">83</i>&nbsp;        shipDirections.put(&quot;-ur&quot;, new Vector2(100f, 100f));</b>
+<b class="fc"><i class="no-highlight">84</i>&nbsp;        shipDirections.put(&quot;-ul&quot;, new Vector2(-100f, 100f));</b>
+<b class="fc"><i class="no-highlight">85</i>&nbsp;        shipDirections.put(&quot;-dr&quot;, new Vector2(100f, -100f));</b>
+<b class="fc"><i class="no-highlight">86</i>&nbsp;        shipDirections.put(&quot;-dl&quot;, new Vector2(-100f, -100f));</b>
+<i class="no-highlight">87</i>&nbsp;
+<b class="fc"><i class="no-highlight">88</i>&nbsp;        Vector2 moveDir = (Vector2) shipDirections.get(dir);</b>
+<b class="fc"><i class="no-highlight">89</i>&nbsp;        Player player = GameManager.getPlayer();</b>
+<b class="fc"><i class="no-highlight">90</i>&nbsp;        RigidBody player_body = player.getComponent(RigidBody.class);</b>
+<b class="fc"><i class="no-highlight">91</i>&nbsp;        Vector2 start = player.getPosition().cpy();</b>
+<b class="fc"><i class="no-highlight">92</i>&nbsp;        player.update();</b>
+<b class="fc"><i class="no-highlight">93</i>&nbsp;        player_body.setVelocity(moveDir);</b>
+<b class="fc"><i class="no-highlight">94</i>&nbsp;        player_body.update();</b>
+<b class="fc"><i class="no-highlight">95</i>&nbsp;        PhysicsManager.update();</b>
+<i class="no-highlight">96</i>&nbsp;//        player.update();
+<i class="no-highlight">97</i>&nbsp;//        //player_body.setVelocity(moveDir);
+<i class="no-highlight">98</i>&nbsp;//        player_body.update();
+<i class="no-highlight">99</i>&nbsp;//        PhysicsManager.update();
+<b class="fc"><i class="no-highlight">100</i>&nbsp;        Vector2 delta = player.getPosition().cpy().sub(start);</b>
+<b class="fc"><i class="no-highlight">101</i>&nbsp;        delta = new Vector2(delta.x * moveDir.x, delta.y * moveDir.y);</b>
+<i class="no-highlight">102</i>&nbsp;        //Check that ship has moved in the correct direction:
+<b class="fc"><i class="no-highlight">103</i>&nbsp;        assertTrue(</b>
+<i class="no-highlight">104</i>&nbsp;                &quot;Ship moved in incorrect direction!&quot; + delta,
+<i class="no-highlight">105</i>&nbsp;                (
+<i class="no-highlight">106</i>&nbsp;                        ((delta.x &gt;= 0.0) &amp;&amp; // ship moved in the correct direction in the x axis
+<i class="no-highlight">107</i>&nbsp;                        (delta.y &gt;= 0.0)) // ship moved in the correct direction in the y axis
+<i class="no-highlight">108</i>&nbsp;                ));
+<i class="no-highlight">109</i>&nbsp;
+<b class="fc"><i class="no-highlight">110</i>&nbsp;        }</b>
+<i class="no-highlight">111</i>&nbsp;}
 </div>
 </pre>
 </div>
@@ -198,7 +210,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2022-05-03 16:30</div>
+    <div style="float:right;">generated on 2022-05-03 20:24</div>
 </div>
 </body>
 </html>

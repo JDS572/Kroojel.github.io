@@ -58,10 +58,10 @@ Current scope:     <a href="../../index.html">all classes</a>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    31.9%
+    31.6%
   </span>
   <span class="absValue">
-    (60/188)
+    (60/190)
   </span>
 </td>
 </tr>
@@ -90,381 +90,387 @@ Current scope:     <a href="../../index.html">all classes</a>
 <i class="no-highlight">15</i>&nbsp;import com.mygdx.game.Quests.KillDuckQuest;
 <i class="no-highlight">16</i>&nbsp;import com.mygdx.game.Quests.KillQuest;
 <i class="no-highlight">17</i>&nbsp;import com.mygdx.game.Quests.LocateQuest;
-<i class="no-highlight">18</i>&nbsp;import com.mygdx.utils.QueueFIFO;
-<i class="no-highlight">19</i>&nbsp;import com.mygdx.utils.Utilities;
-<i class="no-highlight">20</i>&nbsp;
-<i class="no-highlight">21</i>&nbsp;import java.util.ArrayList;
-<i class="no-highlight">22</i>&nbsp;import java.util.Objects;
-<i class="no-highlight">23</i>&nbsp;import java.util.Random;
-<i class="no-highlight">24</i>&nbsp;
-<i class="no-highlight">25</i>&nbsp;/**
-<i class="no-highlight">26</i>&nbsp; * Responsible for creating most entity&#39;s associated with the game. Also the cached chest and cannonballs
-<i class="no-highlight">27</i>&nbsp; */
-<b class="nc"><i class="no-highlight">28</i>&nbsp;public final class GameManager {</b>
-<b class="fc"><i class="no-highlight">29</i>&nbsp;    private static boolean initialized = false;</b>
-<i class="no-highlight">30</i>&nbsp;    private static ArrayList&lt;Faction&gt; factions;
-<i class="no-highlight">31</i>&nbsp;    private static ArrayList&lt;Ship&gt; ships;
-<i class="no-highlight">32</i>&nbsp;    private static ArrayList&lt;College&gt; colleges;
-<i class="no-highlight">33</i>&nbsp;
-<i class="no-highlight">34</i>&nbsp;    private static final int cacheSize = 40;
-<i class="no-highlight">35</i>&nbsp;    private static ArrayList&lt;CannonBall&gt; ballCache;
-<i class="no-highlight">36</i>&nbsp;    private static int currentElement;
-<i class="no-highlight">37</i>&nbsp;    private static Powerup [] powerups;
-<i class="no-highlight">38</i>&nbsp;    private static JsonValue settings;
-<i class="no-highlight">39</i>&nbsp;    private static DuckMonster longboi;
-<i class="no-highlight">40</i>&nbsp;    private static TileMapGraph mapGraph;
-<i class="no-highlight">41</i>&nbsp;
-<i class="no-highlight">42</i>&nbsp;    /**
-<i class="no-highlight">43</i>&nbsp;     * facilitates creation of the game
-<i class="no-highlight">44</i>&nbsp;     */
-<i class="no-highlight">45</i>&nbsp;    public static void Initialize() {
-<b class="fc"><i class="no-highlight">46</i>&nbsp;        initialized = true;</b>
-<b class="fc"><i class="no-highlight">47</i>&nbsp;        currentElement = 0;</b>
-<b class="fc"><i class="no-highlight">48</i>&nbsp;        settings = new JsonReader().parse(Gdx.files.internal(&quot;GameSettings.json&quot;));</b>
-<b class="fc"><i class="no-highlight">49</i>&nbsp;        factions = new ArrayList&lt;&gt;();</b>
-<b class="fc"><i class="no-highlight">50</i>&nbsp;        ships = new ArrayList&lt;&gt;();</b>
-<b class="fc"><i class="no-highlight">51</i>&nbsp;        ballCache = new ArrayList&lt;&gt;(cacheSize);</b>
-<b class="fc"><i class="no-highlight">52</i>&nbsp;        colleges = new ArrayList&lt;&gt;();</b>
-<b class="fc"><i class="no-highlight">53</i>&nbsp;        powerups = new Powerup[50];</b>
-<b class="fc"><i class="no-highlight">54</i>&nbsp;        for (int i = 0; i &lt; cacheSize; i++) {</b>
-<b class="fc"><i class="no-highlight">55</i>&nbsp;            ballCache.add(new CannonBall());</b>
-<i class="no-highlight">56</i>&nbsp;        }
-<b class="fc"><i class="no-highlight">57</i>&nbsp;        for (JsonValue v : settings.get(&quot;factions&quot;)) {</b>
-<b class="fc"><i class="no-highlight">58</i>&nbsp;            String name = v.getString(&quot;name&quot;);</b>
-<b class="fc"><i class="no-highlight">59</i>&nbsp;            String col = v.getString(&quot;colour&quot;);</b>
-<b class="fc"><i class="no-highlight">60</i>&nbsp;            Vector2 pos = new Vector2(v.get(&quot;position&quot;).getFloat(&quot;x&quot;), v.get(&quot;position&quot;).getFloat(&quot;y&quot;));</b>
-<b class="fc"><i class="no-highlight">61</i>&nbsp;            pos = Utilities.tilesToDistance(pos);</b>
-<b class="fc"><i class="no-highlight">62</i>&nbsp;            Vector2 spawn = new Vector2(v.get(&quot;shipSpawn&quot;).getFloat(&quot;x&quot;), v.get(&quot;shipSpawn&quot;).getFloat(&quot;y&quot;));</b>
-<b class="fc"><i class="no-highlight">63</i>&nbsp;            spawn = Utilities.tilesToDistance(spawn);</b>
-<b class="fc"><i class="no-highlight">64</i>&nbsp;            factions.add(new Faction(name, col, pos, spawn, factions.size() + 1));</b>
-<b class="fc"><i class="no-highlight">65</i>&nbsp;        }</b>
-<b class="fc"><i class="no-highlight">66</i>&nbsp;    }</b>
-<i class="no-highlight">67</i>&nbsp;    /**
-<i class="no-highlight">68</i>&nbsp;     * Loads a game from an existing JSON file specifying ship location, health, plunder and other game statistics
-<i class="no-highlight">69</i>&nbsp;     * */
-<i class="no-highlight">70</i>&nbsp;    public static void load_game(JsonValue _factions, JsonValue _ships, JsonValue _colleges, JsonValue _quests, JsonValue base) {
-<b class="nc"><i class="no-highlight">71</i>&nbsp;        reset();</b>
-<b class="nc"><i class="no-highlight">72</i>&nbsp;        factions.clear();</b>
-<b class="nc"><i class="no-highlight">73</i>&nbsp;        factions = new ArrayList&lt;&gt;();</b>
-<i class="no-highlight">74</i>&nbsp;
-<b class="nc"><i class="no-highlight">75</i>&nbsp;        Player p = GameManager.getPlayer();</b>
-<i class="no-highlight">76</i>&nbsp;
-<b class="nc"><i class="no-highlight">77</i>&nbsp;        for (Ship s : ships) {</b>
-<b class="nc"><i class="no-highlight">78</i>&nbsp;            s.getComponent(Pirate.class).setHealth(0);</b>
-<b class="nc"><i class="no-highlight">79</i>&nbsp;            s.setDead();</b>
-<b class="nc"><i class="no-highlight">80</i>&nbsp;            s.update();</b>
-<b class="nc"><i class="no-highlight">81</i>&nbsp;        }</b>
-<b class="nc"><i class="no-highlight">82</i>&nbsp;        ships.clear();</b>
-<b class="nc"><i class="no-highlight">83</i>&nbsp;        ships = new ArrayList&lt;&gt;();</b>
-<i class="no-highlight">84</i>&nbsp;
-<i class="no-highlight">85</i>&nbsp;//        ballCache = new ArrayList&lt;&gt;(cacheSize);
-<i class="no-highlight">86</i>&nbsp;
+<i class="no-highlight">18</i>&nbsp;import com.mygdx.game.UI.GameScreen;
+<i class="no-highlight">19</i>&nbsp;import com.mygdx.utils.QueueFIFO;
+<i class="no-highlight">20</i>&nbsp;import com.mygdx.utils.Utilities;
+<i class="no-highlight">21</i>&nbsp;
+<i class="no-highlight">22</i>&nbsp;import java.util.ArrayList;
+<i class="no-highlight">23</i>&nbsp;import java.util.Objects;
+<i class="no-highlight">24</i>&nbsp;import java.util.Random;
+<i class="no-highlight">25</i>&nbsp;
+<i class="no-highlight">26</i>&nbsp;/**
+<i class="no-highlight">27</i>&nbsp; * Responsible for creating most entity&#39;s associated with the game. Also the cached chest and cannonballs
+<i class="no-highlight">28</i>&nbsp; */
+<b class="nc"><i class="no-highlight">29</i>&nbsp;public final class GameManager {</b>
+<b class="fc"><i class="no-highlight">30</i>&nbsp;    private static boolean initialized = false;</b>
+<i class="no-highlight">31</i>&nbsp;    private static ArrayList&lt;Faction&gt; factions;
+<i class="no-highlight">32</i>&nbsp;    private static ArrayList&lt;Ship&gt; ships;
+<i class="no-highlight">33</i>&nbsp;    private static ArrayList&lt;College&gt; colleges;
+<i class="no-highlight">34</i>&nbsp;
+<i class="no-highlight">35</i>&nbsp;    private static final int cacheSize = 40;
+<i class="no-highlight">36</i>&nbsp;    private static ArrayList&lt;CannonBall&gt; ballCache;
+<i class="no-highlight">37</i>&nbsp;    private static int currentElement;
+<i class="no-highlight">38</i>&nbsp;    private static Powerup [] powerups;
+<i class="no-highlight">39</i>&nbsp;    private static JsonValue settings;
+<i class="no-highlight">40</i>&nbsp;    private static DuckMonster longboi;
+<i class="no-highlight">41</i>&nbsp;    private static TileMapGraph mapGraph;
+<i class="no-highlight">42</i>&nbsp;
+<i class="no-highlight">43</i>&nbsp;    /**
+<i class="no-highlight">44</i>&nbsp;     * facilitates creation of the game
+<i class="no-highlight">45</i>&nbsp;     */
+<i class="no-highlight">46</i>&nbsp;    public static void Initialize() {
+<b class="fc"><i class="no-highlight">47</i>&nbsp;        initialized = true;</b>
+<b class="fc"><i class="no-highlight">48</i>&nbsp;        currentElement = 0;</b>
+<b class="fc"><i class="no-highlight">49</i>&nbsp;        settings = new JsonReader().parse(Gdx.files.internal(&quot;GameSettings.json&quot;));</b>
+<b class="fc"><i class="no-highlight">50</i>&nbsp;        factions = new ArrayList&lt;&gt;();</b>
+<b class="fc"><i class="no-highlight">51</i>&nbsp;        ships = new ArrayList&lt;&gt;();</b>
+<b class="fc"><i class="no-highlight">52</i>&nbsp;        ballCache = new ArrayList&lt;&gt;(cacheSize);</b>
+<b class="fc"><i class="no-highlight">53</i>&nbsp;        colleges = new ArrayList&lt;&gt;();</b>
+<b class="fc"><i class="no-highlight">54</i>&nbsp;        powerups = new Powerup[50];</b>
+<b class="fc"><i class="no-highlight">55</i>&nbsp;        for (int i = 0; i &lt; cacheSize; i++) {</b>
+<b class="fc"><i class="no-highlight">56</i>&nbsp;            ballCache.add(new CannonBall());</b>
+<i class="no-highlight">57</i>&nbsp;        }
+<b class="fc"><i class="no-highlight">58</i>&nbsp;        for (JsonValue v : settings.get(&quot;factions&quot;)) {</b>
+<b class="fc"><i class="no-highlight">59</i>&nbsp;            String name = v.getString(&quot;name&quot;);</b>
+<b class="fc"><i class="no-highlight">60</i>&nbsp;            String col = v.getString(&quot;colour&quot;);</b>
+<b class="fc"><i class="no-highlight">61</i>&nbsp;            Vector2 pos = new Vector2(v.get(&quot;position&quot;).getFloat(&quot;x&quot;), v.get(&quot;position&quot;).getFloat(&quot;y&quot;));</b>
+<b class="fc"><i class="no-highlight">62</i>&nbsp;            pos = Utilities.tilesToDistance(pos);</b>
+<b class="fc"><i class="no-highlight">63</i>&nbsp;            Vector2 spawn = new Vector2(v.get(&quot;shipSpawn&quot;).getFloat(&quot;x&quot;), v.get(&quot;shipSpawn&quot;).getFloat(&quot;y&quot;));</b>
+<b class="fc"><i class="no-highlight">64</i>&nbsp;            spawn = Utilities.tilesToDistance(spawn);</b>
+<b class="fc"><i class="no-highlight">65</i>&nbsp;            factions.add(new Faction(name, col, pos, spawn, factions.size() + 1));</b>
+<b class="fc"><i class="no-highlight">66</i>&nbsp;        }</b>
+<b class="fc"><i class="no-highlight">67</i>&nbsp;    }</b>
+<i class="no-highlight">68</i>&nbsp;    /**
+<i class="no-highlight">69</i>&nbsp;     * Loads a game from an existing JSON file specifying ship location, health, plunder and other game statistics
+<i class="no-highlight">70</i>&nbsp;     * */
+<i class="no-highlight">71</i>&nbsp;    public static void load_game(JsonValue _factions, JsonValue _ships, JsonValue _colleges, JsonValue _quests, JsonValue base) {
+<b class="nc"><i class="no-highlight">72</i>&nbsp;        reset();</b>
+<b class="nc"><i class="no-highlight">73</i>&nbsp;        factions.clear();</b>
+<b class="nc"><i class="no-highlight">74</i>&nbsp;        factions = new ArrayList&lt;&gt;();</b>
+<i class="no-highlight">75</i>&nbsp;
+<b class="nc"><i class="no-highlight">76</i>&nbsp;        Player p = GameManager.getPlayer();</b>
+<i class="no-highlight">77</i>&nbsp;
+<b class="nc"><i class="no-highlight">78</i>&nbsp;        for (Ship s : ships) {</b>
+<b class="nc"><i class="no-highlight">79</i>&nbsp;            s.getComponent(Pirate.class).setHealth(0);</b>
+<b class="nc"><i class="no-highlight">80</i>&nbsp;            s.setDead();</b>
+<b class="nc"><i class="no-highlight">81</i>&nbsp;            s.update();</b>
+<b class="nc"><i class="no-highlight">82</i>&nbsp;        }</b>
+<b class="nc"><i class="no-highlight">83</i>&nbsp;        ships.clear();</b>
+<b class="nc"><i class="no-highlight">84</i>&nbsp;        ships = new ArrayList&lt;&gt;();</b>
+<i class="no-highlight">85</i>&nbsp;
+<i class="no-highlight">86</i>&nbsp;//        ballCache = new ArrayList&lt;&gt;(cacheSize);
 <i class="no-highlight">87</i>&nbsp;
-<b class="nc"><i class="no-highlight">88</i>&nbsp;        for (College c : colleges) {</b>
-<b class="nc"><i class="no-highlight">89</i>&nbsp;            for (Building b : c.getBuildings()) {</b>
-<b class="nc"><i class="no-highlight">90</i>&nbsp;                b.hide();</b>
-<b class="nc"><i class="no-highlight">91</i>&nbsp;            }</b>
-<b class="nc"><i class="no-highlight">92</i>&nbsp;        }</b>
-<b class="nc"><i class="no-highlight">93</i>&nbsp;        colleges.clear();</b>
-<b class="nc"><i class="no-highlight">94</i>&nbsp;        colleges = new ArrayList&lt;&gt;();</b>
-<b class="nc"><i class="no-highlight">95</i>&nbsp;        powerups = new Powerup[50];</b>
-<i class="no-highlight">96</i>&nbsp;
-<b class="nc"><i class="no-highlight">97</i>&nbsp;        System.gc();</b>
-<i class="no-highlight">98</i>&nbsp;//        for (int i = 0; i &lt; cacheSize; i++) {
-<i class="no-highlight">99</i>&nbsp;//            ballCache.add(new CannonBall());
-<i class="no-highlight">100</i>&nbsp;//        }
-<i class="no-highlight">101</i>&nbsp;
-<i class="no-highlight">102</i>&nbsp;//        Load Factions
-<b class="nc"><i class="no-highlight">103</i>&nbsp;        for (JsonValue faction : _factions) {</b>
-<b class="nc"><i class="no-highlight">104</i>&nbsp;            String name = faction.getString(&quot;name&quot;);</b>
-<b class="nc"><i class="no-highlight">105</i>&nbsp;            String col = faction.getString(&quot;shipColour&quot;);</b>
-<b class="nc"><i class="no-highlight">106</i>&nbsp;            Vector2 pos = new Vector2(faction.get(&quot;position&quot;).getFloat(&quot;x&quot;), faction.get(&quot;position&quot;).getFloat(&quot;y&quot;));</b>
-<b class="nc"><i class="no-highlight">107</i>&nbsp;            Vector2 spawn = new Vector2(faction.get(&quot;spawnPos&quot;).getFloat(&quot;x&quot;), faction.get(&quot;spawnPos&quot;).getFloat(&quot;y&quot;));</b>
-<b class="nc"><i class="no-highlight">108</i>&nbsp;            factions.add(new Faction(name, col, pos, spawn, factions.size() + 1));</b>
-<b class="nc"><i class="no-highlight">109</i>&nbsp;        }</b>
-<i class="no-highlight">110</i>&nbsp;
+<i class="no-highlight">88</i>&nbsp;
+<b class="nc"><i class="no-highlight">89</i>&nbsp;        for (College c : colleges) {</b>
+<b class="nc"><i class="no-highlight">90</i>&nbsp;            for (Building b : c.getBuildings()) {</b>
+<b class="nc"><i class="no-highlight">91</i>&nbsp;                b.hide();</b>
+<b class="nc"><i class="no-highlight">92</i>&nbsp;            }</b>
+<b class="nc"><i class="no-highlight">93</i>&nbsp;        }</b>
+<b class="nc"><i class="no-highlight">94</i>&nbsp;        colleges.clear();</b>
+<b class="nc"><i class="no-highlight">95</i>&nbsp;        colleges = new ArrayList&lt;&gt;();</b>
+<b class="nc"><i class="no-highlight">96</i>&nbsp;        powerups = new Powerup[50];</b>
+<i class="no-highlight">97</i>&nbsp;
+<b class="nc"><i class="no-highlight">98</i>&nbsp;        System.gc();</b>
+<i class="no-highlight">99</i>&nbsp;//        for (int i = 0; i &lt; cacheSize; i++) {
+<i class="no-highlight">100</i>&nbsp;//            ballCache.add(new CannonBall());
+<i class="no-highlight">101</i>&nbsp;//        }
+<i class="no-highlight">102</i>&nbsp;
+<i class="no-highlight">103</i>&nbsp;//        Load Factions
+<b class="nc"><i class="no-highlight">104</i>&nbsp;        for (JsonValue faction : _factions) {</b>
+<b class="nc"><i class="no-highlight">105</i>&nbsp;            String name = faction.getString(&quot;name&quot;);</b>
+<b class="nc"><i class="no-highlight">106</i>&nbsp;            String col = faction.getString(&quot;shipColour&quot;);</b>
+<b class="nc"><i class="no-highlight">107</i>&nbsp;            Vector2 pos = new Vector2(faction.get(&quot;position&quot;).getFloat(&quot;x&quot;), faction.get(&quot;position&quot;).getFloat(&quot;y&quot;));</b>
+<b class="nc"><i class="no-highlight">108</i>&nbsp;            Vector2 spawn = new Vector2(faction.get(&quot;spawnPos&quot;).getFloat(&quot;x&quot;), faction.get(&quot;spawnPos&quot;).getFloat(&quot;y&quot;));</b>
+<b class="nc"><i class="no-highlight">109</i>&nbsp;            factions.add(new Faction(name, col, pos, spawn, factions.size() + 1));</b>
+<b class="nc"><i class="no-highlight">110</i>&nbsp;        }</b>
 <i class="no-highlight">111</i>&nbsp;
-<i class="no-highlight">112</i>&nbsp;//        Create player
-<b class="nc"><i class="no-highlight">113</i>&nbsp;        p.setPlayer();</b>
-<b class="nc"><i class="no-highlight">114</i>&nbsp;        p.setFaction(1);</b>
-<i class="no-highlight">115</i>&nbsp;        try {
-<b class="nc"><i class="no-highlight">116</i>&nbsp;            p.setPlunder(base.getInt(&quot;plunder&quot;));</b>
-<b class="nc"><i class="no-highlight">117</i>&nbsp;        } catch (IllegalArgumentException e) {</b>
-<b class="nc"><i class="no-highlight">118</i>&nbsp;            p.setPlunder(0);</b>
-<b class="nc"><i class="no-highlight">119</i>&nbsp;        }</b>
-<b class="nc"><i class="no-highlight">120</i>&nbsp;        p.setHealth(base.getInt(&quot;health&quot;));</b>
-<i class="no-highlight">121</i>&nbsp;        try {
-<b class="nc"><i class="no-highlight">122</i>&nbsp;            p.setCannonBalls(base.getInt(&quot;cannon_balls&quot;));</b>
-<b class="nc"><i class="no-highlight">123</i>&nbsp;        } catch (IllegalArgumentException e) {</b>
-<b class="nc"><i class="no-highlight">124</i>&nbsp;            p.setCannonBalls(0);</b>
-<b class="nc"><i class="no-highlight">125</i>&nbsp;        }</b>
-<b class="nc"><i class="no-highlight">126</i>&nbsp;        ships.add(p);</b>
-<i class="no-highlight">127</i>&nbsp;
-<i class="no-highlight">128</i>&nbsp;//        Create ships from load
-<b class="nc"><i class="no-highlight">129</i>&nbsp;        int counter = 0;</b>
-<b class="nc"><i class="no-highlight">130</i>&nbsp;        for (JsonValue ship : _ships) {</b>
-<b class="nc"><i class="no-highlight">131</i>&nbsp;            if (counter != 0) {</b>
-<b class="nc"><i class="no-highlight">132</i>&nbsp;                NPCShip s = CreateNPCShip(ship.getInt(&quot;faction&quot;) + 1);</b>
-<b class="nc"><i class="no-highlight">133</i>&nbsp;                s.getComponent(Transform.class).setPosition(new Vector2(ship.get(&quot;position&quot;).getInt(&quot;x&quot;), ship.get(&quot;position&quot;).getInt(&quot;y&quot;)));</b>
-<b class="nc"><i class="no-highlight">134</i>&nbsp;                s.getComponent(RigidBody.class).setPosition(new Vector2(ship.get(&quot;position&quot;).getInt(&quot;x&quot;), ship.get(&quot;position&quot;).getInt(&quot;y&quot;)));</b>
-<i class="no-highlight">135</i>&nbsp;            }
-<b class="nc"><i class="no-highlight">136</i>&nbsp;            counter ++;</b>
-<b class="nc"><i class="no-highlight">137</i>&nbsp;        }</b>
-<i class="no-highlight">138</i>&nbsp;
-<i class="no-highlight">139</i>&nbsp;//        System.out.println(_factions);
-<i class="no-highlight">140</i>&nbsp;//        System.out.println(&quot;\n\n\n\n&quot;);
-<i class="no-highlight">141</i>&nbsp;//        for (Faction f : factions) {
-<i class="no-highlight">142</i>&nbsp;//            System.out.println(f.getName());
-<i class="no-highlight">143</i>&nbsp;//        }
+<i class="no-highlight">112</i>&nbsp;
+<i class="no-highlight">113</i>&nbsp;//        Create player
+<b class="nc"><i class="no-highlight">114</i>&nbsp;        p.setPlayer();</b>
+<b class="nc"><i class="no-highlight">115</i>&nbsp;        p.setFaction(1);</b>
+<i class="no-highlight">116</i>&nbsp;        try {
+<b class="nc"><i class="no-highlight">117</i>&nbsp;            p.setPlunder(base.getInt(&quot;plunder&quot;));</b>
+<b class="nc"><i class="no-highlight">118</i>&nbsp;        } catch (IllegalArgumentException e) {</b>
+<b class="nc"><i class="no-highlight">119</i>&nbsp;            p.setPlunder(0);</b>
+<b class="nc"><i class="no-highlight">120</i>&nbsp;        }</b>
+<b class="nc"><i class="no-highlight">121</i>&nbsp;        p.setHealth(base.getInt(&quot;health&quot;));</b>
+<i class="no-highlight">122</i>&nbsp;        try {
+<b class="nc"><i class="no-highlight">123</i>&nbsp;            p.setCannonBalls(base.getInt(&quot;cannon_balls&quot;));</b>
+<b class="nc"><i class="no-highlight">124</i>&nbsp;        } catch (IllegalArgumentException e) {</b>
+<b class="nc"><i class="no-highlight">125</i>&nbsp;            p.setCannonBalls(0);</b>
+<b class="nc"><i class="no-highlight">126</i>&nbsp;        }</b>
+<b class="nc"><i class="no-highlight">127</i>&nbsp;        ships.add(p);</b>
+<b class="nc"><i class="no-highlight">128</i>&nbsp;        Vector2 pos = new Vector2(base.getFloat(&quot;x&quot;), base.getFloat(&quot;y&quot;));</b>
+<b class="nc"><i class="no-highlight">129</i>&nbsp;        p.getComponent(Transform.class).setPosition(pos);</b>
+<i class="no-highlight">130</i>&nbsp;//        Give the players their upgrades
+<i class="no-highlight">131</i>&nbsp;//        GameScreen.loadPlayerUpgrades();
+<i class="no-highlight">132</i>&nbsp;
+<i class="no-highlight">133</i>&nbsp;
+<i class="no-highlight">134</i>&nbsp;//        Create ships from load
+<b class="nc"><i class="no-highlight">135</i>&nbsp;        int counter = 0;</b>
+<b class="nc"><i class="no-highlight">136</i>&nbsp;        for (JsonValue ship : _ships) {</b>
+<b class="nc"><i class="no-highlight">137</i>&nbsp;            if (counter != 0) {</b>
+<b class="nc"><i class="no-highlight">138</i>&nbsp;                NPCShip s = CreateNPCShip(ship.getInt(&quot;faction&quot;) + 1);</b>
+<b class="nc"><i class="no-highlight">139</i>&nbsp;                s.getComponent(Transform.class).setPosition(new Vector2(ship.get(&quot;position&quot;).getInt(&quot;x&quot;), ship.get(&quot;position&quot;).getInt(&quot;y&quot;)));</b>
+<b class="nc"><i class="no-highlight">140</i>&nbsp;                s.getComponent(RigidBody.class).setPosition(new Vector2(ship.get(&quot;position&quot;).getInt(&quot;x&quot;), ship.get(&quot;position&quot;).getInt(&quot;y&quot;)));</b>
+<i class="no-highlight">141</i>&nbsp;            }
+<b class="nc"><i class="no-highlight">142</i>&nbsp;            counter ++;</b>
+<b class="nc"><i class="no-highlight">143</i>&nbsp;        }</b>
 <i class="no-highlight">144</i>&nbsp;
-<b class="nc"><i class="no-highlight">145</i>&nbsp;        for (JsonValue j : _colleges) {</b>
-<b class="nc"><i class="no-highlight">146</i>&nbsp;            if (!j.getBoolean(&quot;destroyed&quot;)) {</b>
-<b class="nc"><i class="no-highlight">147</i>&nbsp;                CreateCollege(j.getInt(&quot;factionID&quot;) + 1);</b>
-<b class="nc"><i class="no-highlight">148</i>&nbsp;            } else if (j.getInt(&quot;factionID&quot;) == 0) {</b>
-<b class="nc"><i class="no-highlight">149</i>&nbsp;                CreateCollege(j.getInt(&quot;factionID&quot;) + 1);</b>
-<i class="no-highlight">150</i>&nbsp;            }
-<b class="nc"><i class="no-highlight">151</i>&nbsp;        }</b>
-<i class="no-highlight">152</i>&nbsp;
-<i class="no-highlight">153</i>&nbsp;//        To stop update() from marking the game as complete when clearing all quests.
-<b class="nc"><i class="no-highlight">154</i>&nbsp;        QuestManager.toggleLoading(true);</b>
-<b class="nc"><i class="no-highlight">155</i>&nbsp;        QuestManager.clearAllQuests();</b>
-<i class="no-highlight">156</i>&nbsp;//        Create quests on load
-<b class="nc"><i class="no-highlight">157</i>&nbsp;        for (JsonValue j : _quests) {</b>
-<b class="nc"><i class="no-highlight">158</i>&nbsp;            if (j.getBoolean(&quot;completed&quot;)) {</b>
-<i class="no-highlight">159</i>&nbsp;                assert true;
-<i class="no-highlight">160</i>&nbsp;            }
-<i class="no-highlight">161</i>&nbsp;            else {
-<b class="nc"><i class="no-highlight">162</i>&nbsp;                if (Objects.equals(j.getString(&quot;type&quot;), &quot;KillQuest&quot;)) {</b>
-<b class="nc"><i class="no-highlight">163</i>&nbsp;                    counter = 0;</b>
-<b class="nc"><i class="no-highlight">164</i>&nbsp;                    KillQuest q = null;</b>
-<b class="nc"><i class="no-highlight">165</i>&nbsp;                    for (Faction f : factions) {</b>
-<i class="no-highlight">166</i>&nbsp;                        try {
-<b class="nc"><i class="no-highlight">167</i>&nbsp;                            if (Objects.equals(j.getString(&quot;description&quot;), f.getName())) {</b>
-<b class="nc"><i class="no-highlight">168</i>&nbsp;                                College enemy = GameManager.getCollege(counter + 1);</b>
-<b class="nc"><i class="no-highlight">169</i>&nbsp;                                q = new KillQuest(enemy);</b>
-<i class="no-highlight">170</i>&nbsp;                            }
-<b class="nc"><i class="no-highlight">171</i>&nbsp;                        } catch (IndexOutOfBoundsException e) {</b>
-<i class="no-highlight">172</i>&nbsp;                            assert true;
-<b class="nc"><i class="no-highlight">173</i>&nbsp;                        }</b>
-<b class="nc"><i class="no-highlight">174</i>&nbsp;                        counter++;</b>
-<b class="nc"><i class="no-highlight">175</i>&nbsp;                    }</b>
-<b class="nc"><i class="no-highlight">176</i>&nbsp;                    if (!(q == null)) {</b>
-<b class="nc"><i class="no-highlight">177</i>&nbsp;                        QuestManager.addQuest(q);</b>
-<i class="no-highlight">178</i>&nbsp;                    } else {
-<b class="nc"><i class="no-highlight">179</i>&nbsp;                        System.out.println(&quot;KillQuest with null target found.&quot;);</b>
-<i class="no-highlight">180</i>&nbsp;                    }
-<b class="nc"><i class="no-highlight">181</i>&nbsp;                } else if (Objects.equals(j.getString(&quot;type&quot;), &quot;LocateQuest&quot;)) {</b>
-<b class="nc"><i class="no-highlight">182</i>&nbsp;                    LocateQuest q = QuestManager.rndLocateQuestReturnable();</b>
-<b class="nc"><i class="no-highlight">183</i>&nbsp;                    QuestManager.addQuest(q);</b>
-<b class="nc"><i class="no-highlight">184</i>&nbsp;                } else if (Objects.equals(j.getString(&quot;type&quot;), &quot;KillDuckQuest&quot;)) {</b>
-<b class="nc"><i class="no-highlight">185</i>&nbsp;                    KillDuckQuest q = new KillDuckQuest();</b>
-<b class="nc"><i class="no-highlight">186</i>&nbsp;                    QuestManager.addQuest(q);</b>
-<b class="nc"><i class="no-highlight">187</i>&nbsp;                } else {</b>
-<b class="nc"><i class="no-highlight">188</i>&nbsp;                    System.out.println(&quot;Unspecified Error - Loading Quests has Broken&quot;);</b>
-<i class="no-highlight">189</i>&nbsp;                }
-<i class="no-highlight">190</i>&nbsp;            }
-<b class="nc"><i class="no-highlight">191</i>&nbsp;        }</b>
-<b class="nc"><i class="no-highlight">192</i>&nbsp;        QuestManager.removePlaceholderQuest();</b>
-<b class="nc"><i class="no-highlight">193</i>&nbsp;        QuestManager.toggleLoading(false);</b>
-<b class="nc"><i class="no-highlight">194</i>&nbsp;    }</b>
-<i class="no-highlight">195</i>&nbsp;
-<i class="no-highlight">196</i>&nbsp;
-<i class="no-highlight">197</i>&nbsp;    /**
-<i class="no-highlight">198</i>&nbsp;     * called every frame, checks id the quests are completed
-<i class="no-highlight">199</i>&nbsp;     */
-<i class="no-highlight">200</i>&nbsp;    public static void update() {
-<b class="nc"><i class="no-highlight">201</i>&nbsp;        QuestManager.checkCompleted();</b>
-<b class="nc"><i class="no-highlight">202</i>&nbsp;    }</b>
-<i class="no-highlight">203</i>&nbsp;
-<i class="no-highlight">204</i>&nbsp;    /**
-<i class="no-highlight">205</i>&nbsp;     * Player is always in ships at index 0
-<i class="no-highlight">206</i>&nbsp;     *
-<i class="no-highlight">207</i>&nbsp;     * @return the ship
-<i class="no-highlight">208</i>&nbsp;     */
-<i class="no-highlight">209</i>&nbsp;    public static Player getPlayer() {
-<b class="fc"><i class="no-highlight">210</i>&nbsp;        return (Player) ships.get(0);</b>
-<i class="no-highlight">211</i>&nbsp;    }
-<i class="no-highlight">212</i>&nbsp;
-<i class="no-highlight">213</i>&nbsp;    /**
-<i class="no-highlight">214</i>&nbsp;     * Creates the game with player maps, NPCs, colleges
-<i class="no-highlight">215</i>&nbsp;     *
-<i class="no-highlight">216</i>&nbsp;     * @param mapId the resource id of the tilemap
-<i class="no-highlight">217</i>&nbsp;     */
-<i class="no-highlight">218</i>&nbsp;    public static void SpawnGame(int mapId) {
-<b class="nc"><i class="no-highlight">219</i>&nbsp;        CreateWorldMap(mapId);</b>
-<b class="nc"><i class="no-highlight">220</i>&nbsp;        CreatePlayer();</b>
-<b class="nc"><i class="no-highlight">221</i>&nbsp;        final int cnt = settings.get(&quot;factionDefaults&quot;).getInt(&quot;shipCount&quot;);</b>
-<b class="nc"><i class="no-highlight">222</i>&nbsp;        for (int i = 0; i &lt; factions.size(); i++) {</b>
-<b class="nc"><i class="no-highlight">223</i>&nbsp;            CreateCollege(i + 1);</b>
-<b class="nc"><i class="no-highlight">224</i>&nbsp;            for (int j = 0; j &lt; cnt; j++) {</b>
-<i class="no-highlight">225</i>&nbsp;                // prevents halifax from having shipcount + player
-<b class="nc"><i class="no-highlight">226</i>&nbsp;                if (i == 0 &amp;&amp; j &gt; cnt - 2) {</b>
-<b class="nc"><i class="no-highlight">227</i>&nbsp;                    break;</b>
-<i class="no-highlight">228</i>&nbsp;                }
-<b class="nc"><i class="no-highlight">229</i>&nbsp;                NPCShip s = CreateNPCShip(i + 1);</b>
-<b class="nc"><i class="no-highlight">230</i>&nbsp;                s.getComponent(Transform.class).setPosition(getFaction(i + 1).getSpawnPos());</b>
-<b class="nc"><i class="no-highlight">231</i>&nbsp;                s.getComponent(RigidBody.class).setPosition(getFaction(i + 1).getSpawnPos());</b>
-<i class="no-highlight">232</i>&nbsp;            }
-<i class="no-highlight">233</i>&nbsp;        }
-<i class="no-highlight">234</i>&nbsp;
-<b class="nc"><i class="no-highlight">235</i>&nbsp;    }</b>
-<i class="no-highlight">236</i>&nbsp;
-<i class="no-highlight">237</i>&nbsp;    /**
-<i class="no-highlight">238</i>&nbsp;     * Creates player that belongs the faction with id 1
-<i class="no-highlight">239</i>&nbsp;     */
-<i class="no-highlight">240</i>&nbsp;    public static void CreatePlayer() {
-<b class="fc"><i class="no-highlight">241</i>&nbsp;        tryInit();</b>
-<b class="fc"><i class="no-highlight">242</i>&nbsp;        Player p = new Player();</b>
-<b class="fc"><i class="no-highlight">243</i>&nbsp;        p.setPlayer();</b>
-<b class="fc"><i class="no-highlight">244</i>&nbsp;        p.setFaction(1);</b>
-<b class="fc"><i class="no-highlight">245</i>&nbsp;        ships.add(p);</b>
-<b class="fc"><i class="no-highlight">246</i>&nbsp;        longboi = new DuckMonster();</b>
-<b class="fc"><i class="no-highlight">247</i>&nbsp;    }</b>
-<i class="no-highlight">248</i>&nbsp;
-<i class="no-highlight">249</i>&nbsp;    /**
-<i class="no-highlight">250</i>&nbsp;     * Creates an NPC ship with the given faction
-<i class="no-highlight">251</i>&nbsp;     *
-<i class="no-highlight">252</i>&nbsp;     * @param factionId desired faction
-<i class="no-highlight">253</i>&nbsp;     * @return the created ship
-<i class="no-highlight">254</i>&nbsp;     */
-<i class="no-highlight">255</i>&nbsp;    public static NPCShip CreateNPCShip(int factionId) {
-<b class="fc"><i class="no-highlight">256</i>&nbsp;        tryInit();</b>
-<b class="fc"><i class="no-highlight">257</i>&nbsp;        NPCShip e = new NPCShip();</b>
-<b class="fc"><i class="no-highlight">258</i>&nbsp;        e.setFaction(factionId);</b>
-<b class="fc"><i class="no-highlight">259</i>&nbsp;        ships.add(e);</b>
-<b class="fc"><i class="no-highlight">260</i>&nbsp;        return e;</b>
-<i class="no-highlight">261</i>&nbsp;    }
-<i class="no-highlight">262</i>&nbsp;
-<i class="no-highlight">263</i>&nbsp;    /**
-<i class="no-highlight">264</i>&nbsp;     * Creates the world map and distributes powerups
-<i class="no-highlight">265</i>&nbsp;     *
-<i class="no-highlight">266</i>&nbsp;     * @param mapId resource id
-<i class="no-highlight">267</i>&nbsp;     */
-<i class="no-highlight">268</i>&nbsp;    public static void CreateWorldMap(int mapId) {
-<b class="nc"><i class="no-highlight">269</i>&nbsp;        tryInit();</b>
-<b class="nc"><i class="no-highlight">270</i>&nbsp;        WorldMap map = new WorldMap(mapId);</b>
-<b class="nc"><i class="no-highlight">271</i>&nbsp;        mapGraph = new TileMapGraph(map.getTileMap());</b>
-<b class="nc"><i class="no-highlight">272</i>&nbsp;        Random r = new Random();</b>
-<b class="nc"><i class="no-highlight">273</i>&nbsp;        for (int i = 0; i &lt; powerups.length; i++){</b>
-<b class="nc"><i class="no-highlight">274</i>&nbsp;            powerups[i] = new Powerup(r.nextInt(5));</b>
-<i class="no-highlight">275</i>&nbsp;        }
-<b class="nc"><i class="no-highlight">276</i>&nbsp;    }</b>
-<i class="no-highlight">277</i>&nbsp;
-<i class="no-highlight">278</i>&nbsp;    /**
-<i class="no-highlight">279</i>&nbsp;     * Creates the college with it&#39;s building for the desired college
-<i class="no-highlight">280</i>&nbsp;     *
-<i class="no-highlight">281</i>&nbsp;     * @param factionId desired faction
-<i class="no-highlight">282</i>&nbsp;     */
-<i class="no-highlight">283</i>&nbsp;    public static void CreateCollege(int factionId) {
-<b class="fc"><i class="no-highlight">284</i>&nbsp;        tryInit();</b>
-<b class="fc"><i class="no-highlight">285</i>&nbsp;        College c = new College(factionId);</b>
-<b class="fc"><i class="no-highlight">286</i>&nbsp;        colleges.add(c);</b>
-<b class="fc"><i class="no-highlight">287</i>&nbsp;        if (c.getComponent(Pirate.class).getFaction().id != getPlayer().getFactionId()){ // enemy colleges get defenders</b>
-<b class="fc"><i class="no-highlight">288</i>&nbsp;            for (Building b : c.getBuildings()) {</b>
-<b class="fc"><i class="no-highlight">289</i>&nbsp;                if (b.isNonFlag()) {</b>
-<b class="fc"><i class="no-highlight">290</i>&nbsp;                    b.makeDefender(); // 1 building per college is a defender</b>
-<b class="fc"><i class="no-highlight">291</i>&nbsp;                    break;</b>
-<i class="no-highlight">292</i>&nbsp;                }
-<b class="nc"><i class="no-highlight">293</i>&nbsp;            }</b>
-<i class="no-highlight">294</i>&nbsp;        }
-<b class="fc"><i class="no-highlight">295</i>&nbsp;    }</b>
-<i class="no-highlight">296</i>&nbsp;
-<i class="no-highlight">297</i>&nbsp;    private static void tryInit() {
-<b class="fc"><i class="no-highlight">298</i>&nbsp;        if (!initialized) {</b>
-<b class="fc"><i class="no-highlight">299</i>&nbsp;            Initialize();</b>
+<i class="no-highlight">145</i>&nbsp;//        System.out.println(_factions);
+<i class="no-highlight">146</i>&nbsp;//        System.out.println(&quot;\n\n\n\n&quot;);
+<i class="no-highlight">147</i>&nbsp;//        for (Faction f : factions) {
+<i class="no-highlight">148</i>&nbsp;//            System.out.println(f.getName());
+<i class="no-highlight">149</i>&nbsp;//        }
+<i class="no-highlight">150</i>&nbsp;
+<b class="nc"><i class="no-highlight">151</i>&nbsp;        for (JsonValue j : _colleges) {</b>
+<b class="nc"><i class="no-highlight">152</i>&nbsp;            if (!j.getBoolean(&quot;destroyed&quot;)) {</b>
+<b class="nc"><i class="no-highlight">153</i>&nbsp;                CreateCollege(j.getInt(&quot;factionID&quot;) + 1);</b>
+<b class="nc"><i class="no-highlight">154</i>&nbsp;            } else if (j.getInt(&quot;factionID&quot;) == 0) {</b>
+<b class="nc"><i class="no-highlight">155</i>&nbsp;                CreateCollege(j.getInt(&quot;factionID&quot;) + 1);</b>
+<i class="no-highlight">156</i>&nbsp;            }
+<b class="nc"><i class="no-highlight">157</i>&nbsp;        }</b>
+<i class="no-highlight">158</i>&nbsp;
+<i class="no-highlight">159</i>&nbsp;//        To stop update() from marking the game as complete when clearing all quests.
+<b class="nc"><i class="no-highlight">160</i>&nbsp;        QuestManager.toggleLoading(true);</b>
+<b class="nc"><i class="no-highlight">161</i>&nbsp;        QuestManager.clearAllQuests();</b>
+<i class="no-highlight">162</i>&nbsp;//        Create quests on load
+<b class="nc"><i class="no-highlight">163</i>&nbsp;        for (JsonValue j : _quests) {</b>
+<b class="nc"><i class="no-highlight">164</i>&nbsp;            if (j.getBoolean(&quot;completed&quot;)) {</b>
+<i class="no-highlight">165</i>&nbsp;                assert true;
+<i class="no-highlight">166</i>&nbsp;            }
+<i class="no-highlight">167</i>&nbsp;            else {
+<b class="nc"><i class="no-highlight">168</i>&nbsp;                if (Objects.equals(j.getString(&quot;type&quot;), &quot;KillQuest&quot;)) {</b>
+<b class="nc"><i class="no-highlight">169</i>&nbsp;                    counter = 0;</b>
+<b class="nc"><i class="no-highlight">170</i>&nbsp;                    KillQuest q = null;</b>
+<b class="nc"><i class="no-highlight">171</i>&nbsp;                    for (Faction f : factions) {</b>
+<i class="no-highlight">172</i>&nbsp;                        try {
+<b class="nc"><i class="no-highlight">173</i>&nbsp;                            if (Objects.equals(j.getString(&quot;description&quot;), f.getName())) {</b>
+<b class="nc"><i class="no-highlight">174</i>&nbsp;                                College enemy = GameManager.getCollege(counter + 1);</b>
+<b class="nc"><i class="no-highlight">175</i>&nbsp;                                q = new KillQuest(enemy);</b>
+<i class="no-highlight">176</i>&nbsp;                            }
+<b class="nc"><i class="no-highlight">177</i>&nbsp;                        } catch (IndexOutOfBoundsException e) {</b>
+<i class="no-highlight">178</i>&nbsp;                            assert true;
+<b class="nc"><i class="no-highlight">179</i>&nbsp;                        }</b>
+<b class="nc"><i class="no-highlight">180</i>&nbsp;                        counter++;</b>
+<b class="nc"><i class="no-highlight">181</i>&nbsp;                    }</b>
+<b class="nc"><i class="no-highlight">182</i>&nbsp;                    if (!(q == null)) {</b>
+<b class="nc"><i class="no-highlight">183</i>&nbsp;                        QuestManager.addQuest(q);</b>
+<i class="no-highlight">184</i>&nbsp;                    } else {
+<b class="nc"><i class="no-highlight">185</i>&nbsp;                        System.out.println(&quot;KillQuest with null target found.&quot;);</b>
+<i class="no-highlight">186</i>&nbsp;                    }
+<b class="nc"><i class="no-highlight">187</i>&nbsp;                } else if (Objects.equals(j.getString(&quot;type&quot;), &quot;LocateQuest&quot;)) {</b>
+<b class="nc"><i class="no-highlight">188</i>&nbsp;                    LocateQuest q = QuestManager.rndLocateQuestReturnable();</b>
+<b class="nc"><i class="no-highlight">189</i>&nbsp;                    QuestManager.addQuest(q);</b>
+<b class="nc"><i class="no-highlight">190</i>&nbsp;                } else if (Objects.equals(j.getString(&quot;type&quot;), &quot;KillDuckQuest&quot;)) {</b>
+<b class="nc"><i class="no-highlight">191</i>&nbsp;                    KillDuckQuest q = new KillDuckQuest();</b>
+<b class="nc"><i class="no-highlight">192</i>&nbsp;                    QuestManager.addQuest(q);</b>
+<b class="nc"><i class="no-highlight">193</i>&nbsp;                } else {</b>
+<b class="nc"><i class="no-highlight">194</i>&nbsp;                    System.out.println(&quot;Unspecified Error - Loading Quests has Broken&quot;);</b>
+<i class="no-highlight">195</i>&nbsp;                }
+<i class="no-highlight">196</i>&nbsp;            }
+<b class="nc"><i class="no-highlight">197</i>&nbsp;        }</b>
+<b class="nc"><i class="no-highlight">198</i>&nbsp;        QuestManager.removePlaceholderQuest();</b>
+<b class="nc"><i class="no-highlight">199</i>&nbsp;        QuestManager.toggleLoading(false);</b>
+<b class="nc"><i class="no-highlight">200</i>&nbsp;    }</b>
+<i class="no-highlight">201</i>&nbsp;
+<i class="no-highlight">202</i>&nbsp;
+<i class="no-highlight">203</i>&nbsp;    /**
+<i class="no-highlight">204</i>&nbsp;     * called every frame, checks id the quests are completed
+<i class="no-highlight">205</i>&nbsp;     */
+<i class="no-highlight">206</i>&nbsp;    public static void update() {
+<b class="nc"><i class="no-highlight">207</i>&nbsp;        QuestManager.checkCompleted();</b>
+<b class="nc"><i class="no-highlight">208</i>&nbsp;    }</b>
+<i class="no-highlight">209</i>&nbsp;
+<i class="no-highlight">210</i>&nbsp;    /**
+<i class="no-highlight">211</i>&nbsp;     * Player is always in ships at index 0
+<i class="no-highlight">212</i>&nbsp;     *
+<i class="no-highlight">213</i>&nbsp;     * @return the ship
+<i class="no-highlight">214</i>&nbsp;     */
+<i class="no-highlight">215</i>&nbsp;    public static Player getPlayer() {
+<b class="fc"><i class="no-highlight">216</i>&nbsp;        return (Player) ships.get(0);</b>
+<i class="no-highlight">217</i>&nbsp;    }
+<i class="no-highlight">218</i>&nbsp;
+<i class="no-highlight">219</i>&nbsp;    /**
+<i class="no-highlight">220</i>&nbsp;     * Creates the game with player maps, NPCs, colleges
+<i class="no-highlight">221</i>&nbsp;     *
+<i class="no-highlight">222</i>&nbsp;     * @param mapId the resource id of the tilemap
+<i class="no-highlight">223</i>&nbsp;     */
+<i class="no-highlight">224</i>&nbsp;    public static void SpawnGame(int mapId) {
+<b class="nc"><i class="no-highlight">225</i>&nbsp;        CreateWorldMap(mapId);</b>
+<b class="nc"><i class="no-highlight">226</i>&nbsp;        CreatePlayer();</b>
+<b class="nc"><i class="no-highlight">227</i>&nbsp;        final int cnt = settings.get(&quot;factionDefaults&quot;).getInt(&quot;shipCount&quot;);</b>
+<b class="nc"><i class="no-highlight">228</i>&nbsp;        for (int i = 0; i &lt; factions.size(); i++) {</b>
+<b class="nc"><i class="no-highlight">229</i>&nbsp;            CreateCollege(i + 1);</b>
+<b class="nc"><i class="no-highlight">230</i>&nbsp;            for (int j = 0; j &lt; cnt; j++) {</b>
+<i class="no-highlight">231</i>&nbsp;                // prevents halifax from having shipcount + player
+<b class="nc"><i class="no-highlight">232</i>&nbsp;                if (i == 0 &amp;&amp; j &gt; cnt - 2) {</b>
+<b class="nc"><i class="no-highlight">233</i>&nbsp;                    break;</b>
+<i class="no-highlight">234</i>&nbsp;                }
+<b class="nc"><i class="no-highlight">235</i>&nbsp;                NPCShip s = CreateNPCShip(i + 1);</b>
+<b class="nc"><i class="no-highlight">236</i>&nbsp;                s.getComponent(Transform.class).setPosition(getFaction(i + 1).getSpawnPos());</b>
+<b class="nc"><i class="no-highlight">237</i>&nbsp;                s.getComponent(RigidBody.class).setPosition(getFaction(i + 1).getSpawnPos());</b>
+<i class="no-highlight">238</i>&nbsp;            }
+<i class="no-highlight">239</i>&nbsp;        }
+<i class="no-highlight">240</i>&nbsp;
+<b class="nc"><i class="no-highlight">241</i>&nbsp;    }</b>
+<i class="no-highlight">242</i>&nbsp;
+<i class="no-highlight">243</i>&nbsp;    /**
+<i class="no-highlight">244</i>&nbsp;     * Creates player that belongs the faction with id 1
+<i class="no-highlight">245</i>&nbsp;     */
+<i class="no-highlight">246</i>&nbsp;    public static void CreatePlayer() {
+<b class="fc"><i class="no-highlight">247</i>&nbsp;        tryInit();</b>
+<b class="fc"><i class="no-highlight">248</i>&nbsp;        Player p = new Player();</b>
+<b class="fc"><i class="no-highlight">249</i>&nbsp;        p.setPlayer();</b>
+<b class="fc"><i class="no-highlight">250</i>&nbsp;        p.setFaction(1);</b>
+<b class="fc"><i class="no-highlight">251</i>&nbsp;        ships.add(p);</b>
+<b class="fc"><i class="no-highlight">252</i>&nbsp;        longboi = new DuckMonster();</b>
+<b class="fc"><i class="no-highlight">253</i>&nbsp;    }</b>
+<i class="no-highlight">254</i>&nbsp;
+<i class="no-highlight">255</i>&nbsp;    /**
+<i class="no-highlight">256</i>&nbsp;     * Creates an NPC ship with the given faction
+<i class="no-highlight">257</i>&nbsp;     *
+<i class="no-highlight">258</i>&nbsp;     * @param factionId desired faction
+<i class="no-highlight">259</i>&nbsp;     * @return the created ship
+<i class="no-highlight">260</i>&nbsp;     */
+<i class="no-highlight">261</i>&nbsp;    public static NPCShip CreateNPCShip(int factionId) {
+<b class="fc"><i class="no-highlight">262</i>&nbsp;        tryInit();</b>
+<b class="fc"><i class="no-highlight">263</i>&nbsp;        NPCShip e = new NPCShip();</b>
+<b class="fc"><i class="no-highlight">264</i>&nbsp;        e.setFaction(factionId);</b>
+<b class="fc"><i class="no-highlight">265</i>&nbsp;        ships.add(e);</b>
+<b class="fc"><i class="no-highlight">266</i>&nbsp;        return e;</b>
+<i class="no-highlight">267</i>&nbsp;    }
+<i class="no-highlight">268</i>&nbsp;
+<i class="no-highlight">269</i>&nbsp;    /**
+<i class="no-highlight">270</i>&nbsp;     * Creates the world map and distributes powerups
+<i class="no-highlight">271</i>&nbsp;     *
+<i class="no-highlight">272</i>&nbsp;     * @param mapId resource id
+<i class="no-highlight">273</i>&nbsp;     */
+<i class="no-highlight">274</i>&nbsp;    public static void CreateWorldMap(int mapId) {
+<b class="nc"><i class="no-highlight">275</i>&nbsp;        tryInit();</b>
+<b class="nc"><i class="no-highlight">276</i>&nbsp;        WorldMap map = new WorldMap(mapId);</b>
+<b class="nc"><i class="no-highlight">277</i>&nbsp;        mapGraph = new TileMapGraph(map.getTileMap());</b>
+<b class="nc"><i class="no-highlight">278</i>&nbsp;        Random r = new Random();</b>
+<b class="nc"><i class="no-highlight">279</i>&nbsp;        for (int i = 0; i &lt; powerups.length; i++){</b>
+<b class="nc"><i class="no-highlight">280</i>&nbsp;            powerups[i] = new Powerup(r.nextInt(5));</b>
+<i class="no-highlight">281</i>&nbsp;        }
+<b class="nc"><i class="no-highlight">282</i>&nbsp;    }</b>
+<i class="no-highlight">283</i>&nbsp;
+<i class="no-highlight">284</i>&nbsp;    /**
+<i class="no-highlight">285</i>&nbsp;     * Creates the college with it&#39;s building for the desired college
+<i class="no-highlight">286</i>&nbsp;     *
+<i class="no-highlight">287</i>&nbsp;     * @param factionId desired faction
+<i class="no-highlight">288</i>&nbsp;     */
+<i class="no-highlight">289</i>&nbsp;    public static void CreateCollege(int factionId) {
+<b class="fc"><i class="no-highlight">290</i>&nbsp;        tryInit();</b>
+<b class="fc"><i class="no-highlight">291</i>&nbsp;        College c = new College(factionId);</b>
+<b class="fc"><i class="no-highlight">292</i>&nbsp;        colleges.add(c);</b>
+<b class="fc"><i class="no-highlight">293</i>&nbsp;        if (c.getComponent(Pirate.class).getFaction().id != getPlayer().getFactionId()){ // enemy colleges get defenders</b>
+<b class="fc"><i class="no-highlight">294</i>&nbsp;            for (Building b : c.getBuildings()) {</b>
+<b class="fc"><i class="no-highlight">295</i>&nbsp;                if (b.isNonFlag()) {</b>
+<b class="fc"><i class="no-highlight">296</i>&nbsp;                    b.makeDefender(); // 1 building per college is a defender</b>
+<b class="fc"><i class="no-highlight">297</i>&nbsp;                    break;</b>
+<i class="no-highlight">298</i>&nbsp;                }
+<b class="nc"><i class="no-highlight">299</i>&nbsp;            }</b>
 <i class="no-highlight">300</i>&nbsp;        }
 <b class="fc"><i class="no-highlight">301</i>&nbsp;    }</b>
 <i class="no-highlight">302</i>&nbsp;
-<i class="no-highlight">303</i>&nbsp;    public static Faction getFaction(int factionId) {
-<b class="fc"><i class="no-highlight">304</i>&nbsp;        tryInit();</b>
-<b class="fc"><i class="no-highlight">305</i>&nbsp;        return factions.get(factionId - 1);</b>
-<i class="no-highlight">306</i>&nbsp;    }
-<i class="no-highlight">307</i>&nbsp;    /**
-<i class="no-highlight">308</i>&nbsp;     * Resets the game.
-<i class="no-highlight">309</i>&nbsp;     * Places ships back to spawn position, sets plunder and points to zero, removes bad weather animation, stops effects of powerups, revives dead ships and buildings
-<i class="no-highlight">310</i>&nbsp;     * */
-<i class="no-highlight">311</i>&nbsp;    public static void reset(){
-<b class="nc"><i class="no-highlight">312</i>&nbsp;        for (Ship s : ships){</b>
-<b class="nc"><i class="no-highlight">313</i>&nbsp;            s.getComponent(Pirate.class).setHealth(s.getComponent(Pirate.class).getMaxHealth());</b>
-<b class="nc"><i class="no-highlight">314</i>&nbsp;            s.getComponent(Transform.class).setPosition(getFaction(s.getFactionId()).getSpawnPos());</b>
-<b class="nc"><i class="no-highlight">315</i>&nbsp;            s.getComponent(RigidBody.class).setPosition(getFaction(s.getFactionId()).getSpawnPos());</b>
-<b class="nc"><i class="no-highlight">316</i>&nbsp;        }</b>
-<b class="nc"><i class="no-highlight">317</i>&nbsp;        for (College c : colleges){</b>
-<b class="nc"><i class="no-highlight">318</i>&nbsp;            c.getComponent(Pirate.class).setHealth(100);</b>
-<b class="nc"><i class="no-highlight">319</i>&nbsp;            for (Building b : c.getBuildings()){</b>
-<b class="nc"><i class="no-highlight">320</i>&nbsp;                b.revive();</b>
-<b class="nc"><i class="no-highlight">321</i>&nbsp;            }</b>
+<i class="no-highlight">303</i>&nbsp;    private static void tryInit() {
+<b class="fc"><i class="no-highlight">304</i>&nbsp;        if (!initialized) {</b>
+<b class="fc"><i class="no-highlight">305</i>&nbsp;            Initialize();</b>
+<i class="no-highlight">306</i>&nbsp;        }
+<b class="fc"><i class="no-highlight">307</i>&nbsp;    }</b>
+<i class="no-highlight">308</i>&nbsp;
+<i class="no-highlight">309</i>&nbsp;    public static Faction getFaction(int factionId) {
+<b class="fc"><i class="no-highlight">310</i>&nbsp;        tryInit();</b>
+<b class="fc"><i class="no-highlight">311</i>&nbsp;        return factions.get(factionId - 1);</b>
+<i class="no-highlight">312</i>&nbsp;    }
+<i class="no-highlight">313</i>&nbsp;    /**
+<i class="no-highlight">314</i>&nbsp;     * Resets the game.
+<i class="no-highlight">315</i>&nbsp;     * Places ships back to spawn position, sets plunder and points to zero, removes bad weather animation, stops effects of powerups, revives dead ships and buildings
+<i class="no-highlight">316</i>&nbsp;     * */
+<i class="no-highlight">317</i>&nbsp;    public static void reset(){
+<b class="nc"><i class="no-highlight">318</i>&nbsp;        for (Ship s : ships){</b>
+<b class="nc"><i class="no-highlight">319</i>&nbsp;            s.getComponent(Pirate.class).setHealth(s.getComponent(Pirate.class).getMaxHealth());</b>
+<b class="nc"><i class="no-highlight">320</i>&nbsp;            s.getComponent(Transform.class).setPosition(getFaction(s.getFactionId()).getSpawnPos());</b>
+<b class="nc"><i class="no-highlight">321</i>&nbsp;            s.getComponent(RigidBody.class).setPosition(getFaction(s.getFactionId()).getSpawnPos());</b>
 <b class="nc"><i class="no-highlight">322</i>&nbsp;        }</b>
-<b class="nc"><i class="no-highlight">323</i>&nbsp;        Player p = GameManager.getPlayer();</b>
-<b class="nc"><i class="no-highlight">324</i>&nbsp;        p.setBadWeather(false);</b>
-<b class="nc"><i class="no-highlight">325</i>&nbsp;        p.getComponent(Transform.class).setPosition(800f, 800f);</b>
-<b class="nc"><i class="no-highlight">326</i>&nbsp;        p.setPlunder(0);</b>
-<b class="nc"><i class="no-highlight">327</i>&nbsp;        if (longboi.isActive()){</b>
-<b class="nc"><i class="no-highlight">328</i>&nbsp;            longboi.deactivate();</b>
-<i class="no-highlight">329</i>&nbsp;        }
-<b class="nc"><i class="no-highlight">330</i>&nbsp;    }</b>
-<i class="no-highlight">331</i>&nbsp;
-<i class="no-highlight">332</i>&nbsp;    /**
-<i class="no-highlight">333</i>&nbsp;     * Gets the setting object from the GameSetting.json
-<i class="no-highlight">334</i>&nbsp;     *
-<i class="no-highlight">335</i>&nbsp;     * @return the JSON representation fo settings
-<i class="no-highlight">336</i>&nbsp;     */
-<i class="no-highlight">337</i>&nbsp;    public static JsonValue getSettings() {
-<b class="fc"><i class="no-highlight">338</i>&nbsp;        tryInit();</b>
-<b class="fc"><i class="no-highlight">339</i>&nbsp;        return settings;</b>
-<i class="no-highlight">340</i>&nbsp;    }
-<i class="no-highlight">341</i>&nbsp;
-<i class="no-highlight">342</i>&nbsp;    public static College getCollege(int factionId) {
-<b class="fc"><i class="no-highlight">343</i>&nbsp;        tryInit();</b>
-<b class="fc"><i class="no-highlight">344</i>&nbsp;        return colleges.get(factionId - 1);</b>
-<i class="no-highlight">345</i>&nbsp;    }
-<i class="no-highlight">346</i>&nbsp;
-<i class="no-highlight">347</i>&nbsp;    public static DuckMonster getLongboi(){
-<b class="fc"><i class="no-highlight">348</i>&nbsp;        return longboi;</b>
-<i class="no-highlight">349</i>&nbsp;    }
-<i class="no-highlight">350</i>&nbsp;    /**
-<i class="no-highlight">351</i>&nbsp;     * Utilises the cached cannonballs to fire one
-<i class="no-highlight">352</i>&nbsp;     *
-<i class="no-highlight">353</i>&nbsp;     * @param p   parent
-<i class="no-highlight">354</i>&nbsp;     * @param dir shoot direction
-<i class="no-highlight">355</i>&nbsp;     */
-<i class="no-highlight">356</i>&nbsp;    public static void shoot(Entity p, Vector2 dir) {
-<b class="fc"><i class="no-highlight">357</i>&nbsp;        Vector2 pos = p.getComponent(Transform.class).getPosition().cpy();</b>
-<i class="no-highlight">358</i>&nbsp;        //pos.add(dir.x * TILE_SIZE * 0.5f, dir.y * TILE_SIZE * 0.5f);
-<b class="fc"><i class="no-highlight">359</i>&nbsp;        ballCache.get(currentElement++).fire(pos, dir, p);</b>
-<b class="fc"><i class="no-highlight">360</i>&nbsp;        currentElement %= cacheSize;</b>
-<b class="fc"><i class="no-highlight">361</i>&nbsp;    }</b>
-<i class="no-highlight">362</i>&nbsp;
-<i class="no-highlight">363</i>&nbsp;    /**
-<i class="no-highlight">364</i>&nbsp;     * uses a* not sure if it works but i think it does
-<i class="no-highlight">365</i>&nbsp;     *
-<i class="no-highlight">366</i>&nbsp;     * @param loc src
-<i class="no-highlight">367</i>&nbsp;     * @param dst dst
-<i class="no-highlight">368</i>&nbsp;     * @return queue of delta postions
-<i class="no-highlight">369</i>&nbsp;     */
-<i class="no-highlight">370</i>&nbsp;    public static QueueFIFO&lt;Vector2&gt; getPath(Vector2 loc, Vector2 dst) {
-<b class="nc"><i class="no-highlight">371</i>&nbsp;        return mapGraph.findOptimisedPath(loc, dst);</b>
-<i class="no-highlight">372</i>&nbsp;    }
-<i class="no-highlight">373</i>&nbsp;
-<i class="no-highlight">374</i>&nbsp;
-<i class="no-highlight">375</i>&nbsp;    /**
-<i class="no-highlight">376</i>&nbsp;     * Gets a random map cell, which is made of water and does not immediately border any land cells
-<i class="no-highlight">377</i>&nbsp;     *
-<i class="no-highlight">378</i>&nbsp;     * */
-<i class="no-highlight">379</i>&nbsp;    public static Vector2 randomWaterCell(){
-<b class="nc"><i class="no-highlight">380</i>&nbsp;        Random r = new Random();</b>
-<b class="nc"><i class="no-highlight">381</i>&nbsp;        Vector2 pos = mapGraph.getWaterNodes().get(r.nextInt(mapGraph.getWaterCount()));</b>
-<b class="nc"><i class="no-highlight">382</i>&nbsp;        return pos;</b>
-<i class="no-highlight">383</i>&nbsp;    }
-<i class="no-highlight">384</i>&nbsp;
-<b class="fc"><i class="no-highlight">385</i>&nbsp;    public static ArrayList&lt;Faction&gt; getFactions() {return factions;}</b>
-<i class="no-highlight">386</i>&nbsp;    public static  ArrayList&lt;Ship&gt; getShips() {
-<b class="fc"><i class="no-highlight">387</i>&nbsp;        return ships;</b>
-<i class="no-highlight">388</i>&nbsp;    }
-<i class="no-highlight">389</i>&nbsp;    public static ArrayList&lt;College&gt; getColleges() {
-<b class="fc"><i class="no-highlight">390</i>&nbsp;        return colleges;</b>
-<i class="no-highlight">391</i>&nbsp;    }
-<i class="no-highlight">392</i>&nbsp;}
+<b class="nc"><i class="no-highlight">323</i>&nbsp;        for (College c : colleges){</b>
+<b class="nc"><i class="no-highlight">324</i>&nbsp;            c.getComponent(Pirate.class).setHealth(100);</b>
+<b class="nc"><i class="no-highlight">325</i>&nbsp;            for (Building b : c.getBuildings()){</b>
+<b class="nc"><i class="no-highlight">326</i>&nbsp;                b.revive();</b>
+<b class="nc"><i class="no-highlight">327</i>&nbsp;            }</b>
+<b class="nc"><i class="no-highlight">328</i>&nbsp;        }</b>
+<b class="nc"><i class="no-highlight">329</i>&nbsp;        Player p = GameManager.getPlayer();</b>
+<b class="nc"><i class="no-highlight">330</i>&nbsp;        p.setBadWeather(false);</b>
+<b class="nc"><i class="no-highlight">331</i>&nbsp;        p.getComponent(Transform.class).setPosition(800f, 800f);</b>
+<b class="nc"><i class="no-highlight">332</i>&nbsp;        p.setPlunder(0);</b>
+<b class="nc"><i class="no-highlight">333</i>&nbsp;        if (longboi.isActive()){</b>
+<b class="nc"><i class="no-highlight">334</i>&nbsp;            longboi.deactivate();</b>
+<i class="no-highlight">335</i>&nbsp;        }
+<b class="nc"><i class="no-highlight">336</i>&nbsp;    }</b>
+<i class="no-highlight">337</i>&nbsp;
+<i class="no-highlight">338</i>&nbsp;    /**
+<i class="no-highlight">339</i>&nbsp;     * Gets the setting object from the GameSetting.json
+<i class="no-highlight">340</i>&nbsp;     *
+<i class="no-highlight">341</i>&nbsp;     * @return the JSON representation fo settings
+<i class="no-highlight">342</i>&nbsp;     */
+<i class="no-highlight">343</i>&nbsp;    public static JsonValue getSettings() {
+<b class="fc"><i class="no-highlight">344</i>&nbsp;        tryInit();</b>
+<b class="fc"><i class="no-highlight">345</i>&nbsp;        return settings;</b>
+<i class="no-highlight">346</i>&nbsp;    }
+<i class="no-highlight">347</i>&nbsp;
+<i class="no-highlight">348</i>&nbsp;    public static College getCollege(int factionId) {
+<b class="fc"><i class="no-highlight">349</i>&nbsp;        tryInit();</b>
+<b class="fc"><i class="no-highlight">350</i>&nbsp;        return colleges.get(factionId - 1);</b>
+<i class="no-highlight">351</i>&nbsp;    }
+<i class="no-highlight">352</i>&nbsp;
+<i class="no-highlight">353</i>&nbsp;    public static DuckMonster getLongboi(){
+<b class="fc"><i class="no-highlight">354</i>&nbsp;        return longboi;</b>
+<i class="no-highlight">355</i>&nbsp;    }
+<i class="no-highlight">356</i>&nbsp;    /**
+<i class="no-highlight">357</i>&nbsp;     * Utilises the cached cannonballs to fire one
+<i class="no-highlight">358</i>&nbsp;     *
+<i class="no-highlight">359</i>&nbsp;     * @param p   parent
+<i class="no-highlight">360</i>&nbsp;     * @param dir shoot direction
+<i class="no-highlight">361</i>&nbsp;     */
+<i class="no-highlight">362</i>&nbsp;    public static void shoot(Entity p, Vector2 dir) {
+<b class="fc"><i class="no-highlight">363</i>&nbsp;        Vector2 pos = p.getComponent(Transform.class).getPosition().cpy();</b>
+<i class="no-highlight">364</i>&nbsp;        //pos.add(dir.x * TILE_SIZE * 0.5f, dir.y * TILE_SIZE * 0.5f);
+<b class="fc"><i class="no-highlight">365</i>&nbsp;        ballCache.get(currentElement++).fire(pos, dir, p);</b>
+<b class="fc"><i class="no-highlight">366</i>&nbsp;        currentElement %= cacheSize;</b>
+<b class="fc"><i class="no-highlight">367</i>&nbsp;    }</b>
+<i class="no-highlight">368</i>&nbsp;
+<i class="no-highlight">369</i>&nbsp;    /**
+<i class="no-highlight">370</i>&nbsp;     * uses a* not sure if it works but i think it does
+<i class="no-highlight">371</i>&nbsp;     *
+<i class="no-highlight">372</i>&nbsp;     * @param loc src
+<i class="no-highlight">373</i>&nbsp;     * @param dst dst
+<i class="no-highlight">374</i>&nbsp;     * @return queue of delta postions
+<i class="no-highlight">375</i>&nbsp;     */
+<i class="no-highlight">376</i>&nbsp;    public static QueueFIFO&lt;Vector2&gt; getPath(Vector2 loc, Vector2 dst) {
+<b class="nc"><i class="no-highlight">377</i>&nbsp;        return mapGraph.findOptimisedPath(loc, dst);</b>
+<i class="no-highlight">378</i>&nbsp;    }
+<i class="no-highlight">379</i>&nbsp;
+<i class="no-highlight">380</i>&nbsp;
+<i class="no-highlight">381</i>&nbsp;    /**
+<i class="no-highlight">382</i>&nbsp;     * Gets a random map cell, which is made of water and does not immediately border any land cells
+<i class="no-highlight">383</i>&nbsp;     *
+<i class="no-highlight">384</i>&nbsp;     * */
+<i class="no-highlight">385</i>&nbsp;    public static Vector2 randomWaterCell(){
+<b class="nc"><i class="no-highlight">386</i>&nbsp;        Random r = new Random();</b>
+<b class="nc"><i class="no-highlight">387</i>&nbsp;        Vector2 pos = mapGraph.getWaterNodes().get(r.nextInt(mapGraph.getWaterCount()));</b>
+<b class="nc"><i class="no-highlight">388</i>&nbsp;        return pos;</b>
+<i class="no-highlight">389</i>&nbsp;    }
+<i class="no-highlight">390</i>&nbsp;
+<b class="fc"><i class="no-highlight">391</i>&nbsp;    public static ArrayList&lt;Faction&gt; getFactions() {return factions;}</b>
+<i class="no-highlight">392</i>&nbsp;    public static  ArrayList&lt;Ship&gt; getShips() {
+<b class="fc"><i class="no-highlight">393</i>&nbsp;        return ships;</b>
+<i class="no-highlight">394</i>&nbsp;    }
+<i class="no-highlight">395</i>&nbsp;    public static ArrayList&lt;College&gt; getColleges() {
+<b class="fc"><i class="no-highlight">396</i>&nbsp;        return colleges;</b>
+<i class="no-highlight">397</i>&nbsp;    }
+<i class="no-highlight">398</i>&nbsp;}
 </div>
 </pre>
 </div>
@@ -491,7 +497,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2022-05-03 16:30</div>
+    <div style="float:right;">generated on 2022-05-03 20:24</div>
 </div>
 </body>
 </html>

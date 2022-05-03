@@ -58,10 +58,10 @@ Current scope:     <a href="../../index.html">all classes</a>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    88.2%
+    87.5%
   </span>
   <span class="absValue">
-    (75/85)
+    (77/88)
   </span>
 </td>
 </tr>
@@ -89,121 +89,128 @@ Current scope:     <a href="../../index.html">all classes</a>
 <i class="no-highlight">14</i>&nbsp;import java.util.ArrayList;
 <i class="no-highlight">15</i>&nbsp;
 <i class="no-highlight">16</i>&nbsp;public class SaveManager{
-<b class="fc"><i class="no-highlight">17</i>&nbsp;    public SaveManager(int health_level, int ammo_level, int speed_level, int damage_level, int timer_points) {</b>
-<i class="no-highlight">18</i>&nbsp;//        Data Collection
-<b class="fc"><i class="no-highlight">19</i>&nbsp;        SaveData data = new SaveData();</b>
-<b class="fc"><i class="no-highlight">20</i>&nbsp;        Player p = GameManager.getPlayer();</b>
-<b class="fc"><i class="no-highlight">21</i>&nbsp;        data.factions = GameManager.getFactions();</b>
-<b class="fc"><i class="no-highlight">22</i>&nbsp;        ArrayList&lt;String&gt; FactionLUT = new ArrayList&lt;&gt;();</b>
-<i class="no-highlight">23</i>&nbsp;
-<i class="no-highlight">24</i>&nbsp;//        Saving necessary data from ship entities as they themselves contain circular
-<i class="no-highlight">25</i>&nbsp;//        references that when JSON-ified do not play nicely.
-<b class="fc"><i class="no-highlight">26</i>&nbsp;        ArrayList&lt;Ship&gt; ships = GameManager.getShips();</b>
-<b class="fc"><i class="no-highlight">27</i>&nbsp;        ArrayList&lt;DataShip&gt; shipsData = new ArrayList&lt;&gt;();</b>
-<b class="fc"><i class="no-highlight">28</i>&nbsp;        for (Ship i : ships) {</b>
-<b class="fc"><i class="no-highlight">29</i>&nbsp;            String jsonFactionID = &quot;Error&quot;;</b>
-<b class="fc"><i class="no-highlight">30</i>&nbsp;            int counter = 0;</b>
-<b class="fc"><i class="no-highlight">31</i>&nbsp;            for (Faction f : data.factions) {</b>
-<b class="fc"><i class="no-highlight">32</i>&nbsp;                FactionLUT.add(counter, f.getName());</b>
-<i class="no-highlight">33</i>&nbsp;
-<b class="fc"><i class="no-highlight">34</i>&nbsp;                if (i.getComponent(Pirate.class).getFaction().getName() == f.getName()) {</b>
-<b class="fc"><i class="no-highlight">35</i>&nbsp;                    jsonFactionID = String.valueOf(counter);</b>
-<i class="no-highlight">36</i>&nbsp;                } else {
-<b class="fc"><i class="no-highlight">37</i>&nbsp;                    counter ++;</b>
-<i class="no-highlight">38</i>&nbsp;                }
-<b class="fc"><i class="no-highlight">39</i>&nbsp;            }</b>
-<b class="fc"><i class="no-highlight">40</i>&nbsp;            String type = i.isPlayer ? &quot;Player&quot; : &quot;NPC&quot;;</b>
-<b class="fc"><i class="no-highlight">41</i>&nbsp;            DataShip d = new DataShip(i.getPosition(), jsonFactionID, i.getComponent(Pirate.class).getFaction().getColour(), type);</b>
-<b class="fc"><i class="no-highlight">42</i>&nbsp;            shipsData.add(d);</b>
-<b class="fc"><i class="no-highlight">43</i>&nbsp;        }</b>
-<b class="fc"><i class="no-highlight">44</i>&nbsp;        data.ships = shipsData;</b>
-<i class="no-highlight">45</i>&nbsp;
-<i class="no-highlight">46</i>&nbsp;//        Saving necessary data from college entities as they themselves contain circular
-<i class="no-highlight">47</i>&nbsp;//        references that when JSON-ified do not play nicely.
-<b class="fc"><i class="no-highlight">48</i>&nbsp;        ArrayList&lt;College&gt; colleges = GameManager.getColleges();</b>
-<b class="fc"><i class="no-highlight">49</i>&nbsp;        ArrayList&lt;DataCollege&gt; collegesData = new ArrayList&lt;&gt;();</b>
-<b class="fc"><i class="no-highlight">50</i>&nbsp;        for (College i : colleges) {</b>
-<b class="fc"><i class="no-highlight">51</i>&nbsp;            String jsonFactionID = &quot;Error&quot;;</b>
-<b class="fc"><i class="no-highlight">52</i>&nbsp;            int counter = 0;</b>
-<b class="fc"><i class="no-highlight">53</i>&nbsp;            for (Faction f : data.factions) {</b>
-<b class="fc"><i class="no-highlight">54</i>&nbsp;                if (i.getComponent(Pirate.class).getFaction().getName() == f.getName()) {</b>
-<b class="fc"><i class="no-highlight">55</i>&nbsp;                    jsonFactionID = String.valueOf(counter);</b>
-<i class="no-highlight">56</i>&nbsp;                } else {
-<b class="fc"><i class="no-highlight">57</i>&nbsp;                    counter ++;</b>
-<i class="no-highlight">58</i>&nbsp;                }
-<b class="fc"><i class="no-highlight">59</i>&nbsp;            }</b>
-<b class="fc"><i class="no-highlight">60</i>&nbsp;            DataCollege d = new DataCollege(jsonFactionID, false);</b>
-<b class="fc"><i class="no-highlight">61</i>&nbsp;            collegesData.add(d);</b>
-<b class="fc"><i class="no-highlight">62</i>&nbsp;        }</b>
-<i class="no-highlight">63</i>&nbsp;
-<i class="no-highlight">64</i>&nbsp;//        Saving necessary data from quest entries as they themselves contain circular
-<i class="no-highlight">65</i>&nbsp;//        references that when JSONified do not play nicely.
-<b class="fc"><i class="no-highlight">66</i>&nbsp;        ArrayList&lt;Quest&gt; quests = QuestManager.getAllQuests();</b>
-<b class="fc"><i class="no-highlight">67</i>&nbsp;        ArrayList&lt;DataQuest&gt; questData = new ArrayList&lt;&gt;();</b>
-<i class="no-highlight">68</i>&nbsp;        String type;
-<b class="fc"><i class="no-highlight">69</i>&nbsp;        for (Quest i : quests) {</b>
-<b class="fc"><i class="no-highlight">70</i>&nbsp;            if (i.getClass().getSimpleName().equals(&quot;KillQuest&quot;)) {</b>
-<i class="no-highlight">71</i>&nbsp;//                This is the checker for college destruction.
-<b class="fc"><i class="no-highlight">72</i>&nbsp;                for (DataCollege j : collegesData){</b>
-<b class="fc"><i class="no-highlight">73</i>&nbsp;                    if (i.getDescription() == FactionLUT.get(Integer.parseInt(j.factionID))) {</b>
-<b class="fc"><i class="no-highlight">74</i>&nbsp;                        j.destroyed = i.isCompleted();</b>
-<i class="no-highlight">75</i>&nbsp;                    }
-<b class="fc"><i class="no-highlight">76</i>&nbsp;                }</b>
-<b class="fc"><i class="no-highlight">77</i>&nbsp;                type = &quot;KillQuest&quot;;</b>
-<b class="fc"><i class="no-highlight">78</i>&nbsp;                DataQuest d = new DataQuest(type, i.getName(), i.getDescription(), i.getReward(), i.isCompleted(), i.getTarget());</b>
-<b class="fc"><i class="no-highlight">79</i>&nbsp;                questData.add(d);</b>
-<b class="fc"><i class="no-highlight">80</i>&nbsp;            } else if (i.getClass().getSimpleName().equals(&quot;LocateQuest&quot;)) {</b>
-<b class="fc"><i class="no-highlight">81</i>&nbsp;                type = &quot;LocateQuest&quot;;</b>
-<b class="fc"><i class="no-highlight">82</i>&nbsp;                DataQuest d = new DataQuest(type, i.getName(), i.getDescription(), i.getReward(), i.isCompleted(), i.getLoc(), i.getRadius());</b>
-<b class="fc"><i class="no-highlight">83</i>&nbsp;                questData.add(d);</b>
-<b class="fc"><i class="no-highlight">84</i>&nbsp;            } else {</b>
-<b class="fc"><i class="no-highlight">85</i>&nbsp;                type = &quot;KillDuckQuest&quot;;</b>
-<b class="fc"><i class="no-highlight">86</i>&nbsp;                DataQuest d = new DataQuest(type, i.getName(), i.getDescription(), i.getReward(), i.isCompleted(), i.getTarget());</b>
-<b class="fc"><i class="no-highlight">87</i>&nbsp;                questData.add(d);</b>
-<i class="no-highlight">88</i>&nbsp;            }
-<b class="fc"><i class="no-highlight">89</i>&nbsp;        }</b>
-<i class="no-highlight">90</i>&nbsp;//        This has been moved to here so edits above also get moved into json file.
-<b class="fc"><i class="no-highlight">91</i>&nbsp;        data.colleges = collegesData;</b>
-<b class="fc"><i class="no-highlight">92</i>&nbsp;        data.quests = questData;</b>
-<i class="no-highlight">93</i>&nbsp;
+<i class="no-highlight">17</i>&nbsp;    public String output;
+<b class="fc"><i class="no-highlight">18</i>&nbsp;    public SaveManager(int health_level, int ammo_level, int speed_level, int damage_level, int timer_points, String filename) {</b>
+<i class="no-highlight">19</i>&nbsp;//        Data Collection
+<b class="fc"><i class="no-highlight">20</i>&nbsp;        SaveData data = new SaveData();</b>
+<b class="fc"><i class="no-highlight">21</i>&nbsp;        Player p = GameManager.getPlayer();</b>
+<b class="fc"><i class="no-highlight">22</i>&nbsp;        data.factions = GameManager.getFactions();</b>
+<b class="fc"><i class="no-highlight">23</i>&nbsp;        ArrayList&lt;String&gt; FactionLUT = new ArrayList&lt;&gt;();</b>
+<i class="no-highlight">24</i>&nbsp;
+<i class="no-highlight">25</i>&nbsp;//        Saving necessary data from ship entities as they themselves contain circular
+<i class="no-highlight">26</i>&nbsp;//        references that when JSON-ified do not play nicely.
+<b class="fc"><i class="no-highlight">27</i>&nbsp;        ArrayList&lt;Ship&gt; ships = GameManager.getShips();</b>
+<b class="fc"><i class="no-highlight">28</i>&nbsp;        ArrayList&lt;DataShip&gt; shipsData = new ArrayList&lt;&gt;();</b>
+<b class="fc"><i class="no-highlight">29</i>&nbsp;        for (Ship i : ships) {</b>
+<b class="fc"><i class="no-highlight">30</i>&nbsp;            String jsonFactionID = &quot;Error&quot;;</b>
+<b class="fc"><i class="no-highlight">31</i>&nbsp;            int counter = 0;</b>
+<b class="fc"><i class="no-highlight">32</i>&nbsp;            for (Faction f : data.factions) {</b>
+<b class="fc"><i class="no-highlight">33</i>&nbsp;                FactionLUT.add(counter, f.getName());</b>
+<i class="no-highlight">34</i>&nbsp;
+<b class="fc"><i class="no-highlight">35</i>&nbsp;                if (i.getComponent(Pirate.class).getFaction().getName() == f.getName()) {</b>
+<b class="fc"><i class="no-highlight">36</i>&nbsp;                    jsonFactionID = String.valueOf(counter);</b>
+<i class="no-highlight">37</i>&nbsp;                } else {
+<b class="fc"><i class="no-highlight">38</i>&nbsp;                    counter ++;</b>
+<i class="no-highlight">39</i>&nbsp;                }
+<b class="fc"><i class="no-highlight">40</i>&nbsp;            }</b>
+<b class="fc"><i class="no-highlight">41</i>&nbsp;            String type = i.isPlayer ? &quot;Player&quot; : &quot;NPC&quot;;</b>
+<b class="fc"><i class="no-highlight">42</i>&nbsp;            DataShip d = new DataShip(i.getPosition(), jsonFactionID, i.getComponent(Pirate.class).getFaction().getColour(), type);</b>
+<b class="fc"><i class="no-highlight">43</i>&nbsp;            shipsData.add(d);</b>
+<b class="fc"><i class="no-highlight">44</i>&nbsp;        }</b>
+<b class="fc"><i class="no-highlight">45</i>&nbsp;        data.ships = shipsData;</b>
+<i class="no-highlight">46</i>&nbsp;
+<i class="no-highlight">47</i>&nbsp;//        Saving necessary data from college entities as they themselves contain circular
+<i class="no-highlight">48</i>&nbsp;//        references that when JSON-ified do not play nicely.
+<b class="fc"><i class="no-highlight">49</i>&nbsp;        ArrayList&lt;College&gt; colleges = GameManager.getColleges();</b>
+<b class="fc"><i class="no-highlight">50</i>&nbsp;        ArrayList&lt;DataCollege&gt; collegesData = new ArrayList&lt;&gt;();</b>
+<b class="fc"><i class="no-highlight">51</i>&nbsp;        for (College i : colleges) {</b>
+<b class="fc"><i class="no-highlight">52</i>&nbsp;            String jsonFactionID = &quot;Error&quot;;</b>
+<b class="fc"><i class="no-highlight">53</i>&nbsp;            int counter = 0;</b>
+<b class="fc"><i class="no-highlight">54</i>&nbsp;            for (Faction f : data.factions) {</b>
+<b class="fc"><i class="no-highlight">55</i>&nbsp;                if (i.getComponent(Pirate.class).getFaction().getName() == f.getName()) {</b>
+<b class="fc"><i class="no-highlight">56</i>&nbsp;                    jsonFactionID = String.valueOf(counter);</b>
+<i class="no-highlight">57</i>&nbsp;                } else {
+<b class="fc"><i class="no-highlight">58</i>&nbsp;                    counter ++;</b>
+<i class="no-highlight">59</i>&nbsp;                }
+<b class="fc"><i class="no-highlight">60</i>&nbsp;            }</b>
+<b class="fc"><i class="no-highlight">61</i>&nbsp;            DataCollege d = new DataCollege(jsonFactionID, false);</b>
+<b class="fc"><i class="no-highlight">62</i>&nbsp;            collegesData.add(d);</b>
+<b class="fc"><i class="no-highlight">63</i>&nbsp;        }</b>
+<i class="no-highlight">64</i>&nbsp;
+<i class="no-highlight">65</i>&nbsp;//        Saving necessary data from quest entries as they themselves contain circular
+<i class="no-highlight">66</i>&nbsp;//        references that when JSONified do not play nicely.
+<b class="fc"><i class="no-highlight">67</i>&nbsp;        ArrayList&lt;Quest&gt; quests = QuestManager.getAllQuests();</b>
+<b class="fc"><i class="no-highlight">68</i>&nbsp;        ArrayList&lt;DataQuest&gt; questData = new ArrayList&lt;&gt;();</b>
+<i class="no-highlight">69</i>&nbsp;        String type;
+<b class="fc"><i class="no-highlight">70</i>&nbsp;        for (Quest i : quests) {</b>
+<b class="fc"><i class="no-highlight">71</i>&nbsp;            if (i.getClass().getSimpleName().equals(&quot;KillQuest&quot;)) {</b>
+<i class="no-highlight">72</i>&nbsp;//                This is the checker for college destruction.
+<b class="fc"><i class="no-highlight">73</i>&nbsp;                for (DataCollege j : collegesData){</b>
+<b class="fc"><i class="no-highlight">74</i>&nbsp;                    if (i.getDescription() == FactionLUT.get(Integer.parseInt(j.factionID))) {</b>
+<b class="fc"><i class="no-highlight">75</i>&nbsp;                        j.destroyed = i.isCompleted();</b>
+<i class="no-highlight">76</i>&nbsp;                    }
+<b class="fc"><i class="no-highlight">77</i>&nbsp;                }</b>
+<b class="fc"><i class="no-highlight">78</i>&nbsp;                type = &quot;KillQuest&quot;;</b>
+<b class="fc"><i class="no-highlight">79</i>&nbsp;                DataQuest d = new DataQuest(type, i.getName(), i.getDescription(), i.getReward(), i.isCompleted(), i.getTarget());</b>
+<b class="fc"><i class="no-highlight">80</i>&nbsp;                questData.add(d);</b>
+<b class="fc"><i class="no-highlight">81</i>&nbsp;            } else if (i.getClass().getSimpleName().equals(&quot;LocateQuest&quot;)) {</b>
+<b class="fc"><i class="no-highlight">82</i>&nbsp;                type = &quot;LocateQuest&quot;;</b>
+<b class="fc"><i class="no-highlight">83</i>&nbsp;                DataQuest d = new DataQuest(type, i.getName(), i.getDescription(), i.getReward(), i.isCompleted(), i.getLoc(), i.getRadius());</b>
+<b class="fc"><i class="no-highlight">84</i>&nbsp;                questData.add(d);</b>
+<b class="fc"><i class="no-highlight">85</i>&nbsp;            } else {</b>
+<b class="fc"><i class="no-highlight">86</i>&nbsp;                type = &quot;KillDuckQuest&quot;;</b>
+<b class="fc"><i class="no-highlight">87</i>&nbsp;                DataQuest d = new DataQuest(type, i.getName(), i.getDescription(), i.getReward(), i.isCompleted(), i.getTarget());</b>
+<b class="fc"><i class="no-highlight">88</i>&nbsp;                questData.add(d);</b>
+<i class="no-highlight">89</i>&nbsp;            }
+<b class="fc"><i class="no-highlight">90</i>&nbsp;        }</b>
+<i class="no-highlight">91</i>&nbsp;//        This has been moved to here so edits above also get moved into json file.
+<b class="fc"><i class="no-highlight">92</i>&nbsp;        data.colleges = collegesData;</b>
+<b class="fc"><i class="no-highlight">93</i>&nbsp;        data.quests = questData;</b>
 <i class="no-highlight">94</i>&nbsp;
-<i class="no-highlight">95</i>&nbsp;//        Please note these will only save if non-zero
-<b class="fc"><i class="no-highlight">96</i>&nbsp;        data.health_level = health_level;</b>
-<b class="fc"><i class="no-highlight">97</i>&nbsp;        data.ammo_level = ammo_level;</b>
-<b class="fc"><i class="no-highlight">98</i>&nbsp;        data.speed_level = speed_level;</b>
-<b class="fc"><i class="no-highlight">99</i>&nbsp;        data.damage_level = damage_level;</b>
-<b class="fc"><i class="no-highlight">100</i>&nbsp;        data.health = p.getHealth();</b>
-<b class="fc"><i class="no-highlight">101</i>&nbsp;        data.plunder = p.getPlunder();</b>
-<b class="fc"><i class="no-highlight">102</i>&nbsp;        data.cannon_balls = p.getAmmo();</b>
-<b class="fc"><i class="no-highlight">103</i>&nbsp;        data.points = (p.getPlunder() * 10 + timer_points);</b>
-<b class="fc"><i class="no-highlight">104</i>&nbsp;        data.x = p.getPosition().x;</b>
-<b class="fc"><i class="no-highlight">105</i>&nbsp;        data.y = p.getPosition().y;</b>
-<i class="no-highlight">106</i>&nbsp;
-<i class="no-highlight">107</i>&nbsp;//        Data Handling
-<b class="fc"><i class="no-highlight">108</i>&nbsp;        Json jsonObject = new Json();</b>
-<b class="fc"><i class="no-highlight">109</i>&nbsp;        String output = jsonObject.prettyPrint(data);</b>
-<b class="fc"><i class="no-highlight">110</i>&nbsp;        String userprofile = System.getenv(&quot;USERPROFILE&quot;);</b>
-<b class="fc"><i class="no-highlight">111</i>&nbsp;        String fileLoc = userprofile + &quot;\\saved_data.json&quot;;</b>
-<b class="fc"><i class="no-highlight">112</i>&nbsp;        try (PrintWriter out = new PrintWriter(fileLoc)) {</b>
-<b class="fc"><i class="no-highlight">113</i>&nbsp;            out.println(output);</b>
-<b class="fc"><i class="no-highlight">114</i>&nbsp;        } catch (FileNotFoundException e) {</b>
-<i class="no-highlight">115</i>&nbsp;            try {
-<b class="nc"><i class="no-highlight">116</i>&nbsp;                File myObj = new File(fileLoc);</b>
-<b class="nc"><i class="no-highlight">117</i>&nbsp;                if (myObj.createNewFile()) {</b>
-<b class="nc"><i class="no-highlight">118</i>&nbsp;                    System.out.println(&quot;File created: &quot; + myObj.getName());</b>
-<i class="no-highlight">119</i>&nbsp;                } else {
-<b class="nc"><i class="no-highlight">120</i>&nbsp;                    System.out.println(&quot;File already exists.&quot;);</b>
-<i class="no-highlight">121</i>&nbsp;                }
-<i class="no-highlight">122</i>&nbsp;            }
-<b class="nc"><i class="no-highlight">123</i>&nbsp;            catch (IOException ee) {</b>
-<b class="nc"><i class="no-highlight">124</i>&nbsp;                System.out.println(&quot;An error occurred.&quot;);</b>
-<b class="nc"><i class="no-highlight">125</i>&nbsp;                e.printStackTrace();</b>
-<b class="nc"><i class="no-highlight">126</i>&nbsp;                System.out.println(&quot;==== Second Error Below ====&quot;);</b>
-<b class="nc"><i class="no-highlight">127</i>&nbsp;                ee.printStackTrace();</b>
-<b class="nc"><i class="no-highlight">128</i>&nbsp;            }</b>
-<b class="fc"><i class="no-highlight">129</i>&nbsp;        }</b>
-<b class="fc"><i class="no-highlight">130</i>&nbsp;    }</b>
-<i class="no-highlight">131</i>&nbsp;}
+<i class="no-highlight">95</i>&nbsp;
+<i class="no-highlight">96</i>&nbsp;//        Please note these will only save if non-zero
+<b class="fc"><i class="no-highlight">97</i>&nbsp;        data.health_level = health_level;</b>
+<b class="fc"><i class="no-highlight">98</i>&nbsp;        data.ammo_level = ammo_level;</b>
+<b class="fc"><i class="no-highlight">99</i>&nbsp;        data.speed_level = speed_level;</b>
+<b class="fc"><i class="no-highlight">100</i>&nbsp;        data.damage_level = damage_level;</b>
+<b class="fc"><i class="no-highlight">101</i>&nbsp;        data.health = p.getHealth();</b>
+<b class="fc"><i class="no-highlight">102</i>&nbsp;        data.plunder = p.getPlunder();</b>
+<b class="fc"><i class="no-highlight">103</i>&nbsp;        data.cannon_balls = p.getAmmo();</b>
+<b class="fc"><i class="no-highlight">104</i>&nbsp;        data.points = (p.getPlunder() * 10 + timer_points);</b>
+<b class="fc"><i class="no-highlight">105</i>&nbsp;        data.x = p.getPosition().x;</b>
+<b class="fc"><i class="no-highlight">106</i>&nbsp;        data.y = p.getPosition().y;</b>
+<i class="no-highlight">107</i>&nbsp;
+<i class="no-highlight">108</i>&nbsp;//        Data Handling
+<b class="fc"><i class="no-highlight">109</i>&nbsp;        Json jsonObject = new Json();</b>
+<b class="fc"><i class="no-highlight">110</i>&nbsp;        output = jsonObject.prettyPrint(data);</b>
+<i class="no-highlight">111</i>&nbsp;        String fileLoc;
+<b class="fc"><i class="no-highlight">112</i>&nbsp;        if (filename == &quot;&quot;) {</b>
+<b class="fc"><i class="no-highlight">113</i>&nbsp;            String userprofile = System.getenv(&quot;USERPROFILE&quot;);</b>
+<b class="fc"><i class="no-highlight">114</i>&nbsp;            fileLoc = userprofile + &quot;\\saved_data.json&quot;;</b>
+<b class="fc"><i class="no-highlight">115</i>&nbsp;        }</b>
+<i class="no-highlight">116</i>&nbsp;        else {
+<b class="nc"><i class="no-highlight">117</i>&nbsp;            fileLoc = &quot;saved_data.json&quot;;</b>
+<i class="no-highlight">118</i>&nbsp;        }
+<b class="fc"><i class="no-highlight">119</i>&nbsp;        try (PrintWriter out = new PrintWriter(fileLoc)) {</b>
+<b class="fc"><i class="no-highlight">120</i>&nbsp;            out.println(output);</b>
+<b class="fc"><i class="no-highlight">121</i>&nbsp;        } catch (FileNotFoundException e) {</b>
+<i class="no-highlight">122</i>&nbsp;            try {
+<b class="nc"><i class="no-highlight">123</i>&nbsp;                File myObj = new File(fileLoc);</b>
+<b class="nc"><i class="no-highlight">124</i>&nbsp;                if (myObj.createNewFile()) {</b>
+<b class="nc"><i class="no-highlight">125</i>&nbsp;                    System.out.println(&quot;File created: &quot; + myObj.getName());</b>
+<i class="no-highlight">126</i>&nbsp;                } else {
+<b class="nc"><i class="no-highlight">127</i>&nbsp;                    System.out.println(&quot;File already exists.&quot;);</b>
+<i class="no-highlight">128</i>&nbsp;                }
+<i class="no-highlight">129</i>&nbsp;            }
+<b class="nc"><i class="no-highlight">130</i>&nbsp;            catch (IOException ee) {</b>
+<b class="nc"><i class="no-highlight">131</i>&nbsp;                System.out.println(&quot;An error occurred.&quot;);</b>
+<b class="nc"><i class="no-highlight">132</i>&nbsp;                e.printStackTrace();</b>
+<b class="nc"><i class="no-highlight">133</i>&nbsp;                System.out.println(&quot;==== Second Error Below ====&quot;);</b>
+<b class="nc"><i class="no-highlight">134</i>&nbsp;                ee.printStackTrace();</b>
+<b class="nc"><i class="no-highlight">135</i>&nbsp;            }</b>
+<b class="fc"><i class="no-highlight">136</i>&nbsp;        }</b>
+<b class="fc"><i class="no-highlight">137</i>&nbsp;    }</b>
+<i class="no-highlight">138</i>&nbsp;}
 </div>
 </pre>
 </div>
@@ -230,7 +237,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2022-05-03 16:30</div>
+    <div style="float:right;">generated on 2022-05-03 20:24</div>
 </div>
 </body>
 </html>

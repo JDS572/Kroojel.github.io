@@ -50,7 +50,7 @@ Current scope:     <a href="../../index.html">all classes</a>
     0%
   </span>
   <span class="absValue">
-    (0/36)
+    (0/31)
   </span>
 </td>
 </tr>
@@ -69,7 +69,7 @@ Current scope:     <a href="../../index.html">all classes</a>
     0%
   </span>
   <span class="absValue">
-    (0/3)
+    (0/2)
   </span>
 </td>
   </tr>
@@ -88,7 +88,7 @@ Current scope:     <a href="../../index.html">all classes</a>
     0%
   </span>
   <span class="absValue">
-    (0/17)
+    (0/16)
   </span>
 </td>
   </tr>
@@ -107,7 +107,7 @@ Current scope:     <a href="../../index.html">all classes</a>
     0%
   </span>
   <span class="absValue">
-    (0/23)
+    (0/22)
   </span>
 </td>
   </tr>
@@ -126,7 +126,7 @@ Current scope:     <a href="../../index.html">all classes</a>
     0%
   </span>
   <span class="absValue">
-    (0/4)
+    (0/3)
   </span>
 </td>
   </tr>
@@ -145,7 +145,7 @@ Current scope:     <a href="../../index.html">all classes</a>
     0%
   </span>
   <span class="absValue">
-    (0/83)
+    (0/74)
   </span>
 </td>
 </tr>
@@ -187,7 +187,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 <i class="no-highlight">29</i>&nbsp;public class MenuScreen extends Page {
 <i class="no-highlight">30</i>&nbsp;    public MenuScreen(PirateGame parent) {
 <b class="nc"><i class="no-highlight">31</i>&nbsp;        super(parent);</b>
-<b class="nc"><i class="no-highlight">32</i>&nbsp;    }</b>
+<i class="no-highlight">32</i>&nbsp;    }
 <i class="no-highlight">33</i>&nbsp;
 <i class="no-highlight">34</i>&nbsp;    /**
 <i class="no-highlight">35</i>&nbsp;     * Create menu widgets such as start button, labels, etc.
@@ -210,7 +210,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 <i class="no-highlight">52</i>&nbsp;            @Override
 <i class="no-highlight">53</i>&nbsp;            public void changed(ChangeEvent event, Actor actor) {
 <b class="nc"><i class="no-highlight">54</i>&nbsp;                parent.setScreen(parent.game);</b>
-<b class="nc"><i class="no-highlight">55</i>&nbsp;            }</b>
+<i class="no-highlight">55</i>&nbsp;            }
 <i class="no-highlight">56</i>&nbsp;        });
 <b class="nc"><i class="no-highlight">57</i>&nbsp;        t.add(play).top().size(100, 25).spaceBottom(space);</b>
 <b class="nc"><i class="no-highlight">58</i>&nbsp;        t.row();</b>
@@ -239,7 +239,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="nc"><i class="no-highlight">81</i>&nbsp;                    System.out.println(e);</b>
 <b class="nc"><i class="no-highlight">82</i>&nbsp;                    loadData.setText(&quot;No Save File&quot;);</b>
 <b class="nc"><i class="no-highlight">83</i>&nbsp;                }</b>
-<b class="nc"><i class="no-highlight">84</i>&nbsp;            }</b>
+<i class="no-highlight">84</i>&nbsp;            }
 <i class="no-highlight">85</i>&nbsp;        });
 <b class="nc"><i class="no-highlight">86</i>&nbsp;        t.add(loadData).top().size(100, 25).spaceBottom(space);</b>
 <b class="nc"><i class="no-highlight">87</i>&nbsp;        t.row();</b>
@@ -274,7 +274,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="nc"><i class="no-highlight">116</i>&nbsp;                    GameManager.getLongboi().setHealth(100);</b>
 <b class="nc"><i class="no-highlight">117</i>&nbsp;                    GameManager.getLongboi().getComponent(Pirate.class).setAttackDmg(10f); // longboi bit stronger than enemies but not too much</b>
 <i class="no-highlight">118</i>&nbsp;                }
-<b class="nc"><i class="no-highlight">119</i>&nbsp;            }</b>
+<i class="no-highlight">119</i>&nbsp;            }
 <i class="no-highlight">120</i>&nbsp;        });
 <b class="nc"><i class="no-highlight">121</i>&nbsp;        t.add(difficulty).top().size(120, 30).spaceBottom(space);</b>
 <b class="nc"><i class="no-highlight">122</i>&nbsp;        t.row();</b>
@@ -285,32 +285,32 @@ Current scope:     <a href="../../index.html">all classes</a>
 <i class="no-highlight">127</i>&nbsp;            public void changed(ChangeEvent event, Actor actor) {
 <b class="nc"><i class="no-highlight">128</i>&nbsp;                Gdx.app.exit();</b>
 <b class="nc"><i class="no-highlight">129</i>&nbsp;                System.exit(0);</b>
-<b class="nc"><i class="no-highlight">130</i>&nbsp;            }</b>
+<i class="no-highlight">130</i>&nbsp;            }
 <i class="no-highlight">131</i>&nbsp;        });
 <b class="nc"><i class="no-highlight">132</i>&nbsp;        t.add(quit).size(100, 25).top().spaceBottom(space);</b>
 <i class="no-highlight">133</i>&nbsp;
 <b class="nc"><i class="no-highlight">134</i>&nbsp;        t.top();</b>
 <i class="no-highlight">135</i>&nbsp;
 <b class="nc"><i class="no-highlight">136</i>&nbsp;        actors.add(t);</b>
-<b class="nc"><i class="no-highlight">137</i>&nbsp;    }</b>
+<i class="no-highlight">137</i>&nbsp;    }
 <i class="no-highlight">138</i>&nbsp;
 <i class="no-highlight">139</i>&nbsp;    @Override
 <i class="no-highlight">140</i>&nbsp;    public void show() {
 <b class="nc"><i class="no-highlight">141</i>&nbsp;        super.show();</b>
-<b class="nc"><i class="no-highlight">142</i>&nbsp;    }</b>
+<i class="no-highlight">142</i>&nbsp;    }
 <i class="no-highlight">143</i>&nbsp;
 <i class="no-highlight">144</i>&nbsp;
 <i class="no-highlight">145</i>&nbsp;    @Override
 <i class="no-highlight">146</i>&nbsp;    public void hide() {
 <b class="nc"><i class="no-highlight">147</i>&nbsp;        super.hide();</b>
-<b class="nc"><i class="no-highlight">148</i>&nbsp;    }</b>
+<i class="no-highlight">148</i>&nbsp;    }
 <i class="no-highlight">149</i>&nbsp;
 <i class="no-highlight">150</i>&nbsp;    @Override
 <i class="no-highlight">151</i>&nbsp;    public void resize(int width, int height) {
 <b class="nc"><i class="no-highlight">152</i>&nbsp;        super.resize(width, height);</b>
 <b class="nc"><i class="no-highlight">153</i>&nbsp;        Table t = (Table) actors.get(0);</b>
 <b class="nc"><i class="no-highlight">154</i>&nbsp;        t.setBackground(new TextureRegionDrawable(ResourceManager.getTexture(&quot;menuBG.jpg&quot;))); // prevent the bg being stretched</b>
-<b class="nc"><i class="no-highlight">155</i>&nbsp;    }</b>
+<i class="no-highlight">155</i>&nbsp;    }
 <i class="no-highlight">156</i>&nbsp;}
 </div>
 </pre>
@@ -338,7 +338,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2022-05-03 16:30</div>
+    <div style="float:right;">generated on 2022-05-03 20:24</div>
 </div>
 </body>
 </html>

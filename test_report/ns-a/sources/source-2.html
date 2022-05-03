@@ -61,7 +61,7 @@ Current scope:     <a href="../../index.html">all classes</a>
     100%
   </span>
   <span class="absValue">
-    (83/83)
+    (84/84)
   </span>
 </td>
 </tr>
@@ -76,86 +76,86 @@ Current scope:     <a href="../../index.html">all classes</a>
 <div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package com.mygdx.tests;
 <i class="no-highlight">2</i>&nbsp;
 <i class="no-highlight">3</i>&nbsp;import com.badlogic.gdx.Game;
-<i class="no-highlight">4</i>&nbsp;import com.mygdx.game.Entitys.Building;
-<i class="no-highlight">5</i>&nbsp;import com.mygdx.game.Entitys.College;
-<i class="no-highlight">6</i>&nbsp;import com.mygdx.game.Entitys.Player;
-<i class="no-highlight">7</i>&nbsp;import com.mygdx.game.Managers.GameManager;
-<i class="no-highlight">8</i>&nbsp;import com.mygdx.game.Managers.PhysicsManager;
-<i class="no-highlight">9</i>&nbsp;import com.mygdx.game.Managers.ResourceManager;
-<i class="no-highlight">10</i>&nbsp;import org.junit.After;
-<i class="no-highlight">11</i>&nbsp;import org.junit.Before;
-<i class="no-highlight">12</i>&nbsp;import org.junit.Test;
-<i class="no-highlight">13</i>&nbsp;import org.junit.runner.RunWith;
-<i class="no-highlight">14</i>&nbsp;import com.mygdx.game.Components.*;
-<i class="no-highlight">15</i>&nbsp;import static com.mygdx.utils.Constants.INIT_CONSTANTS;
-<i class="no-highlight">16</i>&nbsp;import static org.junit.Assert.assertTrue;
-<i class="no-highlight">17</i>&nbsp;
-<i class="no-highlight">18</i>&nbsp;@RunWith(GdxTestRunner.class)
-<b class="fc"><i class="no-highlight">19</i>&nbsp;public class CollegeBuildingTests {</b>
-<i class="no-highlight">20</i>&nbsp;    @Before
-<i class="no-highlight">21</i>&nbsp;    public void prepareEnv(){
-<b class="fc"><i class="no-highlight">22</i>&nbsp;        int id_ship = ResourceManager.addTexture(&quot;ship.png&quot;);</b>
-<b class="fc"><i class="no-highlight">23</i>&nbsp;        int id_map = ResourceManager.addTileMap(&quot;Map.tmx&quot;);</b>
-<b class="fc"><i class="no-highlight">24</i>&nbsp;        int atlas_id = ResourceManager.addTextureAtlas(&quot;Boats.txt&quot;);</b>
-<b class="fc"><i class="no-highlight">25</i>&nbsp;        int extras_id = ResourceManager.addTextureAtlas(&quot;UISkin/skin.atlas&quot;);</b>
-<b class="fc"><i class="no-highlight">26</i>&nbsp;        int buildings_id = ResourceManager.addTextureAtlas(&quot;Buildings.txt&quot;);</b>
-<b class="fc"><i class="no-highlight">27</i>&nbsp;        int powups_atlas_id = ResourceManager.addTextureAtlas(&quot;upgrades_powerups.txt&quot;);</b>
-<b class="fc"><i class="no-highlight">28</i>&nbsp;        ResourceManager.addTexture(&quot;menuBG.jpg&quot;);</b>
-<b class="fc"><i class="no-highlight">29</i>&nbsp;        ResourceManager.addTexture(&quot;Chest.png&quot;);</b>
-<b class="fc"><i class="no-highlight">30</i>&nbsp;        ResourceManager.addTexture(&quot;progress_bar_red.png&quot;);</b>
-<b class="fc"><i class="no-highlight">31</i>&nbsp;        ResourceManager.addTexture(&quot;progress_bar_green.png&quot;);</b>
-<b class="fc"><i class="no-highlight">32</i>&nbsp;        ResourceManager.addTexture(&quot;points_star.png&quot;);</b>
-<b class="fc"><i class="no-highlight">33</i>&nbsp;        ResourceManager.addTextureAtlas(&quot;upgrade_tier_bar.txt&quot;);</b>
-<b class="fc"><i class="no-highlight">34</i>&nbsp;        ResourceManager.addTextureAtlas(&quot;upgrade_pricetags.txt&quot;);</b>
-<b class="fc"><i class="no-highlight">35</i>&nbsp;        ResourceManager.addTextureAtlas(&quot;longboi_moveset.txt&quot;);</b>
-<b class="fc"><i class="no-highlight">36</i>&nbsp;        ResourceManager.addTextureAtlas(&quot;Eggball.txt&quot;);</b>
-<b class="fc"><i class="no-highlight">37</i>&nbsp;        ResourceManager.addTexture(&quot;poison.png&quot;);</b>
-<b class="fc"><i class="no-highlight">38</i>&nbsp;        ResourceManager.addTexture(&quot;arrow.png&quot;);</b>
-<b class="fc"><i class="no-highlight">39</i>&nbsp;        ResourceManager.loadAssets();</b>
-<b class="fc"><i class="no-highlight">40</i>&nbsp;        INIT_CONSTANTS();</b>
-<b class="fc"><i class="no-highlight">41</i>&nbsp;        PhysicsManager.Initialize(false);</b>
-<b class="fc"><i class="no-highlight">42</i>&nbsp;        if(GameManager.getShips().isEmpty()) {</b>
-<b class="fc"><i class="no-highlight">43</i>&nbsp;            GameManager.CreatePlayer(); // the player entity for tests</b>
-<b class="fc"><i class="no-highlight">44</i>&nbsp;            GameManager.CreateNPCShip(2); // the &quot;enemy&quot; entity for tests</b>
-<b class="fc"><i class="no-highlight">45</i>&nbsp;            GameManager.CreateNPCShip(1); // the &quot;ally&quot; entity for tests</b>
-<i class="no-highlight">46</i>&nbsp;        }
-<b class="fc"><i class="no-highlight">47</i>&nbsp;        if (GameManager.getColleges().isEmpty()){</b>
-<b class="fc"><i class="no-highlight">48</i>&nbsp;            GameManager.CreateCollege(2);</b>
-<i class="no-highlight">49</i>&nbsp;        }
-<b class="fc"><i class="no-highlight">50</i>&nbsp;    }</b>
-<i class="no-highlight">51</i>&nbsp;    @After
-<i class="no-highlight">52</i>&nbsp;    public void cleanEnv(){
-<b class="fc"><i class="no-highlight">53</i>&nbsp;        ResourceManager.deepClean();</b>
-<b class="fc"><i class="no-highlight">54</i>&nbsp;        GameManager.getShips().clear();</b>
-<b class="fc"><i class="no-highlight">55</i>&nbsp;        GameManager.getColleges().clear();</b>
-<b class="fc"><i class="no-highlight">56</i>&nbsp;    }</b>
-<i class="no-highlight">57</i>&nbsp;
-<i class="no-highlight">58</i>&nbsp;    @Test
-<i class="no-highlight">59</i>&nbsp;    public void testEnemyCollegeHasDefender(){
-<b class="fc"><i class="no-highlight">60</i>&nbsp;        College c = GameManager.getColleges().get(0);</b>
-<b class="fc"><i class="no-highlight">61</i>&nbsp;        boolean hasDefender = false;</b>
-<b class="fc"><i class="no-highlight">62</i>&nbsp;        for (Building b : c.getBuildings()){</b>
-<b class="fc"><i class="no-highlight">63</i>&nbsp;            if (b.isDefender()){</b>
-<b class="fc"><i class="no-highlight">64</i>&nbsp;                hasDefender = true;</b>
-<i class="no-highlight">65</i>&nbsp;            }
-<b class="fc"><i class="no-highlight">66</i>&nbsp;        }</b>
-<b class="fc"><i class="no-highlight">67</i>&nbsp;        assertTrue(&quot;Enemy college doesnt have a defender!&quot;, hasDefender);</b>
-<b class="fc"><i class="no-highlight">68</i>&nbsp;    }</b>
-<i class="no-highlight">69</i>&nbsp;
-<i class="no-highlight">70</i>&nbsp;    @Test
-<i class="no-highlight">71</i>&nbsp;    public void testDefenderTakesDamage(){
-<b class="fc"><i class="no-highlight">72</i>&nbsp;        College c = GameManager.getColleges().get(0);</b>
-<b class="fc"><i class="no-highlight">73</i>&nbsp;        Building defender = null;</b>
-<b class="fc"><i class="no-highlight">74</i>&nbsp;        for (Building b : c.getBuildings()){</b>
-<b class="fc"><i class="no-highlight">75</i>&nbsp;            if (b.isDefender()){</b>
-<b class="fc"><i class="no-highlight">76</i>&nbsp;                defender = b;</b>
-<i class="no-highlight">77</i>&nbsp;            }
-<b class="fc"><i class="no-highlight">78</i>&nbsp;        }</b>
-<b class="fc"><i class="no-highlight">79</i>&nbsp;        defender.update();</b>
-<b class="fc"><i class="no-highlight">80</i>&nbsp;        int health_init = defender.getHealth();</b>
-<b class="fc"><i class="no-highlight">81</i>&nbsp;        Player p = GameManager.getPlayer();</b>
+<i class="no-highlight">4</i>&nbsp;import com.badlogic.gdx.math.Vector2;
+<i class="no-highlight">5</i>&nbsp;import com.mygdx.game.Entitys.Building;
+<i class="no-highlight">6</i>&nbsp;import com.mygdx.game.Entitys.College;
+<i class="no-highlight">7</i>&nbsp;import com.mygdx.game.Entitys.Player;
+<i class="no-highlight">8</i>&nbsp;import com.mygdx.game.Managers.GameManager;
+<i class="no-highlight">9</i>&nbsp;import com.mygdx.game.Managers.PhysicsManager;
+<i class="no-highlight">10</i>&nbsp;import com.mygdx.game.Managers.ResourceManager;
+<i class="no-highlight">11</i>&nbsp;import org.junit.After;
+<i class="no-highlight">12</i>&nbsp;import org.junit.Before;
+<i class="no-highlight">13</i>&nbsp;import org.junit.Test;
+<i class="no-highlight">14</i>&nbsp;import org.junit.runner.RunWith;
+<i class="no-highlight">15</i>&nbsp;import com.mygdx.game.Components.*;
+<i class="no-highlight">16</i>&nbsp;import static com.mygdx.utils.Constants.INIT_CONSTANTS;
+<i class="no-highlight">17</i>&nbsp;import static org.junit.Assert.assertTrue;
+<i class="no-highlight">18</i>&nbsp;
+<i class="no-highlight">19</i>&nbsp;@RunWith(GdxTestRunner.class)
+<b class="fc"><i class="no-highlight">20</i>&nbsp;public class CollegeBuildingTests {</b>
+<i class="no-highlight">21</i>&nbsp;    @Before
+<i class="no-highlight">22</i>&nbsp;    public void prepareEnv(){
+<b class="fc"><i class="no-highlight">23</i>&nbsp;        int id_ship = ResourceManager.addTexture(&quot;ship.png&quot;);</b>
+<b class="fc"><i class="no-highlight">24</i>&nbsp;        int id_map = ResourceManager.addTileMap(&quot;Map.tmx&quot;);</b>
+<b class="fc"><i class="no-highlight">25</i>&nbsp;        int atlas_id = ResourceManager.addTextureAtlas(&quot;Boats.txt&quot;);</b>
+<b class="fc"><i class="no-highlight">26</i>&nbsp;        int extras_id = ResourceManager.addTextureAtlas(&quot;UISkin/skin.atlas&quot;);</b>
+<b class="fc"><i class="no-highlight">27</i>&nbsp;        int buildings_id = ResourceManager.addTextureAtlas(&quot;Buildings.txt&quot;);</b>
+<b class="fc"><i class="no-highlight">28</i>&nbsp;        int powups_atlas_id = ResourceManager.addTextureAtlas(&quot;upgrades_powerups.txt&quot;);</b>
+<b class="fc"><i class="no-highlight">29</i>&nbsp;        ResourceManager.addTexture(&quot;menuBG.jpg&quot;);</b>
+<b class="fc"><i class="no-highlight">30</i>&nbsp;        ResourceManager.addTexture(&quot;Chest.png&quot;);</b>
+<b class="fc"><i class="no-highlight">31</i>&nbsp;        ResourceManager.addTexture(&quot;progress_bar_red.png&quot;);</b>
+<b class="fc"><i class="no-highlight">32</i>&nbsp;        ResourceManager.addTexture(&quot;progress_bar_green.png&quot;);</b>
+<b class="fc"><i class="no-highlight">33</i>&nbsp;        ResourceManager.addTexture(&quot;points_star.png&quot;);</b>
+<b class="fc"><i class="no-highlight">34</i>&nbsp;        ResourceManager.addTextureAtlas(&quot;upgrade_tier_bar.txt&quot;);</b>
+<b class="fc"><i class="no-highlight">35</i>&nbsp;        ResourceManager.addTextureAtlas(&quot;upgrade_pricetags.txt&quot;);</b>
+<b class="fc"><i class="no-highlight">36</i>&nbsp;        ResourceManager.addTextureAtlas(&quot;longboi_moveset.txt&quot;);</b>
+<b class="fc"><i class="no-highlight">37</i>&nbsp;        ResourceManager.addTextureAtlas(&quot;Eggball.txt&quot;);</b>
+<b class="fc"><i class="no-highlight">38</i>&nbsp;        ResourceManager.addTexture(&quot;poison.png&quot;);</b>
+<b class="fc"><i class="no-highlight">39</i>&nbsp;        ResourceManager.addTexture(&quot;arrow.png&quot;);</b>
+<b class="fc"><i class="no-highlight">40</i>&nbsp;        ResourceManager.loadAssets();</b>
+<b class="fc"><i class="no-highlight">41</i>&nbsp;        INIT_CONSTANTS();</b>
+<b class="fc"><i class="no-highlight">42</i>&nbsp;        PhysicsManager.Initialize(false);</b>
+<b class="fc"><i class="no-highlight">43</i>&nbsp;        GameManager.CreatePlayer(); // the player entity for tests</b>
+<b class="fc"><i class="no-highlight">44</i>&nbsp;        GameManager.CreateNPCShip(2); // the &quot;enemy&quot; entity for tests</b>
+<b class="fc"><i class="no-highlight">45</i>&nbsp;        GameManager.CreateNPCShip(1); // the &quot;ally&quot; entity for tests</b>
+<b class="fc"><i class="no-highlight">46</i>&nbsp;        GameManager.CreateCollege(2);</b>
+<b class="fc"><i class="no-highlight">47</i>&nbsp;    }</b>
+<i class="no-highlight">48</i>&nbsp;    @After
+<i class="no-highlight">49</i>&nbsp;    public void cleanEnv(){
+<b class="fc"><i class="no-highlight">50</i>&nbsp;        ResourceManager.deepClean();</b>
+<b class="fc"><i class="no-highlight">51</i>&nbsp;        GameManager.getShips().clear();</b>
+<b class="fc"><i class="no-highlight">52</i>&nbsp;        GameManager.getColleges().clear();</b>
+<b class="fc"><i class="no-highlight">53</i>&nbsp;    }</b>
+<i class="no-highlight">54</i>&nbsp;
+<i class="no-highlight">55</i>&nbsp;    @Test
+<i class="no-highlight">56</i>&nbsp;    public void testEnemyCollegeHasDefender(){
+<b class="fc"><i class="no-highlight">57</i>&nbsp;        College c = GameManager.getColleges().get(0);</b>
+<b class="fc"><i class="no-highlight">58</i>&nbsp;        boolean hasDefender = false;</b>
+<b class="fc"><i class="no-highlight">59</i>&nbsp;        for (Building b : c.getBuildings()){</b>
+<b class="fc"><i class="no-highlight">60</i>&nbsp;            if (b.isDefender()){</b>
+<b class="fc"><i class="no-highlight">61</i>&nbsp;                hasDefender = true;</b>
+<i class="no-highlight">62</i>&nbsp;            }
+<b class="fc"><i class="no-highlight">63</i>&nbsp;        }</b>
+<b class="fc"><i class="no-highlight">64</i>&nbsp;        assertTrue(&quot;Enemy college doesnt have a defender!&quot;, hasDefender);</b>
+<b class="fc"><i class="no-highlight">65</i>&nbsp;    }</b>
+<i class="no-highlight">66</i>&nbsp;
+<i class="no-highlight">67</i>&nbsp;    @Test
+<i class="no-highlight">68</i>&nbsp;    public void testDefenderTakesDamage(){
+<b class="fc"><i class="no-highlight">69</i>&nbsp;        College c = GameManager.getColleges().get(0);</b>
+<b class="fc"><i class="no-highlight">70</i>&nbsp;        Building defender = null;</b>
+<b class="fc"><i class="no-highlight">71</i>&nbsp;        for (Building b : c.getBuildings()){</b>
+<b class="fc"><i class="no-highlight">72</i>&nbsp;            if (b.isDefender()){</b>
+<b class="fc"><i class="no-highlight">73</i>&nbsp;                defender = b;</b>
+<i class="no-highlight">74</i>&nbsp;            }
+<b class="fc"><i class="no-highlight">75</i>&nbsp;        }</b>
+<b class="fc"><i class="no-highlight">76</i>&nbsp;        defender.update();</b>
+<b class="fc"><i class="no-highlight">77</i>&nbsp;        int health_init = defender.getHealth();</b>
+<b class="fc"><i class="no-highlight">78</i>&nbsp;        Player p = GameManager.getPlayer();</b>
+<b class="fc"><i class="no-highlight">79</i>&nbsp;        Vector2 pos = defender.getComponent(Transform.class).getPosition();</b>
+<b class="fc"><i class="no-highlight">80</i>&nbsp;        p.getComponent(Transform.class).setPosition(pos.x + 100f, pos.y + 100f);</b>
+<b class="fc"><i class="no-highlight">81</i>&nbsp;        System.out.println(defender.getComponent(Transform.class).getPosition());</b>
 <b class="fc"><i class="no-highlight">82</i>&nbsp;        p.shoot(defender.getComponent(Transform.class).getPosition().sub(p.getPosition()).scl(100f));</b>
-<b class="fc"><i class="no-highlight">83</i>&nbsp;        for (int i = 0; i &lt; 3000; i++){</b>
+<b class="fc"><i class="no-highlight">83</i>&nbsp;        for (int i = 0; i &lt; 5000; i++){</b>
 <b class="fc"><i class="no-highlight">84</i>&nbsp;            defender.update();</b>
 <b class="fc"><i class="no-highlight">85</i>&nbsp;            PhysicsManager.update();</b>
 <i class="no-highlight">86</i>&nbsp;        }
@@ -229,7 +229,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2022-05-03 16:30</div>
+    <div style="float:right;">generated on 2022-05-03 20:24</div>
 </div>
 </body>
 </html>

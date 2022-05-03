@@ -50,18 +50,18 @@ Current scope:     <a href="../../index.html">all classes</a>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    64.3%
+    75%
   </span>
   <span class="absValue">
-    (9/14)
+    (9/12)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    59.6%
+    63.3%
   </span>
   <span class="absValue">
-    (31/52)
+    (31/49)
   </span>
 </td>
 </tr>
@@ -88,7 +88,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 <i class="no-highlight">13</i>&nbsp;public class Renderable extends Component {
 <i class="no-highlight">14</i>&nbsp;    protected Sprite sprite;
 <i class="no-highlight">15</i>&nbsp;    private boolean isVisible;
-<i class="no-highlight">16</i>&nbsp;    private Vector2 offset; // specifies the offset of this renderable from parent&#39;s rigid body (used for healthbars)
+<i class="no-highlight">16</i>&nbsp;    private Vector2 offset; // specifies the offset of this renderable from parent&#39;s rigid body (used for healthbars) (added for assesment 2)
 <i class="no-highlight">17</i>&nbsp;
 <i class="no-highlight">18</i>&nbsp;    /**
 <i class="no-highlight">19</i>&nbsp;     * Called in other constructors, loads no textures by itself.
@@ -180,42 +180,38 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="fc"><i class="no-highlight">105</i>&nbsp;        a.setV2(s.getV2());</b>
 <b class="fc"><i class="no-highlight">106</i>&nbsp;    }</b>
 <i class="no-highlight">107</i>&nbsp;
-<i class="no-highlight">108</i>&nbsp;    public boolean isVisible() {
-<b class="nc"><i class="no-highlight">109</i>&nbsp;        return isVisible;</b>
-<i class="no-highlight">110</i>&nbsp;    }
-<i class="no-highlight">111</i>&nbsp;
-<i class="no-highlight">112</i>&nbsp;    public void show() {
-<b class="fc"><i class="no-highlight">113</i>&nbsp;        isVisible = true;</b>
-<b class="fc"><i class="no-highlight">114</i>&nbsp;    }</b>
-<i class="no-highlight">115</i>&nbsp;
-<i class="no-highlight">116</i>&nbsp;    public void hide() {
-<b class="fc"><i class="no-highlight">117</i>&nbsp;        isVisible = false;</b>
-<b class="fc"><i class="no-highlight">118</i>&nbsp;    }</b>
-<i class="no-highlight">119</i>&nbsp;
-<i class="no-highlight">120</i>&nbsp;    public void toggleVisibility() {
-<b class="nc"><i class="no-highlight">121</i>&nbsp;        isVisible = !isVisible;</b>
-<b class="nc"><i class="no-highlight">122</i>&nbsp;    }</b>
-<i class="no-highlight">123</i>&nbsp;    /**
-<i class="no-highlight">124</i>&nbsp;     * Changes size to the width and height specified.
-<i class="no-highlight">125</i>&nbsp;     * @param w new width of renderable
-<i class="no-highlight">126</i>&nbsp;     * @param h new height of renderable
-<i class="no-highlight">127</i>&nbsp;     * */
-<i class="no-highlight">128</i>&nbsp;    public void setSize(float w, float h){
-<b class="fc"><i class="no-highlight">129</i>&nbsp;        sprite.setSize(w, h);</b>
-<b class="fc"><i class="no-highlight">130</i>&nbsp;    }</b>
-<i class="no-highlight">131</i>&nbsp;
-<i class="no-highlight">132</i>&nbsp;    /**
-<i class="no-highlight">133</i>&nbsp;     * Normally, the renderables &quot;attach&quot; to the center of their rigid bodies.
-<i class="no-highlight">134</i>&nbsp;     * This function allows to change renderable position with regards to a rigid body it represents.
-<i class="no-highlight">135</i>&nbsp;     * Allows for things like healthbars, names, etc to be rendered near but not directly over rigid body.
-<i class="no-highlight">136</i>&nbsp;     * @param x amount of pixels to offset horizontally by
-<i class="no-highlight">137</i>&nbsp;     * @param y amount of pixels to offset vertically by
-<i class="no-highlight">138</i>&nbsp;     * */
-<i class="no-highlight">139</i>&nbsp;    public void setOffset(float x, float y){
-<b class="fc"><i class="no-highlight">140</i>&nbsp;        offset = new Vector2(x, y);</b>
-<b class="fc"><i class="no-highlight">141</i>&nbsp;    }</b>
-<i class="no-highlight">142</i>&nbsp;
-<i class="no-highlight">143</i>&nbsp;}
+<i class="no-highlight">108</i>&nbsp;
+<i class="no-highlight">109</i>&nbsp;    public void show() {
+<b class="fc"><i class="no-highlight">110</i>&nbsp;        isVisible = true;</b>
+<b class="fc"><i class="no-highlight">111</i>&nbsp;    }</b>
+<i class="no-highlight">112</i>&nbsp;
+<i class="no-highlight">113</i>&nbsp;    public void hide() {
+<b class="fc"><i class="no-highlight">114</i>&nbsp;        isVisible = false;</b>
+<b class="fc"><i class="no-highlight">115</i>&nbsp;    }</b>
+<i class="no-highlight">116</i>&nbsp;
+<i class="no-highlight">117</i>&nbsp;    /**
+<i class="no-highlight">118</i>&nbsp;     * Developed for assesment 2
+<i class="no-highlight">119</i>&nbsp;     * Changes size to the width and height specified.
+<i class="no-highlight">120</i>&nbsp;     * @param w new width of renderable
+<i class="no-highlight">121</i>&nbsp;     * @param h new height of renderable
+<i class="no-highlight">122</i>&nbsp;     * */
+<i class="no-highlight">123</i>&nbsp;    public void setSize(float w, float h){
+<b class="fc"><i class="no-highlight">124</i>&nbsp;        sprite.setSize(w, h);</b>
+<b class="fc"><i class="no-highlight">125</i>&nbsp;    }</b>
+<i class="no-highlight">126</i>&nbsp;
+<i class="no-highlight">127</i>&nbsp;    /**
+<i class="no-highlight">128</i>&nbsp;     * Developed for assesment 2
+<i class="no-highlight">129</i>&nbsp;     * Normally, the renderables &quot;attach&quot; to the center of their rigid bodies.
+<i class="no-highlight">130</i>&nbsp;     * This function allows to change renderable position with regards to a rigid body it represents.
+<i class="no-highlight">131</i>&nbsp;     * Allows for things like healthbars, names, etc to be rendered near but not directly over rigid body.
+<i class="no-highlight">132</i>&nbsp;     * @param x amount of pixels to offset horizontally by
+<i class="no-highlight">133</i>&nbsp;     * @param y amount of pixels to offset vertically by
+<i class="no-highlight">134</i>&nbsp;     * */
+<i class="no-highlight">135</i>&nbsp;    public void setOffset(float x, float y){
+<b class="fc"><i class="no-highlight">136</i>&nbsp;        offset = new Vector2(x, y);</b>
+<b class="fc"><i class="no-highlight">137</i>&nbsp;    }</b>
+<i class="no-highlight">138</i>&nbsp;
+<i class="no-highlight">139</i>&nbsp;}
 </div>
 </pre>
 </div>
@@ -242,7 +238,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2022-05-03 16:30</div>
+    <div style="float:right;">generated on 2022-05-03 20:24</div>
 </div>
 </body>
 </html>

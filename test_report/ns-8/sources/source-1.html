@@ -50,7 +50,7 @@ Current scope:     <a href="../../index.html">all classes</a>
     0%
   </span>
   <span class="absValue">
-    (0/39)
+    (0/33)
   </span>
 </td>
 </tr>
@@ -69,7 +69,7 @@ Current scope:     <a href="../../index.html">all classes</a>
     0%
   </span>
   <span class="absValue">
-    (0/4)
+    (0/3)
   </span>
 </td>
   </tr>
@@ -88,7 +88,7 @@ Current scope:     <a href="../../index.html">all classes</a>
     0%
   </span>
   <span class="absValue">
-    (0/4)
+    (0/3)
   </span>
 </td>
   </tr>
@@ -107,7 +107,7 @@ Current scope:     <a href="../../index.html">all classes</a>
     0%
   </span>
   <span class="absValue">
-    (0/47)
+    (0/39)
   </span>
 </td>
 </tr>
@@ -144,14 +144,14 @@ Current scope:     <a href="../../index.html">all classes</a>
 <i class="no-highlight">24</i>&nbsp;
 <i class="no-highlight">25</i>&nbsp;    public EndScreen(PirateGame game) {
 <b class="nc"><i class="no-highlight">26</i>&nbsp;        super(game);</b>
-<b class="nc"><i class="no-highlight">27</i>&nbsp;    }</b>
+<i class="no-highlight">27</i>&nbsp;    }
 <i class="no-highlight">28</i>&nbsp;
 <i class="no-highlight">29</i>&nbsp;    /**
 <i class="no-highlight">30</i>&nbsp;     * Set game end screen status to report a win.
 <i class="no-highlight">31</i>&nbsp;     */
 <i class="no-highlight">32</i>&nbsp;    public void win() {
 <b class="nc"><i class="no-highlight">33</i>&nbsp;        wonText.setText(&quot;Congrats You Have Won&quot;);</b>
-<b class="nc"><i class="no-highlight">34</i>&nbsp;    }</b>
+<i class="no-highlight">34</i>&nbsp;    }
 <i class="no-highlight">35</i>&nbsp;
 <i class="no-highlight">36</i>&nbsp;    /**
 <i class="no-highlight">37</i>&nbsp;     * Create game end screen widgets, initialised to game loss status.
@@ -188,7 +188,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 <i class="no-highlight">68</i>&nbsp;            public void changed(ChangeEvent event, Actor actor) {
 <b class="nc"><i class="no-highlight">69</i>&nbsp;                GameManager.reset();</b>
 <b class="nc"><i class="no-highlight">70</i>&nbsp;                parent.setScreen(parent.menu);</b>
-<b class="nc"><i class="no-highlight">71</i>&nbsp;            }</b>
+<i class="no-highlight">71</i>&nbsp;            }
 <i class="no-highlight">72</i>&nbsp;        });
 <b class="nc"><i class="no-highlight">73</i>&nbsp;        TextButton exit = new TextButton(&quot;Exit&quot;, parent.skin);</b>
 <b class="nc"><i class="no-highlight">74</i>&nbsp;        exit.addListener(new ChangeListener() {</b>
@@ -196,12 +196,12 @@ Current scope:     <a href="../../index.html">all classes</a>
 <i class="no-highlight">76</i>&nbsp;            public void changed(ChangeEvent event, Actor actor) {
 <b class="nc"><i class="no-highlight">77</i>&nbsp;                Gdx.app.exit();</b>
 <b class="nc"><i class="no-highlight">78</i>&nbsp;                System.exit(0);</b>
-<b class="nc"><i class="no-highlight">79</i>&nbsp;            }</b>
+<i class="no-highlight">79</i>&nbsp;            }
 <i class="no-highlight">80</i>&nbsp;        });
 <b class="nc"><i class="no-highlight">81</i>&nbsp;        t.add(mainMenu);</b>
 <b class="nc"><i class="no-highlight">82</i>&nbsp;        t.row();</b>
 <b class="nc"><i class="no-highlight">83</i>&nbsp;        t.add(exit);</b>
-<b class="nc"><i class="no-highlight">84</i>&nbsp;    }</b>
+<i class="no-highlight">84</i>&nbsp;    }
 <i class="no-highlight">85</i>&nbsp;
 <i class="no-highlight">86</i>&nbsp;    @Override
 <i class="no-highlight">87</i>&nbsp;    protected void update() {
@@ -211,7 +211,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="nc"><i class="no-highlight">91</i>&nbsp;            Gdx.app.exit();</b>
 <b class="nc"><i class="no-highlight">92</i>&nbsp;            System.exit(0);</b>
 <i class="no-highlight">93</i>&nbsp;        }
-<b class="nc"><i class="no-highlight">94</i>&nbsp;    }</b>
+<i class="no-highlight">94</i>&nbsp;    }
 <i class="no-highlight">95</i>&nbsp;
 <i class="no-highlight">96</i>&nbsp;    /**
 <i class="no-highlight">97</i>&nbsp;     * Get player stats such as plunder etc. and display game end screen.
@@ -222,14 +222,14 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="nc"><i class="no-highlight">102</i>&nbsp;        Player p = GameManager.getPlayer();</b>
 <b class="nc"><i class="no-highlight">103</i>&nbsp;        String stats = String.format(&quot;Health: %s\nAmmo: %s\nPlunder: %s&quot;, p.getHealth(), p.getAmmo(), p.getPlunder());</b>
 <b class="nc"><i class="no-highlight">104</i>&nbsp;        playerStats.setText(stats);</b>
-<b class="nc"><i class="no-highlight">105</i>&nbsp;    }</b>
+<i class="no-highlight">105</i>&nbsp;    }
 <i class="no-highlight">106</i>&nbsp;
 <i class="no-highlight">107</i>&nbsp;    @Override
 <i class="no-highlight">108</i>&nbsp;    public void resize(int width, int height) {
 <b class="nc"><i class="no-highlight">109</i>&nbsp;        super.resize(width, height);</b>
 <b class="nc"><i class="no-highlight">110</i>&nbsp;        Table t = (Table) actors.get(0);</b>
 <b class="nc"><i class="no-highlight">111</i>&nbsp;        t.setBackground(new TextureRegionDrawable(ResourceManager.getTexture(&quot;menuBG.jpg&quot;))); // prevent the bg being stretched</b>
-<b class="nc"><i class="no-highlight">112</i>&nbsp;    }</b>
+<i class="no-highlight">112</i>&nbsp;    }
 <i class="no-highlight">113</i>&nbsp;}
 </div>
 </pre>
@@ -257,7 +257,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2022-05-03 16:30</div>
+    <div style="float:right;">generated on 2022-05-03 20:24</div>
 </div>
 </body>
 </html>

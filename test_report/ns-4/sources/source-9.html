@@ -88,21 +88,21 @@ Current scope:     <a href="../../index.html">all classes</a>
 <i class="no-highlight">13</i>&nbsp;import com.mygdx.utils.Constants;
 <i class="no-highlight">14</i>&nbsp;
 <i class="no-highlight">15</i>&nbsp;import java.util.Random;
-<i class="no-highlight">16</i>&nbsp;
-<i class="no-highlight">17</i>&nbsp;public class Powerup extends Entity implements CollisionCallBack {
-<i class="no-highlight">18</i>&nbsp;    /** A collectable powerup that appears on the playing field.
-<i class="no-highlight">19</i>&nbsp;    *
-<i class="no-highlight">20</i>&nbsp;    * Can be of 5 different types:
-<i class="no-highlight">21</i>&nbsp;    *   0 - health repair - resets player&#39;s health to full (sprite : hammer)
-<i class="no-highlight">22</i>&nbsp;    *   1 - ammo refill - resets player&#39;s ammo to full (sprite : 3 cannonballs)
-<i class="no-highlight">23</i>&nbsp;    *   2 - bad weather resistance - makes player unaffected by bad weather for 10 seconds (sprite : xxx bottle)
-<i class="no-highlight">24</i>&nbsp;    *   3 - invincibility - makes player unaffected by enemy cannonballs/seamonsters/bad weather for 10 seconds (sprite : mario star)
-<i class="no-highlight">25</i>&nbsp;    *   4 - increased speed - doubles the player&#39;s speed for 10 seconds (sprite : ship with arrow overlayed)
-<i class="no-highlight">26</i>&nbsp;    * Like cannonballs, there is a fixed amount of powerups created on startup.
-<i class="no-highlight">27</i>&nbsp;     * Upon contact with player, the powerup moves offscreen until it is placed somewhere again.
-<i class="no-highlight">28</i>&nbsp;     * Powerups cannot be compounded (e.g can&#39;t experience invincibility and increased speed),
-<i class="no-highlight">29</i>&nbsp;     * but health and ammo refills work even when under the effect of another powerup.
-<i class="no-highlight">30</i>&nbsp;    * */
+<i class="no-highlight">16</i>&nbsp;/** A collectable powerup that appears on the playing field. (added for assesment 2)
+<i class="no-highlight">17</i>&nbsp; *
+<i class="no-highlight">18</i>&nbsp; * Can be of 5 different types:
+<i class="no-highlight">19</i>&nbsp; *   0 - health repair - resets player&#39;s health to full (sprite : hammer)
+<i class="no-highlight">20</i>&nbsp; *   1 - ammo refill - resets player&#39;s ammo to full (sprite : 3 cannonballs)
+<i class="no-highlight">21</i>&nbsp; *   2 - bad weather resistance - makes player unaffected by bad weather for 10 seconds (sprite : xxx bottle)
+<i class="no-highlight">22</i>&nbsp; *   3 - invincibility - makes player unaffected by enemy cannonballs/seamonsters/bad weather for 10 seconds (sprite : mario star)
+<i class="no-highlight">23</i>&nbsp; *   4 - increased speed - doubles the player&#39;s speed for 10 seconds (sprite : ship with arrow overlayed)
+<i class="no-highlight">24</i>&nbsp; * Like cannonballs, there is a fixed amount of powerups created on startup.
+<i class="no-highlight">25</i>&nbsp; * Upon contact with player, the powerup moves offscreen until it is placed somewhere again.
+<i class="no-highlight">26</i>&nbsp; * Powerups cannot be compounded (e.g can&#39;t experience invincibility and increased speed),
+<i class="no-highlight">27</i>&nbsp; * but health and ammo refills work even when under the effect of another powerup.
+<i class="no-highlight">28</i>&nbsp; * */
+<i class="no-highlight">29</i>&nbsp;public class Powerup extends Entity implements CollisionCallBack {
+<i class="no-highlight">30</i>&nbsp;
 <i class="no-highlight">31</i>&nbsp;    private int type;
 <i class="no-highlight">32</i>&nbsp;    private boolean justCollected;
 <b class="fc"><i class="no-highlight">33</i>&nbsp;    private final Random rand = new Random();</b>
@@ -277,7 +277,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2022-05-03 16:30</div>
+    <div style="float:right;">generated on 2022-05-03 20:24</div>
 </div>
 </body>
 </html>
