@@ -128,10 +128,7 @@ html, body {
 
   #background {
     min-height: 100%;
-    background-color: #49494963;
-    background-color: #41414191;
-    background-color: #cccccc70;
-    background-color: #27313487;
+    background-color: #FFFFFF;
   }
 
   #main-area {
