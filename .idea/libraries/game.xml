@@ -1,0 +1,16 @@
+<component name="libraryTable">
+  <library name="game">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/game/pirate game group 3 - v1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/game/pirate game group 3 - v6.jar!/" />
+      <root url="jar://$PROJECT_DIR$/game/pirate game group 3.jar!/" />
+      <root url="jar://$PROJECT_DIR$/game/pirate game group 3 - v2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/game/pirate game group 3 - v5.jar!/" />
+      <root url="jar://$PROJECT_DIR$/game/pirate game group 3 - v3.jar!/" />
+      <root url="jar://$PROJECT_DIR$/game/pirate game group 3 - v4.jar!/" />
+      <root url="jar://$PROJECT_DIR$/game/Pirate-Game-Group-3.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
