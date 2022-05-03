@@ -1,4 +1,4 @@
-<head>
+head>
     <link rel="stylesheet" href="style2.css?v=1.1">
     <title>Testing</title>
 </head>
@@ -49,8 +49,41 @@
         <!-- <a href="">About</a> -->
     </nav>
 	<page>
-	<div id="background" class="docs-container">
-            <iframe src="test_report/index.html" class="flexbox"></iframe>
-			</div>
+	<h2>Manual Testing</h2>
+	<p>
+	Manual testing workflow:
+	</p>
+	<ul>
+	<li>Boot up game, ensure it opens</li>
+	<li>Move ship to ground cell, ensure it doesnt pass through</li>
+	<li>Before collecting any powerups, open shop. Ensure that:</li>
+	<ul>
+	<li>Shop window opens</li>
+	<li>Buttons and progress bars scale correctly</li>
+	<li>Purchase is impossible</li>
+	</ul>
+	<li>Ensure ally ship follows player</li>
+	<li>Shoot at an npc ship, a college defender, an ally ship. Ensure that:</li>
+	<ul>
+	<li>NPC takes damage and renders healthbars</li>
+	<li>ally does not take damage</li>
+	<li>college defender take damage and renders healthbar</li>
+	</ul>
+	<li>If current quest is a chest quest, collect and ensure plunder received</li>
+	<li>Ensure bad weather animation renders and fades in and out</li>
+	<li>If over 50 plunder collected, open shop. Ensure that:</li>
+	<ul>
+	<li>Shop window opens</li>
+	<li>Buttons and progress bars scale correctly</li>
+	<li>Purchase is possible</li>
+	</ul>
+	<li>Exit shop and enter pause menu. Ensure it is scaled and renders correctly. Save. Go to main menu.</li>
+	<li>From the main menu, load the game, ensure game spawns and the position of the ship as well as the starts match those from before saving.</li>
+	</ul>
+	<hr>
+	<p>
+	This is a link to the code used to build the tests. This is licenced under the Apache 2 Licence.
+	</p>
+	<a href="https://github.com/TomGrill/gdx-testing" target="_blank">Build code</a>
 	</page>
 </body>
