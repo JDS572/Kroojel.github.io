@@ -1,0 +1,344 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > MenuScreen</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+    @import "../../.css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../.js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.mygdx.game.UI</a>
+</div>
+
+<h1>Coverage Summary for Class: MenuScreen (com.mygdx.game.UI)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">MenuScreen</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/36)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">MenuScreen$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/3)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">MenuScreen$2</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/17)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">MenuScreen$3</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/23)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">MenuScreen$4</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/4)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/13)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/83)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package com.mygdx.game.UI;
+<i class="no-highlight">2</i>&nbsp;
+<i class="no-highlight">3</i>&nbsp;import com.badlogic.gdx.Gdx;
+<i class="no-highlight">4</i>&nbsp;import com.badlogic.gdx.scenes.scene2d.Actor;
+<i class="no-highlight">5</i>&nbsp;import com.badlogic.gdx.scenes.scene2d.InputEvent;
+<i class="no-highlight">6</i>&nbsp;import com.badlogic.gdx.scenes.scene2d.ui.Label;
+<i class="no-highlight">7</i>&nbsp;import com.badlogic.gdx.scenes.scene2d.ui.Table;
+<i class="no-highlight">8</i>&nbsp;import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+<i class="no-highlight">9</i>&nbsp;import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+<i class="no-highlight">10</i>&nbsp;import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+<i class="no-highlight">11</i>&nbsp;import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+<i class="no-highlight">12</i>&nbsp;import com.badlogic.gdx.utils.JsonReader;
+<i class="no-highlight">13</i>&nbsp;import com.badlogic.gdx.utils.JsonValue;
+<i class="no-highlight">14</i>&nbsp;import com.badlogic.gdx.utils.SerializationException;
+<i class="no-highlight">15</i>&nbsp;import com.mygdx.game.Components.Pirate;
+<i class="no-highlight">16</i>&nbsp;import com.mygdx.game.Entitys.NPCShip;
+<i class="no-highlight">17</i>&nbsp;import com.mygdx.game.Entitys.Ship;
+<i class="no-highlight">18</i>&nbsp;import com.mygdx.game.Managers.GameManager;
+<i class="no-highlight">19</i>&nbsp;import com.mygdx.game.Managers.ResourceManager;
+<i class="no-highlight">20</i>&nbsp;import com.mygdx.game.PirateGame;
+<i class="no-highlight">21</i>&nbsp;
+<i class="no-highlight">22</i>&nbsp;import java.io.InputStream;
+<i class="no-highlight">23</i>&nbsp;
+<i class="no-highlight">24</i>&nbsp;import static com.mygdx.utils.Constants.VIEWPORT_HEIGHT;
+<i class="no-highlight">25</i>&nbsp;
+<i class="no-highlight">26</i>&nbsp;/**
+<i class="no-highlight">27</i>&nbsp; * Contains widgets defining the start-of-game menu screen.
+<i class="no-highlight">28</i>&nbsp; */
+<i class="no-highlight">29</i>&nbsp;public class MenuScreen extends Page {
+<i class="no-highlight">30</i>&nbsp;    public MenuScreen(PirateGame parent) {
+<b class="nc"><i class="no-highlight">31</i>&nbsp;        super(parent);</b>
+<b class="nc"><i class="no-highlight">32</i>&nbsp;    }</b>
+<i class="no-highlight">33</i>&nbsp;
+<i class="no-highlight">34</i>&nbsp;    /**
+<i class="no-highlight">35</i>&nbsp;     * Create menu widgets such as start button, labels, etc.
+<i class="no-highlight">36</i>&nbsp;     */
+<i class="no-highlight">37</i>&nbsp;    @Override
+<i class="no-highlight">38</i>&nbsp;    protected void CreateActors() {
+<b class="nc"><i class="no-highlight">39</i>&nbsp;        Table t = new Table();</b>
+<b class="nc"><i class="no-highlight">40</i>&nbsp;        t.setFillParent(true);</b>
+<i class="no-highlight">41</i>&nbsp;
+<b class="nc"><i class="no-highlight">42</i>&nbsp;        float space = VIEWPORT_HEIGHT * 0.125f;</b>
+<i class="no-highlight">43</i>&nbsp;
+<b class="nc"><i class="no-highlight">44</i>&nbsp;        t.setBackground(new TextureRegionDrawable(ResourceManager.getTexture(&quot;menuBG.jpg&quot;)));</b>
+<b class="nc"><i class="no-highlight">45</i>&nbsp;        Label l = new Label(&quot;Pirates the movie the game&quot;, parent.skin);</b>
+<b class="nc"><i class="no-highlight">46</i>&nbsp;        l.setFontScale(2);</b>
+<b class="nc"><i class="no-highlight">47</i>&nbsp;        t.add(l).top().spaceBottom(space * 0.5f);</b>
+<b class="nc"><i class="no-highlight">48</i>&nbsp;        t.row();</b>
+<i class="no-highlight">49</i>&nbsp;
+<b class="nc"><i class="no-highlight">50</i>&nbsp;        TextButton play = new TextButton(&quot;Play&quot;, parent.skin);</b>
+<b class="nc"><i class="no-highlight">51</i>&nbsp;        play.addListener(new ChangeListener() {</b>
+<i class="no-highlight">52</i>&nbsp;            @Override
+<i class="no-highlight">53</i>&nbsp;            public void changed(ChangeEvent event, Actor actor) {
+<b class="nc"><i class="no-highlight">54</i>&nbsp;                parent.setScreen(parent.game);</b>
+<b class="nc"><i class="no-highlight">55</i>&nbsp;            }</b>
+<i class="no-highlight">56</i>&nbsp;        });
+<b class="nc"><i class="no-highlight">57</i>&nbsp;        t.add(play).top().size(100, 25).spaceBottom(space);</b>
+<b class="nc"><i class="no-highlight">58</i>&nbsp;        t.row();</b>
+<i class="no-highlight">59</i>&nbsp;
+<b class="nc"><i class="no-highlight">60</i>&nbsp;        TextButton loadData = new TextButton(&quot;Load Game&quot;, parent.skin);</b>
+<b class="nc"><i class="no-highlight">61</i>&nbsp;        loadData.addListener(new ClickListener() {</b>
+<i class="no-highlight">62</i>&nbsp;            @Override
+<i class="no-highlight">63</i>&nbsp;            public void clicked(InputEvent event, float x, float y) {
+<i class="no-highlight">64</i>&nbsp;//                Loading JSON to working memory
+<b class="nc"><i class="no-highlight">65</i>&nbsp;                String userprofile = System.getenv(&quot;USERPROFILE&quot;);</b>
+<b class="nc"><i class="no-highlight">66</i>&nbsp;                String fileLoc = userprofile + &quot;\\saved_data.json&quot;;</b>
+<i class="no-highlight">67</i>&nbsp;
+<b class="nc"><i class="no-highlight">68</i>&nbsp;                JsonReader json = new JsonReader();</b>
+<i class="no-highlight">69</i>&nbsp;                try {
+<b class="nc"><i class="no-highlight">70</i>&nbsp;                    JsonValue base = json.parse(Gdx.files.internal(fileLoc));</b>
+<b class="nc"><i class="no-highlight">71</i>&nbsp;                    JsonValue factions = base.get(&quot;factions&quot;);</b>
+<b class="nc"><i class="no-highlight">72</i>&nbsp;                    JsonValue ships = base.get(&quot;ships&quot;);</b>
+<b class="nc"><i class="no-highlight">73</i>&nbsp;                    JsonValue colleges = base.get(&quot;colleges&quot;);</b>
+<b class="nc"><i class="no-highlight">74</i>&nbsp;                    JsonValue quests = base.get(&quot;quests&quot;);</b>
+<i class="no-highlight">75</i>&nbsp;//                Set the loaded flag to true and pass these variables to the game
+<b class="nc"><i class="no-highlight">76</i>&nbsp;                    GameManager.load_game(factions, ships, colleges, quests, base);</b>
+<i class="no-highlight">77</i>&nbsp;//                Do all the loading before this point.
+<b class="nc"><i class="no-highlight">78</i>&nbsp;                    parent.setScreen(parent.game);</b>
+<b class="nc"><i class="no-highlight">79</i>&nbsp;                } catch (SerializationException e) {</b>
+<b class="nc"><i class="no-highlight">80</i>&nbsp;                    System.out.println(&quot;The System Cannot find the File Specified.&quot;);</b>
+<b class="nc"><i class="no-highlight">81</i>&nbsp;                    System.out.println(e);</b>
+<b class="nc"><i class="no-highlight">82</i>&nbsp;                    loadData.setText(&quot;No Save File&quot;);</b>
+<b class="nc"><i class="no-highlight">83</i>&nbsp;                }</b>
+<b class="nc"><i class="no-highlight">84</i>&nbsp;            }</b>
+<i class="no-highlight">85</i>&nbsp;        });
+<b class="nc"><i class="no-highlight">86</i>&nbsp;        t.add(loadData).top().size(100, 25).spaceBottom(space);</b>
+<b class="nc"><i class="no-highlight">87</i>&nbsp;        t.row();</b>
+<i class="no-highlight">88</i>&nbsp;
+<b class="nc"><i class="no-highlight">89</i>&nbsp;        TextButton difficulty = new TextButton(&quot;Difficulty: Easy&quot;, parent.skin);</b>
+<b class="nc"><i class="no-highlight">90</i>&nbsp;        difficulty.addListener(new ClickListener() {</b>
+<i class="no-highlight">91</i>&nbsp;            @Override
+<i class="no-highlight">92</i>&nbsp;            public void clicked(InputEvent event, float x, float y) {
+<b class="nc"><i class="no-highlight">93</i>&nbsp;                if (difficulty.getText().toString().equals(&quot;Difficulty: Easy&quot;)) {</b>
+<b class="nc"><i class="no-highlight">94</i>&nbsp;                    difficulty.setText(&quot;Difficulty: Hard&quot;);</b>
+<b class="nc"><i class="no-highlight">95</i>&nbsp;                    GameManager.getPlayer().getComponent(Pirate.class).setAttackDmg(5f); // player is weaker</b>
+<b class="nc"><i class="no-highlight">96</i>&nbsp;                    for(Ship s : GameManager.getShips()){</b>
+<b class="nc"><i class="no-highlight">97</i>&nbsp;                        if (s instanceof NPCShip &amp;&amp; !((NPCShip)s).isAlly()){</b>
+<b class="nc"><i class="no-highlight">98</i>&nbsp;                            s.getComponent(Pirate.class).setHealth(150); // enemies are stronger</b>
+<b class="nc"><i class="no-highlight">99</i>&nbsp;                            s.getComponent(Pirate.class).setMaxHealth(150);</b>
+<b class="nc"><i class="no-highlight">100</i>&nbsp;                            s.getComponent(Pirate.class).setAttackDmg(15f); // enemies&#39; attacks more destructive</b>
+<i class="no-highlight">101</i>&nbsp;                        }
+<b class="nc"><i class="no-highlight">102</i>&nbsp;                    }</b>
+<b class="nc"><i class="no-highlight">103</i>&nbsp;                    GameManager.getLongboi().setHealth(200); // longboi stronger</b>
+<b class="nc"><i class="no-highlight">104</i>&nbsp;                    GameManager.getLongboi().getComponent(Pirate.class).setAttackDmg(15f); // longboi attacks more destructive</b>
+<i class="no-highlight">105</i>&nbsp;                }
+<i class="no-highlight">106</i>&nbsp;                else {
+<b class="nc"><i class="no-highlight">107</i>&nbsp;                    difficulty.setText(&quot;Difficulty: Easy&quot;);</b>
+<b class="nc"><i class="no-highlight">108</i>&nbsp;                    GameManager.getPlayer().getComponent(Pirate.class).setAttackDmg(10f);</b>
+<b class="nc"><i class="no-highlight">109</i>&nbsp;                    for(Ship s : GameManager.getShips()){</b>
+<b class="nc"><i class="no-highlight">110</i>&nbsp;                        if (s instanceof NPCShip &amp;&amp; !((NPCShip)s).isAlly()){</b>
+<b class="nc"><i class="no-highlight">111</i>&nbsp;                            s.getComponent(Pirate.class).setHealth(100);</b>
+<b class="nc"><i class="no-highlight">112</i>&nbsp;                            s.getComponent(Pirate.class).setMaxHealth(100);</b>
+<b class="nc"><i class="no-highlight">113</i>&nbsp;                            s.getComponent(Pirate.class).setAttackDmg(5f); // enemies are weaker</b>
+<i class="no-highlight">114</i>&nbsp;                        }
+<b class="nc"><i class="no-highlight">115</i>&nbsp;                    }</b>
+<b class="nc"><i class="no-highlight">116</i>&nbsp;                    GameManager.getLongboi().setHealth(100);</b>
+<b class="nc"><i class="no-highlight">117</i>&nbsp;                    GameManager.getLongboi().getComponent(Pirate.class).setAttackDmg(10f); // longboi bit stronger than enemies but not too much</b>
+<i class="no-highlight">118</i>&nbsp;                }
+<b class="nc"><i class="no-highlight">119</i>&nbsp;            }</b>
+<i class="no-highlight">120</i>&nbsp;        });
+<b class="nc"><i class="no-highlight">121</i>&nbsp;        t.add(difficulty).top().size(120, 30).spaceBottom(space);</b>
+<b class="nc"><i class="no-highlight">122</i>&nbsp;        t.row();</b>
+<i class="no-highlight">123</i>&nbsp;
+<b class="nc"><i class="no-highlight">124</i>&nbsp;        TextButton quit = new TextButton(&quot;Quit&quot;, parent.skin);</b>
+<b class="nc"><i class="no-highlight">125</i>&nbsp;        quit.addListener(new ChangeListener() {</b>
+<i class="no-highlight">126</i>&nbsp;            @Override
+<i class="no-highlight">127</i>&nbsp;            public void changed(ChangeEvent event, Actor actor) {
+<b class="nc"><i class="no-highlight">128</i>&nbsp;                Gdx.app.exit();</b>
+<b class="nc"><i class="no-highlight">129</i>&nbsp;                System.exit(0);</b>
+<b class="nc"><i class="no-highlight">130</i>&nbsp;            }</b>
+<i class="no-highlight">131</i>&nbsp;        });
+<b class="nc"><i class="no-highlight">132</i>&nbsp;        t.add(quit).size(100, 25).top().spaceBottom(space);</b>
+<i class="no-highlight">133</i>&nbsp;
+<b class="nc"><i class="no-highlight">134</i>&nbsp;        t.top();</b>
+<i class="no-highlight">135</i>&nbsp;
+<b class="nc"><i class="no-highlight">136</i>&nbsp;        actors.add(t);</b>
+<b class="nc"><i class="no-highlight">137</i>&nbsp;    }</b>
+<i class="no-highlight">138</i>&nbsp;
+<i class="no-highlight">139</i>&nbsp;    @Override
+<i class="no-highlight">140</i>&nbsp;    public void show() {
+<b class="nc"><i class="no-highlight">141</i>&nbsp;        super.show();</b>
+<b class="nc"><i class="no-highlight">142</i>&nbsp;    }</b>
+<i class="no-highlight">143</i>&nbsp;
+<i class="no-highlight">144</i>&nbsp;
+<i class="no-highlight">145</i>&nbsp;    @Override
+<i class="no-highlight">146</i>&nbsp;    public void hide() {
+<b class="nc"><i class="no-highlight">147</i>&nbsp;        super.hide();</b>
+<b class="nc"><i class="no-highlight">148</i>&nbsp;    }</b>
+<i class="no-highlight">149</i>&nbsp;
+<i class="no-highlight">150</i>&nbsp;    @Override
+<i class="no-highlight">151</i>&nbsp;    public void resize(int width, int height) {
+<b class="nc"><i class="no-highlight">152</i>&nbsp;        super.resize(width, height);</b>
+<b class="nc"><i class="no-highlight">153</i>&nbsp;        Table t = (Table) actors.get(0);</b>
+<b class="nc"><i class="no-highlight">154</i>&nbsp;        t.setBackground(new TextureRegionDrawable(ResourceManager.getTexture(&quot;menuBG.jpg&quot;))); // prevent the bg being stretched</b>
+<b class="nc"><i class="no-highlight">155</i>&nbsp;    }</b>
+<i class="no-highlight">156</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-05-03 16:30</div>
+</div>
+</body>
+</html>

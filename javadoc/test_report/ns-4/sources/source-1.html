@@ -1,0 +1,345 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > Building</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+    @import "../../.css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../.js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.mygdx.game.Entitys</a>
+</div>
+
+<h1>Coverage Summary for Class: Building (com.mygdx.game.Entitys)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Building</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    87.5%
+  </span>
+  <span class="absValue">
+    (14/16)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    79.8%
+  </span>
+  <span class="absValue">
+    (87/109)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package com.mygdx.game.Entitys;
+<i class="no-highlight">2</i>&nbsp;
+<i class="no-highlight">3</i>&nbsp;import com.badlogic.gdx.graphics.g2d.Sprite;
+<i class="no-highlight">4</i>&nbsp;import com.badlogic.gdx.math.Vector2;
+<i class="no-highlight">5</i>&nbsp;import com.mygdx.game.Components.Pirate;
+<i class="no-highlight">6</i>&nbsp;import com.mygdx.game.Components.Renderable;
+<i class="no-highlight">7</i>&nbsp;import com.mygdx.game.Components.RigidBody;
+<i class="no-highlight">8</i>&nbsp;import com.mygdx.game.Components.Transform;
+<i class="no-highlight">9</i>&nbsp;import com.mygdx.game.Managers.EntityManager;
+<i class="no-highlight">10</i>&nbsp;import com.mygdx.game.Managers.GameManager;
+<i class="no-highlight">11</i>&nbsp;import com.mygdx.game.Managers.RenderLayer;
+<i class="no-highlight">12</i>&nbsp;import com.mygdx.game.Managers.ResourceManager;
+<i class="no-highlight">13</i>&nbsp;import com.mygdx.game.Physics.CollisionCallBack;
+<i class="no-highlight">14</i>&nbsp;import com.mygdx.game.Physics.CollisionInfo;
+<i class="no-highlight">15</i>&nbsp;import com.mygdx.game.Physics.PhysicsBodyType;
+<i class="no-highlight">16</i>&nbsp;
+<i class="no-highlight">17</i>&nbsp;import static com.mygdx.utils.Constants.BUILDING_SCALE;
+<i class="no-highlight">18</i>&nbsp;
+<i class="no-highlight">19</i>&nbsp;/**
+<i class="no-highlight">20</i>&nbsp; * Buildings that you see in game.
+<i class="no-highlight">21</i>&nbsp; */
+<i class="no-highlight">22</i>&nbsp;public class Building extends Entity implements CollisionCallBack {
+<i class="no-highlight">23</i>&nbsp;    private String buildingName;
+<i class="no-highlight">24</i>&nbsp;    private static int atlas_id;
+<i class="no-highlight">25</i>&nbsp;    private boolean isFlag;
+<i class="no-highlight">26</i>&nbsp;    private boolean isDefender; // if true, building acts as defender for its college (shoots and has health instead of insta dying)
+<i class="no-highlight">27</i>&nbsp;    private int cannonTimer;
+<i class="no-highlight">28</i>&nbsp;    private Renderable green, red;
+<i class="no-highlight">29</i>&nbsp;
+<i class="no-highlight">30</i>&nbsp;    Building() {
+<b class="fc"><i class="no-highlight">31</i>&nbsp;        super();</b>
+<b class="fc"><i class="no-highlight">32</i>&nbsp;        isFlag = false;</b>
+<b class="fc"><i class="no-highlight">33</i>&nbsp;        Transform t = new Transform();</b>
+<b class="fc"><i class="no-highlight">34</i>&nbsp;        t.setScale(BUILDING_SCALE, BUILDING_SCALE);</b>
+<b class="fc"><i class="no-highlight">35</i>&nbsp;        Pirate p = new Pirate();</b>
+<b class="fc"><i class="no-highlight">36</i>&nbsp;        atlas_id = ResourceManager.getId(&quot;Buildings.txt&quot;);</b>
+<b class="fc"><i class="no-highlight">37</i>&nbsp;        Renderable r = new Renderable(atlas_id, &quot;big&quot;, RenderLayer.Transparent);</b>
+<b class="fc"><i class="no-highlight">38</i>&nbsp;        addComponents(t, p, r);</b>
+<b class="fc"><i class="no-highlight">39</i>&nbsp;        isDefender = false;</b>
+<b class="fc"><i class="no-highlight">40</i>&nbsp;        green = new Renderable(ResourceManager.getId(&quot;progress_bar_green.png&quot;), RenderLayer.Transparent);</b>
+<b class="fc"><i class="no-highlight">41</i>&nbsp;        red = new Renderable(ResourceManager.getId(&quot;progress_bar_red.png&quot;), RenderLayer.Transparent);</b>
+<b class="fc"><i class="no-highlight">42</i>&nbsp;        addComponents(green, red);</b>
+<b class="fc"><i class="no-highlight">43</i>&nbsp;        green.setOffset(0f, 32f);</b>
+<b class="fc"><i class="no-highlight">44</i>&nbsp;        green.setSize(32f, 5f);</b>
+<b class="fc"><i class="no-highlight">45</i>&nbsp;        red.setOffset(32f, 32f);</b>
+<b class="fc"><i class="no-highlight">46</i>&nbsp;        red.setSize(5f, 5f);</b>
+<b class="fc"><i class="no-highlight">47</i>&nbsp;        green.show();</b>
+<b class="fc"><i class="no-highlight">48</i>&nbsp;        red.show();</b>
+<b class="fc"><i class="no-highlight">49</i>&nbsp;    }</b>
+<i class="no-highlight">50</i>&nbsp;
+<i class="no-highlight">51</i>&nbsp;    /**
+<i class="no-highlight">52</i>&nbsp;     * Flags are indestructible and mark college locations.
+<i class="no-highlight">53</i>&nbsp;     *
+<i class="no-highlight">54</i>&nbsp;     * @param isFlag set to true to create a flag
+<i class="no-highlight">55</i>&nbsp;     */
+<i class="no-highlight">56</i>&nbsp;    Building(boolean isFlag) {
+<b class="fc"><i class="no-highlight">57</i>&nbsp;        this();</b>
+<b class="fc"><i class="no-highlight">58</i>&nbsp;        this.isFlag = isFlag;</b>
+<b class="fc"><i class="no-highlight">59</i>&nbsp;    }</b>
+<i class="no-highlight">60</i>&nbsp;
+<i class="no-highlight">61</i>&nbsp;    public boolean isNonFlag(){
+<b class="fc"><i class="no-highlight">62</i>&nbsp;        return !isFlag;</b>
+<i class="no-highlight">63</i>&nbsp;    }
+<i class="no-highlight">64</i>&nbsp;
+<b class="fc"><i class="no-highlight">65</i>&nbsp;    public boolean isDefender(){return isDefender;}</b>
+<i class="no-highlight">66</i>&nbsp;
+<i class="no-highlight">67</i>&nbsp;    /**
+<i class="no-highlight">68</i>&nbsp;     * Creates a building with the given name at the specified location.
+<i class="no-highlight">69</i>&nbsp;     *
+<i class="no-highlight">70</i>&nbsp;     * @param pos  2D position vector
+<i class="no-highlight">71</i>&nbsp;     * @param name name of building
+<i class="no-highlight">72</i>&nbsp;     */
+<i class="no-highlight">73</i>&nbsp;    public void create(Vector2 pos, String name) {
+<b class="fc"><i class="no-highlight">74</i>&nbsp;        Sprite s = ResourceManager.getSprite(atlas_id, name);</b>
+<b class="fc"><i class="no-highlight">75</i>&nbsp;        Renderable r = getComponent(Renderable.class);</b>
+<b class="fc"><i class="no-highlight">76</i>&nbsp;        r.setTexture(s);</b>
+<b class="fc"><i class="no-highlight">77</i>&nbsp;        getComponent(Transform.class).setPosition(pos);</b>
+<b class="fc"><i class="no-highlight">78</i>&nbsp;        buildingName = name;</b>
+<i class="no-highlight">79</i>&nbsp;
+<b class="fc"><i class="no-highlight">80</i>&nbsp;        RigidBody rb = new RigidBody(PhysicsBodyType.Static, r, getComponent(Transform.class));</b>
+<b class="fc"><i class="no-highlight">81</i>&nbsp;        rb.setCallback(this);</b>
+<b class="fc"><i class="no-highlight">82</i>&nbsp;        addComponent(rb);</b>
+<b class="fc"><i class="no-highlight">83</i>&nbsp;    }</b>
+<i class="no-highlight">84</i>&nbsp;    /**
+<i class="no-highlight">85</i>&nbsp;     * Marks building as one that can shoot at player and adds a trigger for the player entering within aggro range.
+<i class="no-highlight">86</i>&nbsp;     * */
+<i class="no-highlight">87</i>&nbsp;    public void makeDefender(){
+<b class="fc"><i class="no-highlight">88</i>&nbsp;        isDefender = true;</b>
+<b class="fc"><i class="no-highlight">89</i>&nbsp;        cannonTimer = (int) (3f / EntityManager.getDeltaTime());</b>
+<b class="fc"><i class="no-highlight">90</i>&nbsp;        getComponent(RigidBody.class).addTrigger(500, &quot;agro_college&quot;);</b>
+<b class="fc"><i class="no-highlight">91</i>&nbsp;    }</b>
+<i class="no-highlight">92</i>&nbsp;
+<i class="no-highlight">93</i>&nbsp;    public int getHealth(){
+<b class="fc"><i class="no-highlight">94</i>&nbsp;        return getComponent(Pirate.class).getHealth();</b>
+<i class="no-highlight">95</i>&nbsp;    }
+<i class="no-highlight">96</i>&nbsp;
+<i class="no-highlight">97</i>&nbsp;    /**
+<i class="no-highlight">98</i>&nbsp;     * Replace the building with ruins and mark as broken.
+<i class="no-highlight">99</i>&nbsp;     */
+<i class="no-highlight">100</i>&nbsp;    private void destroy() {
+<b class="fc"><i class="no-highlight">101</i>&nbsp;        if (isFlag) {</b>
+<b class="nc"><i class="no-highlight">102</i>&nbsp;            return;</b>
+<i class="no-highlight">103</i>&nbsp;        }
+<b class="fc"><i class="no-highlight">104</i>&nbsp;        Sprite s = ResourceManager.getSprite(atlas_id, buildingName + &quot;-broken&quot;);</b>
+<b class="fc"><i class="no-highlight">105</i>&nbsp;        Renderable r = getComponent(Renderable.class);</b>
+<b class="fc"><i class="no-highlight">106</i>&nbsp;        r.setTexture(s);</b>
+<b class="fc"><i class="no-highlight">107</i>&nbsp;        getComponent(Pirate.class).kill();</b>
+<b class="fc"><i class="no-highlight">108</i>&nbsp;        red.hide();</b>
+<b class="fc"><i class="no-highlight">109</i>&nbsp;        green.hide();</b>
+<b class="fc"><i class="no-highlight">110</i>&nbsp;    }</b>
+<i class="no-highlight">111</i>&nbsp;
+<i class="no-highlight">112</i>&nbsp;    /**
+<i class="no-highlight">113</i>&nbsp;     * Called on every frame, does nothing for non - defenders (buildings incapable of shooting)
+<i class="no-highlight">114</i>&nbsp;     * For defenders, waits 3 seconds and shoots at player if within agro range.
+<i class="no-highlight">115</i>&nbsp;     * For defenders, updates healthbar to reflect current health level.
+<i class="no-highlight">116</i>&nbsp;     * */
+<i class="no-highlight">117</i>&nbsp;    @Override
+<i class="no-highlight">118</i>&nbsp;    public void update(){
+<b class="fc"><i class="no-highlight">119</i>&nbsp;        if (getComponent(Pirate.class).isAlive() &amp;&amp; isDefender){</b>
+<b class="fc"><i class="no-highlight">120</i>&nbsp;            if (getComponent(Pirate.class).getTarget() instanceof Player){</b>
+<b class="fc"><i class="no-highlight">121</i>&nbsp;                if (cannonTimer == 0){</b>
+<b class="fc"><i class="no-highlight">122</i>&nbsp;                    getComponent(Pirate.class).shoot(GameManager.getPlayer().getPosition().sub(getComponent(Transform.class).getPosition()).scl(100f));</b>
+<b class="fc"><i class="no-highlight">123</i>&nbsp;                    cannonTimer = (int) (3f / EntityManager.getDeltaTime());</b>
+<i class="no-highlight">124</i>&nbsp;                }
+<i class="no-highlight">125</i>&nbsp;                else{
+<b class="fc"><i class="no-highlight">126</i>&nbsp;                    cannonTimer --;</b>
+<i class="no-highlight">127</i>&nbsp;                }
+<i class="no-highlight">128</i>&nbsp;            }
+<b class="fc"><i class="no-highlight">129</i>&nbsp;            if (getHealth() == getComponent(Pirate.class).getMaxHealth()) {</b>
+<b class="fc"><i class="no-highlight">130</i>&nbsp;                red.hide();</b>
+<b class="fc"><i class="no-highlight">131</i>&nbsp;                green.hide();</b>
+<i class="no-highlight">132</i>&nbsp;            } // if not harmed, health bar removed to avoid visual clutter
+<i class="no-highlight">133</i>&nbsp;            else {
+<b class="fc"><i class="no-highlight">134</i>&nbsp;                red.show();</b>
+<b class="fc"><i class="no-highlight">135</i>&nbsp;                green.show();</b>
+<i class="no-highlight">136</i>&nbsp;                //resizing green and red components according to current health
+<b class="fc"><i class="no-highlight">137</i>&nbsp;                float green_ratio = (float) getHealth() / (float) getComponent(Pirate.class).getMaxHealth();</b>
+<b class="fc"><i class="no-highlight">138</i>&nbsp;                green.setSize(32f * green_ratio, 5f);</b>
+<b class="fc"><i class="no-highlight">139</i>&nbsp;                red.setSize(32f * (1f - green_ratio) * BUILDING_SCALE, 5f);</b>
+<b class="fc"><i class="no-highlight">140</i>&nbsp;                red.setOffset(32 * green_ratio * BUILDING_SCALE, 32f);</b>
+<b class="fc"><i class="no-highlight">141</i>&nbsp;            }</b>
+<i class="no-highlight">142</i>&nbsp;
+<i class="no-highlight">143</i>&nbsp;        }
+<b class="fc"><i class="no-highlight">144</i>&nbsp;        else if (!getComponent(Pirate.class).isAlive() &amp;&amp; isDefender){</b>
+<b class="nc"><i class="no-highlight">145</i>&nbsp;            destroy();</b>
+<i class="no-highlight">146</i>&nbsp;        }
+<b class="fc"><i class="no-highlight">147</i>&nbsp;        else if (!isDefender){</b>
+<b class="fc"><i class="no-highlight">148</i>&nbsp;            red.hide();</b>
+<b class="fc"><i class="no-highlight">149</i>&nbsp;            green.hide();</b>
+<i class="no-highlight">150</i>&nbsp;        }
+<b class="fc"><i class="no-highlight">151</i>&nbsp;    }</b>
+<i class="no-highlight">152</i>&nbsp;    /**
+<i class="no-highlight">153</i>&nbsp;     * Used on reset of the game screen.
+<i class="no-highlight">154</i>&nbsp;     * Sets health back to 100 and, if destroyed, changes the sprite back to undestroyed version
+<i class="no-highlight">155</i>&nbsp;     * */
+<i class="no-highlight">156</i>&nbsp;    public void revive(){
+<b class="nc"><i class="no-highlight">157</i>&nbsp;        if (isFlag) {</b>
+<b class="nc"><i class="no-highlight">158</i>&nbsp;            return;</b>
+<i class="no-highlight">159</i>&nbsp;        }
+<b class="nc"><i class="no-highlight">160</i>&nbsp;        Sprite s = ResourceManager.getSprite(atlas_id, buildingName);</b>
+<b class="nc"><i class="no-highlight">161</i>&nbsp;        Renderable r = getComponent(Renderable.class);</b>
+<b class="nc"><i class="no-highlight">162</i>&nbsp;        r.setTexture(s);</b>
+<b class="nc"><i class="no-highlight">163</i>&nbsp;        Pirate p = getComponent(Pirate.class);</b>
+<b class="nc"><i class="no-highlight">164</i>&nbsp;        p.setHealth(100);</b>
+<b class="nc"><i class="no-highlight">165</i>&nbsp;        if (p.getTarget() != null) {p.removeTarget();}</b>
+<b class="nc"><i class="no-highlight">166</i>&nbsp;        red.hide();</b>
+<b class="nc"><i class="no-highlight">167</i>&nbsp;        green.hide();</b>
+<i class="no-highlight">168</i>&nbsp;
+<b class="nc"><i class="no-highlight">169</i>&nbsp;    }</b>
+<i class="no-highlight">170</i>&nbsp;
+<i class="no-highlight">171</i>&nbsp;    public boolean isAlive() {
+<b class="fc"><i class="no-highlight">172</i>&nbsp;        return getComponent(Pirate.class).isAlive();</b>
+<i class="no-highlight">173</i>&nbsp;    }
+<i class="no-highlight">174</i>&nbsp;
+<i class="no-highlight">175</i>&nbsp;    @Override
+<i class="no-highlight">176</i>&nbsp;    public void BeginContact(CollisionInfo info) {
+<i class="no-highlight">177</i>&nbsp;
+<b class="fc"><i class="no-highlight">178</i>&nbsp;    }</b>
+<i class="no-highlight">179</i>&nbsp;
+<i class="no-highlight">180</i>&nbsp;    @Override
+<i class="no-highlight">181</i>&nbsp;    public void EndContact(CollisionInfo info) {
+<i class="no-highlight">182</i>&nbsp;
+<b class="fc"><i class="no-highlight">183</i>&nbsp;    }</b>
+<i class="no-highlight">184</i>&nbsp;
+<i class="no-highlight">185</i>&nbsp;    /**
+<i class="no-highlight">186</i>&nbsp;     * If the building is not a defender (doesnt shoot at player), kills the building and the cannonball that hit it.
+<i class="no-highlight">187</i>&nbsp;     * Otherwise harms the building and kills the cannonball
+<i class="no-highlight">188</i>&nbsp;     * For defenders, player entering the aggro range makes the building add it as a target.
+<i class="no-highlight">189</i>&nbsp;     *
+<i class="no-highlight">190</i>&nbsp;     * @param info CollisionInfo container
+<i class="no-highlight">191</i>&nbsp;     */
+<i class="no-highlight">192</i>&nbsp;    @Override
+<i class="no-highlight">193</i>&nbsp;    public void EnterTrigger(CollisionInfo info) {
+<b class="fc"><i class="no-highlight">194</i>&nbsp;        if(!info.fB.isSensor()){</b>
+<b class="fc"><i class="no-highlight">195</i>&nbsp;            if (info.a instanceof CannonBall &amp;&amp; isAlive() &amp;&amp; !isFlag) { // bullets travel through flags</b>
+<b class="fc"><i class="no-highlight">196</i>&nbsp;                CannonBall b = (CannonBall) info.a;</b>
+<i class="no-highlight">197</i>&nbsp;                // the ball if from the same faction
+<i class="no-highlight">198</i>&nbsp;            /*if(Objects.equals(b.getShooter().getComponent(Pirate.class).getFaction().getName(),
+<i class="no-highlight">199</i>&nbsp;                    getComponent(Pirate.class).getFaction().getName())) {
+<i class="no-highlight">200</i>&nbsp;                return;
+<i class="no-highlight">201</i>&nbsp;            }*/
+<b class="fc"><i class="no-highlight">202</i>&nbsp;                if (! (b.getShooter() instanceof Building)){</b>
+<b class="fc"><i class="no-highlight">203</i>&nbsp;                    if (b.getShooter() instanceof Player &amp;&amp; !isDefender) {</b>
+<b class="fc"><i class="no-highlight">204</i>&nbsp;                        destroy();</b>
+<b class="fc"><i class="no-highlight">205</i>&nbsp;                    } else if (b.getShooter() instanceof Player &amp;&amp; isDefender) {</b>
+<b class="fc"><i class="no-highlight">206</i>&nbsp;                        getComponent(Pirate.class).takeDamage(info.b.getComponent(Pirate.class).getDmg());</b>
+<i class="no-highlight">207</i>&nbsp;                    }
+<b class="fc"><i class="no-highlight">208</i>&nbsp;                    ((CannonBall) info.a).kill();</b>
+<i class="no-highlight">209</i>&nbsp;                }
+<b class="fc"><i class="no-highlight">210</i>&nbsp;            }</b>
+<i class="no-highlight">211</i>&nbsp;        }
+<b class="fc"><i class="no-highlight">212</i>&nbsp;        else if(info.a instanceof Player){</b>
+<b class="fc"><i class="no-highlight">213</i>&nbsp;            getComponent(Pirate.class).addTarget((Player) info.a);</b>
+<b class="fc"><i class="no-highlight">214</i>&nbsp;            cannonTimer = (int) (4f / EntityManager.getDeltaTime());</b>
+<i class="no-highlight">215</i>&nbsp;        }
+<b class="fc"><i class="no-highlight">216</i>&nbsp;    }</b>
+<i class="no-highlight">217</i>&nbsp;    /**
+<i class="no-highlight">218</i>&nbsp;     * For defender buildings, the player leaving the aggro range removes the target from the building&#39;s list of targets
+<i class="no-highlight">219</i>&nbsp;     * @param info CollisionInfo container
+<i class="no-highlight">220</i>&nbsp;     * */
+<i class="no-highlight">221</i>&nbsp;    @Override
+<i class="no-highlight">222</i>&nbsp;    public void ExitTrigger(CollisionInfo info) {
+<b class="fc"><i class="no-highlight">223</i>&nbsp;        if (info.fB.isSensor() &amp;&amp; info.a instanceof Player){</b>
+<b class="fc"><i class="no-highlight">224</i>&nbsp;            getComponent(Pirate.class).removeTarget();</b>
+<i class="no-highlight">225</i>&nbsp;        }
+<i class="no-highlight">226</i>&nbsp;
+<b class="fc"><i class="no-highlight">227</i>&nbsp;    }</b>
+<i class="no-highlight">228</i>&nbsp;
+<i class="no-highlight">229</i>&nbsp;    public void hide() {
+<b class="nc"><i class="no-highlight">230</i>&nbsp;        for (Renderable r : getComponents(Renderable.class)){</b>
+<b class="nc"><i class="no-highlight">231</i>&nbsp;            r.hide();</b>
+<b class="nc"><i class="no-highlight">232</i>&nbsp;        }</b>
+<b class="nc"><i class="no-highlight">233</i>&nbsp;        Transform t = getComponent(Transform.class);</b>
+<b class="nc"><i class="no-highlight">234</i>&nbsp;        t.setPosition(100000, 100000);</b>
+<i class="no-highlight">235</i>&nbsp;
+<b class="nc"><i class="no-highlight">236</i>&nbsp;        RigidBody rb = getComponent(RigidBody.class);</b>
+<b class="nc"><i class="no-highlight">237</i>&nbsp;        rb.setPosition(t.getPosition());</b>
+<b class="nc"><i class="no-highlight">238</i>&nbsp;        rb.setVelocity(0, 0);</b>
+<b class="nc"><i class="no-highlight">239</i>&nbsp;    }</b>
+<i class="no-highlight">240</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-05-03 16:30</div>
+</div>
+</body>
+</html>

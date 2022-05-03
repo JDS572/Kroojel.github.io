@@ -1,0 +1,219 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > SaveLoadTests</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+    @import "../../.css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../.js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.mygdx.tests</a>
+</div>
+
+<h1>Coverage Summary for Class: SaveLoadTests (com.mygdx.tests)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">SaveLoadTests</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    85.5%
+  </span>
+  <span class="absValue">
+    (65/76)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package com.mygdx.tests;
+<i class="no-highlight">2</i>&nbsp;
+<i class="no-highlight">3</i>&nbsp;import com.badlogic.gdx.Gdx;
+<i class="no-highlight">4</i>&nbsp;import com.badlogic.gdx.math.Vector2;
+<i class="no-highlight">5</i>&nbsp;import com.badlogic.gdx.utils.JsonReader;
+<i class="no-highlight">6</i>&nbsp;import com.badlogic.gdx.utils.JsonValue;
+<i class="no-highlight">7</i>&nbsp;import com.mygdx.game.Entitys.NPCShip;
+<i class="no-highlight">8</i>&nbsp;import com.mygdx.game.Entitys.Player;
+<i class="no-highlight">9</i>&nbsp;import com.mygdx.game.Entitys.Ship;
+<i class="no-highlight">10</i>&nbsp;import com.mygdx.game.Managers.*;
+<i class="no-highlight">11</i>&nbsp;import org.junit.After;
+<i class="no-highlight">12</i>&nbsp;import org.junit.Before;
+<i class="no-highlight">13</i>&nbsp;import org.junit.Test;
+<i class="no-highlight">14</i>&nbsp;import org.junit.runner.RunWith;
+<i class="no-highlight">15</i>&nbsp;
+<i class="no-highlight">16</i>&nbsp;import static com.mygdx.utils.Constants.INIT_CONSTANTS;
+<i class="no-highlight">17</i>&nbsp;import static org.junit.Assert.assertFalse;
+<i class="no-highlight">18</i>&nbsp;import static org.junit.Assert.assertTrue;
+<i class="no-highlight">19</i>&nbsp;
+<i class="no-highlight">20</i>&nbsp;@RunWith(GdxTestRunner.class)
+<b class="fc"><i class="no-highlight">21</i>&nbsp;public class SaveLoadTests {</b>
+<i class="no-highlight">22</i>&nbsp;    @Before
+<i class="no-highlight">23</i>&nbsp;    public void prepareEnv(){
+<b class="fc"><i class="no-highlight">24</i>&nbsp;        int id_ship = ResourceManager.addTexture(&quot;ship.png&quot;);</b>
+<b class="fc"><i class="no-highlight">25</i>&nbsp;        int id_map = ResourceManager.addTileMap(&quot;Map.tmx&quot;);</b>
+<b class="fc"><i class="no-highlight">26</i>&nbsp;        int atlas_id = ResourceManager.addTextureAtlas(&quot;Boats.txt&quot;);</b>
+<b class="fc"><i class="no-highlight">27</i>&nbsp;        int extras_id = ResourceManager.addTextureAtlas(&quot;UISkin/skin.atlas&quot;);</b>
+<b class="fc"><i class="no-highlight">28</i>&nbsp;        int buildings_id = ResourceManager.addTextureAtlas(&quot;Buildings.txt&quot;);</b>
+<b class="fc"><i class="no-highlight">29</i>&nbsp;        int powups_atlas_id = ResourceManager.addTextureAtlas(&quot;upgrades_powerups.txt&quot;);</b>
+<b class="fc"><i class="no-highlight">30</i>&nbsp;        ResourceManager.addTexture(&quot;menuBG.jpg&quot;);</b>
+<b class="fc"><i class="no-highlight">31</i>&nbsp;        ResourceManager.addTexture(&quot;Chest.png&quot;);</b>
+<b class="fc"><i class="no-highlight">32</i>&nbsp;        ResourceManager.addTexture(&quot;progress_bar_red.png&quot;);</b>
+<b class="fc"><i class="no-highlight">33</i>&nbsp;        ResourceManager.addTexture(&quot;progress_bar_green.png&quot;);</b>
+<b class="fc"><i class="no-highlight">34</i>&nbsp;        ResourceManager.addTexture(&quot;points_star.png&quot;);</b>
+<b class="fc"><i class="no-highlight">35</i>&nbsp;        ResourceManager.addTextureAtlas(&quot;upgrade_tier_bar.txt&quot;);</b>
+<b class="fc"><i class="no-highlight">36</i>&nbsp;        ResourceManager.addTextureAtlas(&quot;upgrade_pricetags.txt&quot;);</b>
+<b class="fc"><i class="no-highlight">37</i>&nbsp;        ResourceManager.addTextureAtlas(&quot;longboi_moveset.txt&quot;);</b>
+<b class="fc"><i class="no-highlight">38</i>&nbsp;        ResourceManager.addTextureAtlas(&quot;Eggball.txt&quot;);</b>
+<b class="fc"><i class="no-highlight">39</i>&nbsp;        ResourceManager.addTexture(&quot;poison.png&quot;);</b>
+<b class="fc"><i class="no-highlight">40</i>&nbsp;        ResourceManager.addTexture(&quot;arrow.png&quot;);</b>
+<b class="fc"><i class="no-highlight">41</i>&nbsp;        ResourceManager.loadAssets();</b>
+<b class="fc"><i class="no-highlight">42</i>&nbsp;        INIT_CONSTANTS();</b>
+<b class="fc"><i class="no-highlight">43</i>&nbsp;        PhysicsManager.Initialize(false);</b>
+<b class="fc"><i class="no-highlight">44</i>&nbsp;        if(GameManager.getShips().isEmpty()) {</b>
+<b class="fc"><i class="no-highlight">45</i>&nbsp;            GameManager.CreatePlayer(); // the player entity for tests</b>
+<b class="fc"><i class="no-highlight">46</i>&nbsp;            GameManager.CreateNPCShip(2); // the &quot;enemy&quot; entity for tests</b>
+<b class="fc"><i class="no-highlight">47</i>&nbsp;            GameManager.CreateNPCShip(1); // the &quot;ally&quot; entity for tests</b>
+<i class="no-highlight">48</i>&nbsp;        }
+<b class="fc"><i class="no-highlight">49</i>&nbsp;        if (GameManager.getColleges().isEmpty()){</b>
+<b class="fc"><i class="no-highlight">50</i>&nbsp;            for (int i = 0; i &lt; 5; i ++)</b>
+<b class="fc"><i class="no-highlight">51</i>&nbsp;            GameManager.CreateCollege(i + 1);</b>
+<i class="no-highlight">52</i>&nbsp;        }
+<b class="fc"><i class="no-highlight">53</i>&nbsp;        QuestManager.Initialize();</b>
+<b class="fc"><i class="no-highlight">54</i>&nbsp;    }</b>
+<i class="no-highlight">55</i>&nbsp;    @After
+<i class="no-highlight">56</i>&nbsp;    public void cleanEnv(){
+<b class="fc"><i class="no-highlight">57</i>&nbsp;        ResourceManager.deepClean();</b>
+<b class="fc"><i class="no-highlight">58</i>&nbsp;        GameManager.getShips().clear();</b>
+<b class="fc"><i class="no-highlight">59</i>&nbsp;        GameManager.getColleges().clear();</b>
+<b class="fc"><i class="no-highlight">60</i>&nbsp;    }</b>
+<i class="no-highlight">61</i>&nbsp;
+<i class="no-highlight">62</i>&nbsp;    @Test
+<i class="no-highlight">63</i>&nbsp;    public void testWritesToFile(){
+<b class="fc"><i class="no-highlight">64</i>&nbsp;        SaveManager s = new SaveManager(0, 0, 0, 0, 0);</b>
+<b class="fc"><i class="no-highlight">65</i>&nbsp;        String userprofile = System.getenv(&quot;USERPROFILE&quot;);</b>
+<b class="fc"><i class="no-highlight">66</i>&nbsp;        String fileLoc = userprofile + &quot;\\saved_data.json&quot;;</b>
+<b class="fc"><i class="no-highlight">67</i>&nbsp;        assertTrue(&quot;No save file has been created!&quot;, Gdx.files.internal(fileLoc).exists());</b>
+<b class="fc"><i class="no-highlight">68</i>&nbsp;    }</b>
+<i class="no-highlight">69</i>&nbsp;
+<i class="no-highlight">70</i>&nbsp;    @Test
+<i class="no-highlight">71</i>&nbsp;    public void testStoresStateProperly(){
+<b class="fc"><i class="no-highlight">72</i>&nbsp;        JsonReader json = new JsonReader();</b>
+<b class="fc"><i class="no-highlight">73</i>&nbsp;        Player p = GameManager.getPlayer();</b>
+<b class="fc"><i class="no-highlight">74</i>&nbsp;        NPCShip enemy = (NPCShip)GameManager.getShips().get(2);</b>
+<b class="fc"><i class="no-highlight">75</i>&nbsp;        NPCShip ally = (NPCShip)GameManager.getShips().get(2);</b>
+<b class="fc"><i class="no-highlight">76</i>&nbsp;        String userprofile = System.getenv(&quot;USERPROFILE&quot;);</b>
+<b class="fc"><i class="no-highlight">77</i>&nbsp;        String fileLoc = userprofile + &quot;\\saved_data.json&quot;;</b>
+<b class="fc"><i class="no-highlight">78</i>&nbsp;        JsonValue base = json.parse(Gdx.files.internal(fileLoc));</b>
+<b class="fc"><i class="no-highlight">79</i>&nbsp;        JsonValue ships = base.get(&quot;ships&quot;);</b>
+<b class="fc"><i class="no-highlight">80</i>&nbsp;        JsonValue colleges = base.get(&quot;colleges&quot;);</b>
+<b class="fc"><i class="no-highlight">81</i>&nbsp;        JsonValue quests = base.get(&quot;quests&quot;);</b>
+<b class="fc"><i class="no-highlight">82</i>&nbsp;        for (JsonValue ship : ships){</b>
+<b class="fc"><i class="no-highlight">83</i>&nbsp;            if (ship.getInt(&quot;faction&quot;) == 0 &amp;&amp; ship.getString(&quot;type&quot;) == &quot;Player&quot;){</b>
+<i class="no-highlight">84</i>&nbsp;                float pos_x, pos_y;
+<b class="nc"><i class="no-highlight">85</i>&nbsp;                pos_x = ship.get(&quot;position&quot;).getFloat(&quot;x&quot;);</b>
+<b class="nc"><i class="no-highlight">86</i>&nbsp;                pos_y = ship.get(&quot;position&quot;).getFloat(&quot;y&quot;);</b>
+<b class="nc"><i class="no-highlight">87</i>&nbsp;                assertTrue(&quot;Player position stored incorrectly!&quot;, p.getPosition().x == pos_x &amp;&amp; p.getPosition().y == pos_y);</b>
+<b class="nc"><i class="no-highlight">88</i>&nbsp;            }</b>
+<b class="fc"><i class="no-highlight">89</i>&nbsp;            else if (ship.getInt(&quot;faction&quot;) == 0 &amp;&amp; ship.getString(&quot;type&quot;) == &quot;NPC&quot;){</b>
+<i class="no-highlight">90</i>&nbsp;                float pos_x, pos_y;
+<b class="nc"><i class="no-highlight">91</i>&nbsp;                pos_x = ship.get(&quot;position&quot;).getFloat(&quot;x&quot;);</b>
+<b class="nc"><i class="no-highlight">92</i>&nbsp;                pos_y = ship.get(&quot;position&quot;).getFloat(&quot;y&quot;);</b>
+<b class="nc"><i class="no-highlight">93</i>&nbsp;                assertTrue(&quot;Ally ship position stored incorrectly!&quot;, ally.getPosition().x == pos_x &amp;&amp; ally.getPosition().y == pos_y);</b>
+<b class="nc"><i class="no-highlight">94</i>&nbsp;            }</b>
+<b class="fc"><i class="no-highlight">95</i>&nbsp;            else if (ship.getInt(&quot;faction&quot;) == 1 &amp;&amp; ship.getString(&quot;type&quot;) == &quot;NPC&quot;){</b>
+<i class="no-highlight">96</i>&nbsp;                float pos_x, pos_y;
+<b class="nc"><i class="no-highlight">97</i>&nbsp;                pos_x = ship.get(&quot;position&quot;).getFloat(&quot;x&quot;);</b>
+<b class="nc"><i class="no-highlight">98</i>&nbsp;                pos_y = ship.get(&quot;position&quot;).getFloat(&quot;y&quot;);</b>
+<b class="nc"><i class="no-highlight">99</i>&nbsp;                assertTrue(&quot;Enemy ship position stored incorrectly!&quot;, enemy.getPosition().x == pos_x &amp;&amp; enemy.getPosition().y == pos_y);</b>
+<i class="no-highlight">100</i>&nbsp;            }
+<b class="fc"><i class="no-highlight">101</i>&nbsp;        }</b>
+<b class="fc"><i class="no-highlight">102</i>&nbsp;        for (JsonValue college : colleges){</b>
+<b class="fc"><i class="no-highlight">103</i>&nbsp;            int faction = college.getInt(&quot;factionID&quot;);</b>
+<b class="fc"><i class="no-highlight">104</i>&nbsp;            assertTrue(&quot;College of faction &quot; + faction + &quot; was registered as destroyed even though it wasnt!&quot;, !college.getBoolean(&quot;destroyed&quot;));</b>
+<b class="fc"><i class="no-highlight">105</i>&nbsp;        }</b>
+<b class="fc"><i class="no-highlight">106</i>&nbsp;        boolean duckQuestExists = false;</b>
+<b class="fc"><i class="no-highlight">107</i>&nbsp;        for (JsonValue quest : quests){</b>
+<b class="fc"><i class="no-highlight">108</i>&nbsp;            if(quest.getString(&quot;type&quot;).equals(&quot;KillDuckQuest&quot;)){duckQuestExists = true;}</b>
+<b class="fc"><i class="no-highlight">109</i>&nbsp;            assertFalse(&quot;Quest was recorded as completed before completion!&quot;, quest.getBoolean(&quot;completed&quot;));</b>
+<b class="fc"><i class="no-highlight">110</i>&nbsp;        }</b>
+<b class="fc"><i class="no-highlight">111</i>&nbsp;        assertTrue(&quot;Duck quest missing from list of saved quests!&quot;, duckQuestExists);</b>
+<b class="fc"><i class="no-highlight">112</i>&nbsp;    }</b>
+<i class="no-highlight">113</i>&nbsp;
+<i class="no-highlight">114</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-05-03 16:30</div>
+</div>
+</body>
+</html>
